@@ -1,0 +1,10 @@
+{
+    "user":"INTRA\\ljhervilla",
+    "password":"Banesco2021..",
+    "networkDrive":"\\\\smgm1034\\Linea_base_windows",
+    "archivo":"LB_Marzo_2021.csv",
+    "DBServer":"localhost",    
+    "port":"5432",
+    "userName":"lornis"    
+}
+
