@@ -85,10 +85,11 @@
                         
                         $arrayProv=array();
                         $consultaFile = fopen(HOME.SALIDAS."consultas.json", "r");
+                        
                         while(!feof($consultaFile)){
                             $reg=fgets($consultaFile);
                             if (feof($consultaFile)) break;
-                            if ($reg!=false) $arrayProv[]=$reg;        
+                            if ($reg!=false) $arrayProv[]=$reg;      
                         }   
 
                         $resultConsulta = file_put_contents(HOME.SALIDAS."arrayConsultas.json", json_encode($arrayProv));

@@ -1,5 +1,20 @@
 <?php
 
+include "constantes.php";
+
+echo HOME;
+echo "<br/><br/>";
+
+$files = glob(HOME . '/vROps/salidas/stats/*'); // get all file names
+
+foreach($files as $file){ // iterate files
+  //if(is_file($file) && ($file!="/var/www/html/STISCR/vROps/salidas/VmwareToken.json"))
+  if(is_file($file))
+    echo($file) . "<br/>"; // 
+    //unlink();
+}
+
+/*
 $var = array();
 echo "el valor del count es: " . count($var);
 

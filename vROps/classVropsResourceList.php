@@ -107,7 +107,14 @@ class VropsResourceList{
                    
                     $nomArchivo = HOME . SALIDAS . $resourceKinds . "ResourceListArray.json";
                     
-                    file_put_contents($nomArchivo, json_encode($resourceListArray));                    
+                    file_put_contents($nomArchivo, json_encode($resourceListArray));  
+                    
+                    if (file_exists(HOME . SALIDAS . "allResourceList.json", json_encode($resourceListArray))){
+                        $f = fopen(HOME . SALIDAS . "allResourceList.json", "w");
+                        fclose($f);
+                    }
+                    
+                    file_put_contents(HOME . SALIDAS . "allResourceList.json", json_encode($resourceListArray), FILE_APPEND);    
 
                     return $resourceListInfo;
 
