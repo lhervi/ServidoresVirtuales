@@ -50,12 +50,11 @@ class VropsConexion {
                 $result = $con->prepare($consulta);
                 $result->execute();
                 $datos = $result->fetchAll();                
-                return $datos; 
-                                     
+                return $datos;                              
             }catch(PDOException $e){
                 $datos[0] = TRUE;
-                $datos[1]= "hubo un error al realizar la consulta. " . $e->getMessage();  
-                return $datos;               
+                $datos[1]= "hubo un error al realizar la consulta. " . $e->getMessage();
+                return $datos;
             }
                   
         }else{
@@ -67,18 +66,16 @@ class VropsConexion {
 
     //Esta función además de servir para insertar registros de la linea base, sirve también para crear 
     //la tabla en caso de que la misma no haya sido creada.
-    public static function insertar (string $consulta){  
+    public static function insertar (string $consulta){
         
         if ($consulta!==null && $consulta!==""){
 
-            $con = self::obtenerConexion();            
+            $con = self::obtenerConexion();
             
-            try{    
+            try{
                     
                 $result = $con->prepare($consulta);
-               // echo $result;
-                //echo "<br/>";
-                //echo $consulta;
+               
                 $registros = $result->execute();
 
                 return $registros;

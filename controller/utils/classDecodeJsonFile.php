@@ -40,7 +40,9 @@ class DecodeJF {
      *```    
      * 
      * @param  string $file
-     * @return array     
+     * @return array  En caso de error regresa ['error']=true y ['mensaje'] con la descripción del error.
+     * Si todo va bien, regresa ['error']=false y $arreglo que contiene el arreglo.
+                       
      *     
      */
     static function decodeJsonFile(string $file){

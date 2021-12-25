@@ -50,8 +50,40 @@ class Utils{
         
         return $result;
     }
+    
+    /**
+     * eraseFiles
+     *
+     * @param  string $ruta La ruta del directorio de los archivos a eliminar
+     * @param  array $lista La lista de rutas de los archivos a evitar
+     * @return array $result['eliminados'] el número de archivos eliminados, $result['excluidos'] el número de excluidos
+     * 
+     * Función estática para eliminar todos los archivos de un directorio, dada una ruta
+     * 
+     */
+    static function eraseFiles(string $ruta, array $lista=null){
+        $files = glob($ruta); // get all file names        
+        $result['eliminados'] = 0; //cuenta los archivos eliminados
+        $result['excluidos'] = 0; //cuenta los archivos excluidos
+        $result['rarezas'] = 0; //cuenta lo que no se consideró archivo
+        
+        foreach($files as $file){ // iterate files  
+            if(is_file($file)){                
+                if(in_array($file, $lista)){
+                    $result['excluidos']++;
+                    continue;
+                }else{
+                    unlink($file);
+                    $result['eliminados']++;
+                }   
+            }else{
+                $result['rarezas']++;
+                continue;
+            }
+        }
 
+       return $result; //Regresa el arreglo con el número de archivos eliminados y excluidos        
+    }     
 }
-
 
 ?>

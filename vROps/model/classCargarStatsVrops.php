@@ -33,7 +33,7 @@ class CargarStatsVrops {
             $error['error'] = true;
             $error['mensaje'] = "hubo un error al insertar los registros en la BD";
             return $error;
-        }        
+        }
     }
     
     /**
