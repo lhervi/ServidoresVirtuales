@@ -21,34 +21,68 @@ div {
 include "constantes.php";
 include_once './controller/utils/classUtils.php';
 include_once './controller/utils/classDecodeJsonFile.php';
+include_once './vROps/model/classCargarResourList.php';
 
 //$file = HOME . "/STISCR/vROps/salidas/hostsystemResourceListArray.json";
 $file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
 
-$array = DecodeJF::decodeJsonFile($file);
-$prov = array();
-$arrayProv = array();
 
-if($array['error']){
-    die("hubo un error");
-}else{
-    foreach($array as $reg){      
-        $prov['name'] = $reg['name'] ?? "";
-        $prov['identifier'] = $reg['identifier'] ?? "";
-        $prov['adapterKindKey'] = $reg['adapterKindKey'] ?? "";
-        $prov['resourceKindKey'] = $reg['resourceKindKey'] ?? ""; 
-        $prov['linkToSelf'] = $reg['links']['linkToSelf'] ?? "";  
-        $prov['relationsOfResource'] = $reg['links']['relationsOfResource'] ?? "";
-        $prov['propertiesOfResource'] = $reg['links']['propertiesOfResource'] ?? "";
-        $prov['alertsOfResource'] = $reg['links']['alertsOfResource'] ?? "";
-        $prov['symptomsOfResource'] = $reg['links']['symptomsOfResource'] ?? "";
-        $prov['statKeysOfResource'] = $reg['links']['statKeysOfResource'] ?? "";
-        $prov['latestStatsOfResource'] = $reg['links']['latestStatsOfResource'] ?? "";
-        $prov['latestPropertiesOfResource'] = $reg['links']['latestPropertiesOfResource'] ?? "";
-        $prov['credentialsOfResource'] = $reg['links']['credentialsOfResource'] ?? "";        
-        $arrayProv[]=$prov;
+//función para crear la tabla resourceList del mes si no existe
+
+
+//Esta función estará en STISCR/vROps/model/classCargarResourList.php
+
+
+//función para insertar los registros en la tabla
+
+//función para verificar que los registros que se desean insertar ya no estén
+
+function readResourceListArray(string $file){
+  $array = DecodeJF::decodeJsonFile($file);
+  //$prov = getProv();
+  $prov = array();
+  $arrayProv = array();
+  $prefix = "<a href=http://" . HOSTVROPS; 
+  
+  
+  if($array['error']){
+    return $array();
+  }else{
+      foreach($array as $reg){      
+          $prov['name'] = $reg['name'] ?? "";
+          $prov['identifier'] = $reg['identifier'] ?? "";
+          $prov['adapterKindKey'] = $reg['adapterKindKey'] ?? "";
+          $prov['resourceKindKey'] = $reg['resourceKindKey'] ?? "";           
+          $prov['linkToSelf'] = $reg['links']['linkToSelf'] ?? "";          
+          $prov['relationsOfResource'] = $reg['links']['relationsOfResource'] ?? "";
+          $prov['propertiesOfResource'] = $reg['links']['propertiesOfResource'] ?? "";
+          $prov['alertsOfResource'] = $reg['links']['alertsOfResource'] ?? "";
+          $prov['symptomsOfResource'] = $reg['links']['symptomsOfResource'] ?? "";
+          $prov['statKeysOfResource'] = $reg['links']['statKeysOfResource'] ?? "";
+          $prov['latestStatsOfResource'] = $reg['links']['latestStatsOfResource'] ?? "";
+          $prov['latestPropertiesOfResource'] = $reg['links']['latestPropertiesOfResource'] ?? "";
+          $prov['credentialsOfResource'] = $reg['links']['credentialsOfResource'] ?? "";   
+
+          $salto=0;
+          foreach($prov as $ind=>$campo){
+            if ($salto<4){
+              $salto++;
+              continue;
+            }            
+            $prov[$ind]= $prefix . $campo . ">" . $ind . "</a>";          
+          }         
+  
+          $arrayProv[]=$prov;
+          
+        }
+
+        
+    
+    return $arrayProv;    
   }
 }
+
+
 
 ?>
 
@@ -58,8 +92,10 @@ if($array['error']){
 <table>
 <tr>
 <?php
-      echo "<th><h4>#</h4></th>";
-    foreach($prov as $ind=>$reg){  
+
+    $arrayProv = readResourceListArray($file);    
+    echo "<th><h4>#</h4></th>";
+    foreach($arrayProv[0] as $ind=>$reg){  
       echo "<th><div><h4>" . $ind . "</h4></div></th>";   
     }
 ?>
