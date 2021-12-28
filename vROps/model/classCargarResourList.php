@@ -1,8 +1,16 @@
 <?php
 
+/**
+ * CargarResourceList  Clase que contiene métodos estáticos para procesar la información de la lista de recursos resourceList
+ */
 class CargarResourceList{
 
-
+    
+    /**
+     * crearResourceListTable Función estática que crea la tabla vmware_recursos si no existe
+     *
+     * @return $result es un arreglo que
+     */
     function crearResourceListTable(){    
         
         include_once 'classVropsConnection.php';
@@ -18,7 +26,51 @@ class CargarResourceList{
         return $result;
     }
 
-    function readResourceListArray(string $file){
+    function insertRegistrosResourceList(array $registros){ //recibe un arreglo con los registos a insertar
+
+      include_once '';
+      
+      $strInsert = array();
+      
+      $tope=0; //contador de registros para insertar el número máximo definido en la constante NUMREGINSERT
+      
+      $consultaInsert = "INSERT INTO vmware_recursos (nombre, recursos_id, adapterKindKey, tipo, ";
+      $consultaInsert .= "linkToSelf, relationsOfResource, propertiesOfResource, "; 
+      $consultaInsert .= "alertsOfResource, symptomsOfResource, statKeysOfResource, "; 
+      $consultaInsert .= "latestStatsOfResource, latestPropertiesOfResource, credentialsOfResource) "; 
+      $consultaInsert .= "VALUES ";
+      $registrosAlmacenados=0;
+      
+      foreach($registros as $campos){
+        
+        //contruir el string con los valores a insertar        
+        $strInsert[] = "(" . implode(", ", $campos) . ") ";
+        
+        $tope++; //tope se incrementa fuera del if y dentro del foreach
+        
+        if ($tope>NUMREGINSERT){ //inserta un lote de registros de acuerdo al tope definido como NUMREGINSERT
+         
+          $consultaInsert .= implode(", ", $strInsert); //Cuando se alcanzan el tope, se añaden los valores
+          $result = VropsConexion::insertar($consulta);          
+          if (!$result){
+            die("ocurrió un error al intentar grabar a información de los resourceList en la BD");
+          }else{
+            $registrosAlmacenados+=$tope;
+          }
+          $tope=0;
+          $strInsert=array();
+        }
+
+      }
+
+      if ($tope>0){  //inserta los últimos registros que hayan quedado fuera de los lotes 
+        $consultaInsert .= implode(", ", $strInsert);
+        VropsConexion::insertar($consulta);
+        $registrosAlmacenados+=$tope;
+      }
+    }
+
+    function readResourceListArray(string $file, bool $linkActive=true){
         $array = DecodeJF::decodeJsonFile($file);
         //$prov = getProv();
         $prov = array();
@@ -44,14 +96,17 @@ class CargarResourceList{
                 $prov['latestPropertiesOfResource'] = $reg['links']['latestPropertiesOfResource'] ?? "";
                 $prov['credentialsOfResource'] = $reg['links']['credentialsOfResource'] ?? "";   
       
-                $salto=0;
-                foreach($prov as $ind=>$campo){
-                  if ($salto<4){
-                    $salto++;
-                    continue;
-                  }            
-                  $prov[$ind]= $prefix . $campo . ">" . $ind . "</a>";          
-                }         
+                if($linkActive){  //si linkActive es igual a true, crea enlaces HTML en el campo de enlaces
+                  $salto=0;
+                  foreach($prov as $ind=>$campo){
+                    if ($salto<4){
+                      $salto++;
+                      continue;
+                    }            
+                    $prov[$ind]= $prefix . $campo . ">" . $ind . "</a>";          
+                  }         
+                }
+                
         
                 $arrayProv[]=$prov;
                 
@@ -80,16 +135,13 @@ class CargarResourceList{
             foreach($resourceListArray as $registro){
                 $arrayProv[] = $registro['nombre'];    
 
-            }
-            
+            }            
         }
-                
-
         
-        //Convertir el archivo en un arreglo
-        //Si la tabla no existe en la BD, crearla
-        //Recorrer el arreglo
-        //Escribir la información en lotes de 1000 registros
+        //Convertir el archivo en un arreglo (listo)
+        //Si la tabla no existe en la BD, crearla (listo)
+        //Recorrer el arreglo (listo)
+        //Escribir la información en lotes de 1000 registros (listo)
 
     }
 

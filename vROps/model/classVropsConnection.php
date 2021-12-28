@@ -65,7 +65,13 @@ class VropsConexion {
     }
 
     //Esta función además de servir para insertar registros de la linea base, sirve también para crear 
-    //la tabla en caso de que la misma no haya sido creada.
+    //la tabla en caso de que la misma no haya sido creada.    
+    /**
+     * insertar es una función estática que inserta registros en la BD, sin necesidad de crear la conexión
+     * 
+     * @param  string $consulta la cadena que contiene la consulta a realizar
+     * @return true or false dependiendo el resultado de la operación
+     */
     public static function insertar (string $consulta){
         
         if ($consulta!==null && $consulta!==""){
@@ -81,6 +87,7 @@ class VropsConexion {
                 return $registros;
 
             }catch(PDOException $e){
+
                 die("hubo un problema, error: " . $e->getMessage() . "<br>");
             }
             

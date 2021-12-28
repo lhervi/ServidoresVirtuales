@@ -23,7 +23,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
                     <h2>Gestión de métricas vROps</h2>
                 </div><br/>
 
-                <!- -->-
+                <!- -->
 
                 <div class="container col-auto">
                     <div class="d-inline-flex justify-content-start align-items-center p-2 .bg-light">
