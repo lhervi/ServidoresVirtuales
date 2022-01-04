@@ -19,9 +19,11 @@ div {
 <?php
 
 include "constantes.php";
+include "./vROps/model/vropsConfigDB.php";
 include_once './controller/utils/classUtils.php';
 include_once './controller/utils/classDecodeJsonFile.php';
-include_once './vROps/model/classCargarResourList.php';
+include_once './vROps/model/classCargarResourceList.php';
+
 
 //$file = HOME . "/STISCR/vROps/salidas/hostsystemResourceListArray.json";
 $file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
@@ -37,52 +39,6 @@ $file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
 
 //función para verificar que los registros que se desean insertar ya no estén
 
-function readResourceListArray(string $file){
-  $array = DecodeJF::decodeJsonFile($file);
-  //$prov = getProv();
-  $prov = array();
-  $arrayProv = array();
-  $prefix = "<a href=http://" . HOSTVROPS; 
-  
-  
-  if($array['error']){
-    return $array();
-  }else{
-      foreach($array as $reg){      
-          $prov['name'] = $reg['name'] ?? "";
-          $prov['identifier'] = $reg['identifier'] ?? "";
-          $prov['adapterKindKey'] = $reg['adapterKindKey'] ?? "";
-          $prov['resourceKindKey'] = $reg['resourceKindKey'] ?? "";           
-          $prov['linkToSelf'] = $reg['links']['linkToSelf'] ?? "";          
-          $prov['relationsOfResource'] = $reg['links']['relationsOfResource'] ?? "";
-          $prov['propertiesOfResource'] = $reg['links']['propertiesOfResource'] ?? "";
-          $prov['alertsOfResource'] = $reg['links']['alertsOfResource'] ?? "";
-          $prov['symptomsOfResource'] = $reg['links']['symptomsOfResource'] ?? "";
-          $prov['statKeysOfResource'] = $reg['links']['statKeysOfResource'] ?? "";
-          $prov['latestStatsOfResource'] = $reg['links']['latestStatsOfResource'] ?? "";
-          $prov['latestPropertiesOfResource'] = $reg['links']['latestPropertiesOfResource'] ?? "";
-          $prov['credentialsOfResource'] = $reg['links']['credentialsOfResource'] ?? "";   
-
-          $salto=0;
-          foreach($prov as $ind=>$campo){
-            if ($salto<4){
-              $salto++;
-              continue;
-            }            
-            $prov[$ind]= $prefix . $campo . ">" . $ind . "</a>";          
-          }         
-  
-          $arrayProv[]=$prov;
-          
-        }
-
-        
-    
-    return $arrayProv;    
-  }
-}
-
-
 
 ?>
 
@@ -93,15 +49,29 @@ function readResourceListArray(string $file){
 <tr>
 <?php
 
-    $arrayProv = readResourceListArray($file);    
-    echo "<th><h4>#</h4></th>";
+    $cols=1; //Se inicia el contador en uno porque hay una celda adicional que corresponde con el número de registro
+    $arrayProv = CargarResourceList::readResourceListArray($file);
+
+    //crea el encabezado de la tabla 
+
+    echo "<th><h4>#</h4></th>"; //añade un campo contador con #
     foreach($arrayProv[0] as $ind=>$reg){  
-      echo "<th><div><h4>" . $ind . "</h4></div></th>";   
+      echo "<th><div><h4>" . $ind . "</h4></div></th>";   //Se añaden todos los campos del encabezado
+      $cols++;
+    }
+
+    //pasa la información a la base de datos
+    $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+
+    if ($result>0){ //evalúa si se insertaron los registros en la base de datos
+      echo "<tr><td align='center' colspan='". $cols ."'><div><h3> Se incertaron " . $result  . " registros</h3></div></td></tr>";
     }
 ?>
 </tr>
 
 <?php
+
+//Llena la tabla con los valores de los campos
 foreach($arrayProv as $ind => $reg){
   echo "<tr>";  
   echo "<td align='center'>" . strval($ind + 1)  . "</td>";
@@ -111,46 +81,19 @@ foreach($arrayProv as $ind => $reg){
   echo "</tr>";  
 }
 
-/*
+$numReg = count($arrayProv);
 
-$numReg = count($prov);
-while ($numReg>=0){
-  echo "<tr>";
-  foreach($arrayProv[$numReg] as $ind=>$reg){
-    if($numReg==10) {
-      $a=2;
-    }
-    
-    echo "<td>" . $reg[$ind] . "</td>";
-    /*
-    echo "<td>" . $reg['name'] . "</td>";
-    echo "<td>" . $reg['identifier'] . "</td>";
-    echo "<td>" . $reg['adapterKindKey'] . "</td>";
-    echo "<td>" . $reg['resourceKindKey'] . "</td>";
-    echo "<td>" . $reg['linkToSelf'] . "</td>";
-    echo "<td>" . $reg['relationsOfResource'] . "</td>";
-    echo "<td>" . $reg['propertiesOfResource'] . "</td>";
-    echo "<td>" . $reg['alertsOfResource'] . "</td>";
-    echo "<td>" . $reg['symptomsOfResource'] . "</td>";
-    echo "<td>" . $reg['latestStatsOfResource'] . "</td>";
-    echo "<td>" . $reg['latestPropertiesOfResource'] . "</td>";
-    echo "<td>" . $reg['credentialsOfResource'] . "</td>";  
-    
-    
-    //echo "<br/>"; //$prov[10]["name"]
-  }  
-  echo "</tr>";
-  $numReg--;
-}
-*/
+
+
 ?>
 
 </table>
 
 <br/>
-
 </body>
 </html>
+
+
 
 <?php
 

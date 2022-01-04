@@ -11,24 +11,27 @@ class CargarResourceList{
      *
      * @return $result es un arreglo que
      */
-    function crearResourceListTable(){    
+    static function crearResourceListTable(){    
         
         include_once 'classVropsConnection.php';
 
         $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_recursos (nombre VARCHAR NOT NULL, ";
         $consultaCreaTabla .= "recursos_id VARCHAR NOT NULL, adapterKindKey VARCHAR NOT NULL, tipo VARCHAR NOT NULL, ";
-        $consultaCreaTabla .= "linkToSelf VARCHAR NOT NULL, relationsOfResource VARCHAR NOT NULL, propertiesOfResource VARCHAR NOT NULL,)"; 
-        $consultaCreaTabla .= "alertsOfResource VARCHAR NOT NULL, symptomsOfResource VARCHAR NOT NULL, statKeysOfResource VARCHAR NOT NULL,)"; 
-        $consultaCreaTabla .= "latestStatsOfResource VARCHAR NOT NULL, latestPropertiesOfResource VARCHAR NOT NULL, credentialsOfResource VARCHAR NOT NULL,)"; 
+        $consultaCreaTabla .= "linkToSelf VARCHAR NOT NULL, relationsOfResource VARCHAR NOT NULL, propertiesOfResource VARCHAR NOT NULL, "; 
+        $consultaCreaTabla .= "alertsOfResource VARCHAR NOT NULL, symptomsOfResource VARCHAR NOT NULL, statKeysOfResource VARCHAR NOT NULL, "; 
+        $consultaCreaTabla .= "latestStatsOfResource VARCHAR NOT NULL, latestPropertiesOfResource VARCHAR NOT NULL, credentialsOfResource VARCHAR NOT NULL)"; 
 
         $result = VropsConexion::insertar($consultaCreaTabla);       
 
         return $result;
     }
 
-    function insertRegistrosResourceList(array $registros){ //recibe un arreglo con los registos a insertar
+    static function insertRegistrosResourceList(array $registros){ //recibe un arreglo con los registos a insertar
 
-      include_once '';
+      //include_once './classVropsConnection.php';
+      include_once 'classVropsConnection.php';
+
+      self::crearResourceListTable();
       
       $strInsert = array();
       
@@ -43,14 +46,21 @@ class CargarResourceList{
       
       foreach($registros as $campos){
         
+        //foreach($campos as $campo){
+          //colocar comillas aquí a cada campo 
+          //$campo = "'" . $campo . "'";
+        //}
+
         //contruir el string con los valores a insertar        
-        $strInsert[] = "(" . implode(", ", $campos) . ") ";
+        $strInsert[] = "('" . implode("','", $campos) . "') ";
         
         $tope++; //tope se incrementa fuera del if y dentro del foreach
         
         if ($tope>NUMREGINSERT){ //inserta un lote de registros de acuerdo al tope definido como NUMREGINSERT
          
           $consultaInsert .= implode(", ", $strInsert); //Cuando se alcanzan el tope, se añaden los valores
+          file_put_contents("consulta.txt", $strInsert);
+          //die;
           $result = VropsConexion::insertar($consulta);          
           if (!$result){
             die("ocurrió un error al intentar grabar a información de los resourceList en la BD");
@@ -65,12 +75,16 @@ class CargarResourceList{
 
       if ($tope>0){  //inserta los últimos registros que hayan quedado fuera de los lotes 
         $consultaInsert .= implode(", ", $strInsert);
-        VropsConexion::insertar($consulta);
+        VropsConexion::insertar($consultaInsert);
         $registrosAlmacenados+=$tope;
       }
+      return $registrosAlmacenados;
     }
 
-    function readResourceListArray(string $file, bool $linkActive=true){
+    static function readResourceListArray(string $file, bool $linkActive=true){
+       
+        include_once './controller/utils/classDecodeJsonFile.php';
+      
         $array = DecodeJF::decodeJsonFile($file);
         //$prov = getProv();
         $prov = array();
@@ -82,6 +96,9 @@ class CargarResourceList{
           return $array();
         }else{
             foreach($array as $reg){      
+                if($reg==false || is_null($reg) || $reg['name']==""){
+                  continue;
+                } 
                 $prov['name'] = $reg['name'] ?? "";
                 $prov['identifier'] = $reg['identifier'] ?? "";
                 $prov['adapterKindKey'] = $reg['adapterKindKey'] ?? "";
@@ -117,8 +134,11 @@ class CargarResourceList{
           return $arrayProv;    
         }
       }
+
+      
     
-    function loadResourceList(string $resourceListFile){ //Recibir el nombre del archivo a cargar
+    /*
+      function loadResourceList(string $resourceListFile){ //Recibir el nombre del archivo a cargar
         include_once HOME . "/STISCR/vROps/model/classVropsConnection.php";
         include_once HOME . "/STISCR/controller/utils/classDecodeJsonFile.php";
 
@@ -144,6 +164,7 @@ class CargarResourceList{
         //Escribir la información en lotes de 1000 registros (listo)
 
     }
+    */
 
 }
 

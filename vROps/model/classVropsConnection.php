@@ -73,6 +73,10 @@ class VropsConexion {
      * @return true or false dependiendo el resultado de la operación
      */
     public static function insertar (string $consulta){
+
+        file_put_contents("consulta2.txt", $consulta);
+
+        //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           die;
         
         if ($consulta!==null && $consulta!==""){
 
