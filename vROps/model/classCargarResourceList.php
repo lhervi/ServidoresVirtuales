@@ -11,6 +11,9 @@ class CargarResourceList{
      *
      * @return $result es un arreglo que
      */
+    //=========================================================
+    // CREAR TABLA  
+    //=========================================================
     static function crearResourceListTable(){    
         
         include_once 'classVropsConnection.php';
@@ -25,6 +28,10 @@ class CargarResourceList{
 
         return $result;
     }
+
+    //=========================================================
+    // INSERTAR DATOS 
+    //=========================================================
 
     static function insertRegistrosResourceList(array $registros){ //recibe un arreglo con los registos a insertar
 
@@ -81,7 +88,11 @@ class CargarResourceList{
       return $registrosAlmacenados;
     }
 
-    static function readResourceListArray(string $file, bool $linkActive=true){
+    //=========================================================
+    // OBTENER LA LISTA DE LOS RECURSOS DE UN ARCHIVO
+    //=========================================================
+
+    static function readResourceListArray(string $file,   bool $linkActive=true){
        
         include_once './controller/utils/classDecodeJsonFile.php';
       

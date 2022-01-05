@@ -173,6 +173,38 @@ class Fechas{
             return $error;
         }
     }
+    
+    /**
+     * getDatefromMiliSeconds Regresa una fecha válida en formato string
+     *
+     * @param  int $fecMiliSeconds el entero que representa una fecha en milisegundos
+     * @param  string $tipo un string con el formato de fecha de salida. Si no se pasa el formato de salida es año/mes/dia hora:min:seg "Y/m/d H:i:s"
+     * @return string $fecha un string con la representación de la fecha
+     */
+    static function getDatefromMiliSeconds(int $fecMiliSeconds, $tipo="Y/m/d H:i:s"){ 
+        /*
+            $tipo("F j, Y, g:i a");                 // March 10, 2001, 5:16 pm
+            $tipo("m.d.y");                         // 03.10.01
+            $tipo("j, n, Y");                       // 10, 3, 2001
+            $tipo("Ymd");                           // 20010310
+            $tipo('h-i-s, j-m-y, it is w Day');     // 05-16-18, 10-03-01, 1631 1618 6 Satpm01
+            $tipo('\i\t \i\s \t\h\e jS \d\a\y.');   // it is the 10th day.
+            $tipo("D M j G:i:s T Y");               // Sat Mar 10 17:16:18 MST 2001
+            $tipo('H:m:s \m \i\s\ \m\o\n\t\h');     // 17:03:18 m is month
+            $tipo("H:i:s");                         // 17:16:18
+        
+        */     
+        $fecha = date($tipo, ($fecMiliSeconds/1000));
+        return $fecha;
+    }
+    
+    static function getMilisecondsFromDate(string $fecha){
+    
+        $fecMili = new DateTime($fecha);   
+        return  $fecMili->getTimestamp()*1000;
+    
+    }
+
 }
 
 ?>

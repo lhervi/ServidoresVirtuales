@@ -105,16 +105,18 @@ class VropsResourceList{
 
                     $resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
                    
+                    // eliminar??
                     $nomArchivo = HOME . SALIDAS . $resourceKinds . "ResourceListArray.json";
+                    // eliminar??
                     
                     file_put_contents($nomArchivo, json_encode($resourceListArray));  
                     
-                    if (file_exists(HOME . SALIDAS . "allResourceList.json", json_encode($resourceListArray))){
-                        $f = fopen(HOME . SALIDAS . "allResourceList.json", "w");
+                    if (file_exists(HOME . SALIDAS . ALLRESOURCELIST, json_encode($resourceListArray))){
+                        $f = fopen(HOME . SALIDAS . ALLRESOURCELIST, "w");
                         fclose($f);
                     }
                     
-                    file_put_contents(HOME . SALIDAS . "allResourceList.json", json_encode($resourceListArray), FILE_APPEND);    
+                    file_put_contents(HOME . SALIDAS . ALLRESOURCELIST, json_encode($resourceListArray), FILE_APPEND);    
 
                     return $resourceListInfo;
 

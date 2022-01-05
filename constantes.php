@@ -5,6 +5,8 @@ define("TOKENHEADER", "Authorization: vRealizeOpsToken ");
 
 define("HOSTVROPS", "vrops01.intra.banesco.com");
 
+define("ALLRESOURCELIST", "allResourceList.json");
+
 define("REPORTERRORACTIVE", false);
 
 // ------------------ R U T A S -------------------------------------
@@ -12,8 +14,6 @@ define("REPORTERRORACTIVE", false);
 define("HOME", __DIR__);
 
 define("ARCHIVODECONFIGURACION", HOME."/vROps/vROpsConf.json");
-
-
 
 define("VROPSLOGFILE", "/vROps/errors/vROpsErrors.log");
 
