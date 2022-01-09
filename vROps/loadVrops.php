@@ -13,7 +13,9 @@
 <?php
 
    if (isset($_POST['continuar'])){
+               
         CargarStatsVrops::cargarStats();
+
         echo '<div class="w-100"  max-width: 100%; style="background-color: #eee; height: 250px; max-width: 100%;">';
         echo "<br/><h3>Culminó la carga</h3><br/>";
         echo "</div>";

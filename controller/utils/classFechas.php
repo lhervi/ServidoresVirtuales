@@ -175,7 +175,7 @@ class Fechas{
     }
     
     /**
-     * getDatefromMiliSeconds Regresa una fecha válida en formato string
+     * getDatefromMiliSeconds Método estático que regresa una fecha válida en formato string
      *
      * @param  int $fecMiliSeconds el entero que representa una fecha en milisegundos
      * @param  string $tipo un string con el formato de fecha de salida. Si no se pasa el formato de salida es año/mes/dia hora:min:seg "Y/m/d H:i:s"
@@ -197,14 +197,23 @@ class Fechas{
         $fecha = date($tipo, ($fecMiliSeconds/1000));
         return $fecha;
     }
-    
+        
+    /**
+     * getMilisecondsFromDate Método estático que regresa un entero que representa una fecha en milisegundos
+     *
+     * @param  string $fecha Fecha válida en formato string en formato año/mes/día hora:min:seg
+     * Si no se pasa una fecha, regresa la fecha actual en miliseconds
+     * @return int un entero que representa la fecha en milisegundos
+     */
     static function getMilisecondsFromDate(string $fecha){
     
-        $fecMili = new DateTime($fecha);   
-        return  $fecMili->getTimestamp()*1000;
-    
+        if(is_null($fecha)){
+            $fecMili = new DateTime();
+        }else{
+            $fecMili = new DateTime($fecha);
+        }
+        return  $fecMili->getTimestamp()*1000;    
     }
-
 }
 
 ?>

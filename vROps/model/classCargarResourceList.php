@@ -97,7 +97,7 @@ class CargarResourceList{
         include_once './controller/utils/classDecodeJsonFile.php';
       
         $array = DecodeJF::decodeJsonFile($file);
-        //$prov = getProv();
+        
         $prov = array();
         $arrayProv = array();
         $prefix = "<a href=http://" . HOSTVROPS; 

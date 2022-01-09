@@ -215,6 +215,9 @@ class CargarStatsVrops {
             $error = self::procesarLoteDeFileStat($result);
             if ($error['error']){
                 die ("<br/><h2>no se procesaron todos los archivos</h2>");
+                
+                //En este punto debe hacerse un roll back
+
             }else{
                 echo "<br/>";
                 echo '<div class="w-100" style="background-color: #BCF53D; height: 250px; max-width: 100%;">';                

@@ -26,21 +26,49 @@ function getDatefromMiliSeconds(int $fecMiliSeconds, $tipo="Y/m/d H:i:s"){
         $tipo('H:m:s \m \i\s\ \m\o\n\t\h');     // 17:03:18 m is month
         $tipo("H:i:s");                         // 17:16:18
     
-    */     
+    */         
+
     $fecha = date($tipo, ($fecMiliSeconds/1000));
     return $fecha;
 }
 
 function getMilisecondsFromDate(string $fecha){
 
-    $fecMili = new DateTime($fecha);   
+    if(is_null($fecha)){
+        $fecMili = new DateTime();
+    }else{
+        $fecMili = new DateTime($fecha);
+    }
+    
     return  $fecMili->getTimestamp()*1000;
 
 }
 
+$getMili = function($fec){
+    return getMilisecondsFromDate($fec);
+};
 
-echo "fecha1 es: " . $fec1 . " y fecha2 es: " . $fec1;
+$getFecha = function($fecMiliSeconds){
+    return getDatefromMiliSeconds($fecMiliSeconds);
+};
+
+function fecha($parametro, $function){
+
+    return $function($parametro);
+    
+}
+
+
+//Función que dada un fecha, indique cuál la primera fecha y última de ese mes en fomato año/mes/dia hora:min:seg
+
+//echo "fecha1 es: " . $fec1 . " y fecha2 es: " . $fec1;
 echo "<br/><br/>";
+echo "getMili: " . fecha($fechaString, $getMili);
+echo "<br/><br/>";
+echo "getFecha: " . fecha($fec1, $getFecha);
+echo "<br/><br/>";
+
+/*
 echo "fecha1: " . getDatefromMiliSeconds($fec1);
 echo "<br/><br/>";
 echo "fecha2: " . getDatefromMiliSeconds($fec2); 
@@ -70,5 +98,5 @@ echo "<br/><br/>";
 echo "La fecha " . $fechaString . " en formato de milisegundos es: " . getMilisecondsFromDate($fechaString);
 echo "<br/><br/>";
 echo "La misma fecha transformada " . $fechaString . " nuevamente a string: " . getDatefromMiliSeconds(getMilisecondsFromDate($fechaString));
-
+*/
 ?>
