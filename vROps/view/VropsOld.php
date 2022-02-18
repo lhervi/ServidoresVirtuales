@@ -34,9 +34,9 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
 
                                 <div class="form-group form-check-inline"><h5>Fechas del Intervalo<br/></h5>               
                                     <label for="inicio">Inicio</label>    
-                                    <input type="month" id="inicio" name="inicio">   
+                                    <input type="date" id="inicio" name="inicio">   
                                     <label for="fin">Fin</label>
-                                    <input type="month" id="fin" name="fin">                
+                                    <input type="date" id="fin" name="fin">                
                                 </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Intervalo de medición</h5>
