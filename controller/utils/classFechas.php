@@ -215,6 +215,36 @@ class Fechas{
         return  $fecMili->getTimestamp()*1000;    
     }
     
+    /**
+     * lastDay Método estático que recibe una fecha en formato yyyy-mm y regresa el último día de ese mes
+     *
+     * @param  string $fec ej: 2021-07
+     * @return string ejemplo '30' que representa el último día de un mes dado
+     */
+    static function lastDay (string $fec){
+        
+        $lastDay = "28";
+        $continuar=true;
+        
+        $month = self::splitMesAño($fec)['mes'];
+        $monthProv = $month;
+        
+        $fecProv = new DateTime($fec . "-" .$lastDay);      
+
+        while($continuar){
+            $fecProv->add(new DateInterval('P1D'));
+            $monthProv = $fecProv->format('m');
+            if($month == $monthProv){
+                $lastDay++;
+            }else{
+                $continuar=false;
+                return strval($lastDay);
+            }            
+        }
+
+
+    }
+    
 }
 
 ?>

@@ -23,9 +23,18 @@
                     //Revisar entradas ======== I N C L U I R ========
 
                     
-
-                    $begin = array_key_exists("inicio", $_POST) ? $_POST["inicio"] : Fechas::fechaQuery("hoy", true);
-                    $end = array_key_exists("fin", $_POST) ? $_POST["fin"] : Fechas::fechaQuery("fin", true);
+                    //2022-01
+                    if(isset($_POST["mesConsulta"])){
+                        //$mesConsulta = Fechas::splitMesAño($_POST["mesConsulta"]);
+                        //$begin = $mesConsulta['mes'];
+                        //$end = $mesConsulta ['año'];
+                        $begin = $_POST["mesConsulta"] . "-01";
+                        $end = $_POST["mesConsulta"] . Fechas::lastDay();
+                    }
+                      
+                    //$begin 
+                    //$begin = array_key_exists("inicio", $_POST) ? $_POST["inicio"] : Fechas::fechaQuery("hoy", true);
+                    //$end = array_key_exists("fin", $_POST) ? $_POST["fin"] : Fechas::fechaQuery("fin", true);
 
                     $intervalType = array_key_exists("intervalType", $_POST) ? $_POST["intervalType"] : "HOURS";
                     $intervalQuantifier = array_key_exists("intervalQuantifier", $_POST) ? intval($_POST["intervalQuantifier"]) : 1;
