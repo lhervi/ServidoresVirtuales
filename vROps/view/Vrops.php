@@ -32,11 +32,9 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
             
                             <form id="enviarForma" action="../genStats.php" method="post" class="form-group">  
 
-                                <div class="form-group form-check-inline"><h5>Fechas del Intervalo<br/></h5>               
-                                    <label for="inicio">Inicio</label>    
-                                    <input type="month" id="inicio" name="inicio">   
-                                    <label for="fin">Fin</label>
-                                    <input type="month" id="fin" name="fin">                
+                                <div class="form-group form-check-inline"><h5>Fecha del lapso a optener<br/></h5>               
+                                    <label for="mesConsulta">Mes a obtener</label>    
+                                    <input type="month" id="mesConsulta" name="mesConsulta">                                                 
                                 </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Intervalo de medición</h5>

@@ -84,6 +84,20 @@ class Utils{
 
        return $result; //Regresa el arreglo con el número de archivos eliminados y excluidos        
     }     
+
+    static function limpiarDirectorio(string $directorio){
+
+        $listado = scandir($directorio);    
+        unset($listado[array_search('..', $listado, true)]);
+        unset($listado[array_search('.', $listado, true)]);    
+        foreach($listado as $file){
+            unset($file);
+        }
+        
+        return true;       
+
+    }
+    
 }
 
 ?>

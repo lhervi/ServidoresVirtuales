@@ -25,11 +25,10 @@
                     
                     //2022-01
                     if(isset($_POST["mesConsulta"])){
-                        //$mesConsulta = Fechas::splitMesAño($_POST["mesConsulta"]);
-                        //$begin = $mesConsulta['mes'];
-                        //$end = $mesConsulta ['año'];
+                       
                         $begin = $_POST["mesConsulta"] . "-01";
-                        $end = $_POST["mesConsulta"] . Fechas::lastDay();
+                        $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);
+
                     }
                       
                     //$begin 

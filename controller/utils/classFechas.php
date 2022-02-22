@@ -241,8 +241,6 @@ class Fechas{
                 return strval($lastDay);
             }            
         }
-
-
     }
     
 }
