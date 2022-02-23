@@ -85,19 +85,44 @@ class Utils{
        return $result; //Regresa el arreglo con el número de archivos eliminados y excluidos        
     }     
 
+    /*
     static function limpiarDirectorio(string $directorio){
 
         $listado = scandir($directorio);    
         unset($listado[array_search('..', $listado, true)]);
         unset($listado[array_search('.', $listado, true)]);    
         foreach($listado as $file){
-            unset($file);
-        }
-        
-        return true;       
-
-    }
+            $fileToDelete = $directorio . "/" . $file;
+            unset($fileToDelete);
+        }        
+        return true;
+    } 
+    */
+    static function limpiarDirectorio(string $dir, array $exceptions = array()){
     
+        $listado = scandir($dir);    
+        unset($listado[array_search('..', $listado, true)]);
+        unset($listado[array_search('.', $listado, true)]);    
+        
+        foreach($listado as $file){
+            
+            $noExcluido = array_search($file, $exceptions) === false ? true : false;
+            
+            if($noExcluido){           
+                $f = $dir . "/" . $file;
+                unlink($f);
+            }        
+        }    
+        return true;
+    }   
+
+    static function listarDirectorio(string $dir){
+   
+        $listado = scandir($dir);
+        unset($listado[array_search(".", $listado)]);
+        unset($listado[array_search("..", $listado)]);
+        return $listado;
+    }  
 }
 
 ?>
