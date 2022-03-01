@@ -103,7 +103,8 @@ class VropsResourceList{
                     $resourceListInfo['resourceList'] = $resourceListArray;
                     $resourceListInfo['error'] = false;
 
-                    $resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
+                    //Al parecer esta linea está repetida
+                    //$resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
                    
                     // eliminar??
                     $nomArchivo = HOME . SALIDAS . $resourceKinds . "ResourceListArray.json";
@@ -166,17 +167,7 @@ class VropsResourceList{
                 
                 $cantidadDeResourceId = count($resp);  //Número de Ids
                 $segmentosArray= VropsConf::getCampo("segmentos"); //Cantidad de registros a agrupar
-                $avance = $segmentosArray['error'] ? SEGMENTOS : $segmentosArray['segmentos'];
-
-                /*
-                echo "<br/>";
-                echo "_______________________________________________________";
-                echo __FILE__.__LINE__."el valor del avance es: " . $avance;
-                echo "_______________________________________________________";
-                echo "<br/>";
-                */
-                                
-                //$avance = $segmento; //La cantidad de elementos a tomar en cada grupo
+                $avance = $segmentosArray['error'] ? SEGMENTOS : $segmentosArray['segmentos'];               
 
                 $nombre = $resourceKinds;
                 $nombre .= Fechas::fechaHoy("completa");

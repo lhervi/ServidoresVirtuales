@@ -19,22 +19,16 @@
                 <?php
 
                     // -----------------------------------------------  S A L T O  --------------------------------------
-
+                    //============ Procesamiento de entradas ================//
                     //Revisar entradas ======== I N C L U I R ========
-
                     
-                    //2022-01
                     if(isset($_POST["mesConsulta"])){
                        
                         $begin = $_POST["mesConsulta"] . "-01";
                         $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);
 
                     }
-                      
-                    //$begin 
-                    //$begin = array_key_exists("inicio", $_POST) ? $_POST["inicio"] : Fechas::fechaQuery("hoy", true);
-                    //$end = array_key_exists("fin", $_POST) ? $_POST["fin"] : Fechas::fechaQuery("fin", true);
-
+                 
                     $intervalType = array_key_exists("intervalType", $_POST) ? $_POST["intervalType"] : "HOURS";
                     $intervalQuantifier = array_key_exists("intervalQuantifier", $_POST) ? intval($_POST["intervalQuantifier"]) : 1;
                     $rollUpType = array_key_exists("rollUpType", $_POST) ? $_POST["rollUpType"] : "AVG";
@@ -44,12 +38,15 @@
                             $resourceKindsArray[] = $ind;
                         }
                     }
-
-                    //------  VERIFICAR QUE LOS CAMPOS ESTÉN CORRECTOS 
-                    //------  Fechas con valores no mayores a tres meses de amplitud
-
+                    
                     $resourceKinds = array_key_exists("resourceKinds", $_POST) ? $_POST["resourceKinds"] : "virtualmachine";
 
+                    //============ Fin de Procesamiento de entradas ================//
+
+                    //------------------------------------------------------------------------------------------------------------
+
+                    //============ Obtención de token de acceso ================//
+                    
                     $tokenInfo=VropsToken::getToken();
 
                     if ($tokenInfo['error']){
@@ -59,7 +56,13 @@
                         $_SESSION['tokenOk']=true;
                     }
 
+                    //============ Fin de obtención de token de acceso ================//
+
+                    //------------------------------------------------------------------------------------------------------------
+
                     file_put_contents(HOME.SALIDAS.'indiceDeConsultas.json', '{"indiceDeConsultas":0}');
+
+
                     foreach($resourceKindsArray as $resourceKinds){
                                 
                         $camposForStats = VropsResourceList::getCamposForStats($begin, $end, $intervalType, $intervalQuantifier, $rollUpType, $resourceKinds);  //además crea el archivo campos.json
@@ -77,7 +80,14 @@
                     
                         $campos = $camposForStats['campos']; //'camposArray contiene todos los campos para execCurl, menos porciones "REVISAR"
                         
+                        
+                        //============== I T E R A C I O N E S   P O R   S E R V I D O R =============//
+                        //Aquí debo decirle qué servidor procesar y hacer las iteraciones desde acá 
+                        //Pasos:
+                        //1. Leer el arreglo de servidores y para cada servidor, ejecutar el resto del programa, pasando el nombre del servidor a procesar                        
+                        
                         $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds);
+                        
                     }
 
                     if ($resultCurl['error']){
