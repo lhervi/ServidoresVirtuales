@@ -9,15 +9,13 @@ class VropsConf{
 
     private $conf;
 
-    function __construct(string $tipo="tipoVmwareToken", $resourceKinds=null){ 
+    function __construct(string $tipo="tipoVmwareToken", $resourceKinds=null, string $vropsServer=null){ 
 
         include_once '../constantes.php';
         include_once '../controller/utils/classDecodeJsonFile.php';        
         
         $conf = DecodeJF::decodeJsonFile(ARCHIVODECONFIGURACION); //Se inicializa el objeto con el arreglo de configuración vROpsConf.json        
-
-        
-       
+              
         if ($conf['error']){
             $this->conf['error']=true;
             $this->conf['mensaje']="el objeto no pudo crearse debido a que no se pudo leer el archivo de configuración";
@@ -33,26 +31,47 @@ class VropsConf{
                 $this->setResourceKinds($resourceKinds);                
                 $this->setStatKey($this->conf[$resourceKinds]);                   
             }
-            
+
+            if (!is_null($vropsServer)){
+                $this->conf['vropsServer'] = $vropsServer;         
+            }            
 
         }
 
     }
 
-    function setResourceKinds($resourceKinds){  //Le asigna un resourceKind al objeto ["virtualmachine"|"hostsystem"]
-        $this->conf['resourceKinds']=$resourceKinds;
+    //--------------------------- métodos vropsServer ---------------------------//
 
+    function getVropsServers(){  //método que retorna un array de strings con la lista de los servidores vrops                
+        return $this->conf["vropsServers"];        
     }
 
+    function getVropsServer(){  //método que retorna un string con el nombre del servidor vrops actual
+        return $this->conf["vropsServer"];        
+    }
+
+    function setVropsServer($vropsServer){  //método que permite inyectarle el nombre del servidor vrops a un objeto conf
+        $this->conf['vropsServer'] = $vropsServer;      
+    }
+
+    //--------------------------- fin métodos vropsServer ---------------------------//
+
+    //--------------------------- métodos resourceKinds ---------------------------//
+    
+    function setResourceKinds($resourceKinds){  //Le asigna un resourceKind al objeto ["virtualmachine"|"hostsystem"]
+        $this->conf['resourceKinds']=$resourceKinds;
+    }
+    
     function getResourceKinds(){  //Le asigna un resourceKind al objeto ["virtualmachine"|"hostsystem"]
         
         if (array_key_exists('resourceKinds', $this->conf)){
             return $this->conf['resourceKinds'];
         }else{
-            return null;  //---------------------------- -----------------------------
+            return null;
         }        
-
     }
+
+    //--------------------------- fin métodos resourceKinds ---------------------------//
 
     function getStatKey(){
         $rk=$this->getResourceKinds();
@@ -96,12 +115,11 @@ class VropsConf{
      * @return void
      */
 
-    function setGET(bool $val){       
-       
-        $this->conf[$this->tipo]['GET']=$val;      
-                  
+    function setGET(bool $val){
+        $this->conf[$this->tipo]['GET']=$val;
     }
     
+    //--------------------------- métodos token ---------------------------//
     /**
      * setToken
      * Este método pertenece a la clase VropsConf, recibe un string con la información del Token para asignar el
@@ -130,6 +148,10 @@ class VropsConf{
         }
     }
 
+    //--------------------------- fin métodos token ---------------------------//
+
+    //--------------------------- métodos nombre de archivo ---------------------------//
+
     function setNomArch(string $arch){
         $this->conf[$this->tipo]['arch']=$arch;
     }
@@ -144,9 +166,16 @@ class VropsConf{
         return $arch;
     }  
 
-    function setUrl(string $url){
-        $this->conf[$this->tipo]['url']=$url;
+    //--------------------------- fin métodos nombre de archivo ---------------------------//
+
+    //-------------------------------- método URL -----------------------------------------//
+    
+    //Este método es candidato a ser eliminado!! [ ¿ *** ELIMINAR *** ? ]
+    function setUrl(string $url){ 
+       $this->conf[$this->tipo]['url'] =  $this->conf->getVropsServer() . $url;
     }
+
+    //---------------------------- fin del método URL -------------------------------------//
 
     function getUserBA(){
         return $this->conf['userBA'];
@@ -190,10 +219,11 @@ class VropsConf{
 
     function getUrl(){               
         $tipo = $this->conf['tipo'];
-        $url = $this->conf[$tipo]['url'];
+        $url = $this->getVropsServer();
+        $url.= $this->conf[$tipo]['url'];
         if($tipo=="tipoResourceKinds"){
             $url .= $this->getResourceKinds();
-            $url .= "&page=0&pageSize=1800";            
+            $url .= URLTAIL;         
         }
         return $url;
     }
@@ -239,6 +269,7 @@ class VropsConf{
 
         $param['header']= $this->conf['header'];
         $param['proxy']= $this->conf['proxy'];
+        $param["vropsServers"] = $this->conf["vropsServers"];
         $param['userproxy']= $this->getUserProxy();        
         $param['certfirefox']= $this->getCertfirefox();
         $param['userpassword']= $this->getUserPasswordBA();

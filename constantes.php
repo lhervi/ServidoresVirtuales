@@ -9,6 +9,10 @@ define("ALLRESOURCELIST", "allResourceList.json");
 
 define("REPORTERRORACTIVE", false);
 
+define("URLVROPSTAIL", "&page=0&pageSize=");
+define("PAGESIZE", "1800"); //Este es el número de recursos vrops que trae una página en una cosulta
+define("URLTAIL", URLVROPSTAIL . PAGESIZE); //Concatena el string en el que termina la cola de la consulta con el núm max de recursos
+
 // ------------------ R U T A S -------------------------------------
 
 define("HOME", __DIR__);
