@@ -216,6 +216,7 @@ class VropsResourceList{
         include_once '../controller/utils/classArrayToJson.php';
         include_once '../vROps/classVropsConf.php';
         
+        //Contiene el arreglo de parámetros de consulta
         $statKeyArray = VropsConf::getCampo($resourceKinds);  // $resourceKinds=['virtualmachine'|'hostsystem']
  
         if ($statKeyArray['error']){

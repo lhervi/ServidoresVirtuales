@@ -16,7 +16,6 @@ include_once "../../view/css/style.css";
 <body>
 <?php
 
-
 include_once "../../constantes.php";
 include_once "../model/vropsConfigDB.php";
 include_once '../../controller/utils/classUtils.php';
@@ -27,7 +26,7 @@ $fechaInicio = $_POST['fechaInicio'];
 $fechaFin = $_POST['fechaFin'];
 
 $file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
-$file = HOME . SALIDA . ALLRESOURCELIST
+$file = HOME . SALIDAS . ALLRESOURCELIST;
 
 ?>
 

@@ -70,6 +70,7 @@
                         if ($camposForStats['error']){
                             die($camposForStats['mensaje']);
                         }
+                        //====== [PENDIENTE] Crear una funcion a la que se le pasen parámetros y pinte el estatus
                         echo '<div class="w-100" style="background-color: #19D4BD; height: 100px; max-width: 100%;">';
                         echo "<h2>Estatus del procesamiento</h2>";                
                         echo "<div>";                        
@@ -86,7 +87,22 @@
                         //Pasos:
                         //1. Leer el arreglo de servidores y para cada servidor, ejecutar el resto del programa, pasando el nombre del servidor a procesar                        
                         
-                        $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds);
+                        //Recupera el arreglo de strings con las direcciones de los servidores
+                        $vropsServers = VropsConf::getCampo('vropsServers');
+
+                        if ($vropsServers['error']){
+                            die ('no se pudo obtener el listado de servidores vrops');
+                        }else{
+                            
+                            foreach($vropsServers['$vropsServers'] as $vropsServer){
+                                $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $vropsServer);
+                            }
+
+                        }
+
+                        
+
+                        
                         
                     }
 

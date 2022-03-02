@@ -235,13 +235,13 @@ class Curl {
 
     //------------------------------------------------------ INICIO execCurl  -------------------------------------------
 
-    static function prepareExecCurl(string $token, string $tipo, array $camposArray=null, $resourceKinds=null){
+    static function prepareExecCurl(string $token, string $tipo, array $camposArray=null, $resourceKinds=null, $vropsServer=null){
         
         include_once '../vROps/classVropsConf.php';
         $error['error'] = "";
         $error['mensaje'] = "";
 
-        $objConf = new VropsConf($tipo, $resourceKinds);
+        $objConf = new VropsConf($tipo, $resourceKinds, $vropsServer);
         if($objConf->getError()){
             $error['error'] = true;
             $error['mensaje'] = "no se obtuvo la lista de recursos por problemas para acceder al archivo de configiración";
@@ -271,7 +271,7 @@ class Curl {
                     $nonArchSalida = HOME.STATS."stats" . $name;      //crea el nombre del archivo de salida de las estadísticas para el curl                       
                     
             
-                    $param['arch'] = $nonArchSalida;                  //asigna el nombre de cada archivo de salida con las estadísticas para el curl                       
+                    $param['arch'] = $nonArchSalida;                  //asigna el nombre de cada archivo de salida con las estadísticas para el curl                                           
                     $param['campos'] = $camposResult[$ind]['campos']; //asigna los campos en formato json a param
                     $nonArchSalidaArray[]=$nonArchSalida;             //Arreglo para registrar todos los nombres de los archivos de salida
                     file_put_contents(HOME.SALIDAS."statsAllFileList.txt", $nonArchSalida.PHP_EOL, FILE_APPEND);
@@ -293,8 +293,11 @@ class Curl {
                 $infConsulta['begin'] = $camposArray['begin'];
                 $infConsulta['end'] = $camposArray['end'];                    
                 $infConsulta['paramArray'] = $paramArray;
+                $infConsulta['vropsServer'] = $vropsServer;
 
                 //---------------------------- información de los archivos de salida ----------
+                
+                $statsArchInfo['vropsServer']=$vropsServer;
                 $statsArchInfo['resourceKinds']=$resourceKinds;
                 $statsArchInfo['created']=$fecha;
                 $statsArchInfo['begin']=$camposArray['begin'];
