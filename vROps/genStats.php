@@ -88,23 +88,16 @@
                         //1. Leer el arreglo de servidores y para cada servidor, ejecutar el resto del programa, pasando el nombre del servidor a procesar                        
                         
                         //Recupera el arreglo de strings con las direcciones de los servidores
-                        $vropsServers = VropsConf::getCampo('vropsServers');
+                        $vropsServer = VropsConf::getCampo('vropsServer');
 
-                        if ($vropsServers['error']){
+                        if ($vropsServer['error']){
                             die ('no se pudo obtener el listado de servidores vrops');
-                        }else{
-                            
-                            foreach($vropsServers['$vropsServers'] as $vropsServer){
-                                $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $vropsServer);
-                            }
-
+                        }else{                            
+                            $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $vropsServer);
                         }
 
-                        
-
-                        
-                        
                     }
+
 
                     if ($resultCurl['error']){
                         die($resultCurl["mensaje"]);

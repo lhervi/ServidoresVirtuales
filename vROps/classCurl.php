@@ -16,19 +16,7 @@ class Curl {
         
         $arch = fopen($param['arch'] , "w") or exit ("no se pudo abrir el archivo que almacenará el token");
         
-        //echo "el parámetro recibido en el Curl es: ";       
-        
-        if(REPORTERRORACTIVE){
-            echo __FILE__ . " linea: " . __LINE__;
-            echo "<br/>";
-            echo "contenido de param['arch']: ";
-            echo "<br/>";
-            print_r($param['arch']);
-            echo "<br/>";            
-            echo "todo param: " . "<br/>";
-            var_dump($param);
-        }
-        
+        //echo "el parámetro recibido en el Curl es: ";              
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $param['header']);                   //1
         curl_setopt($curl, CURLOPT_PROXY, $param['proxy']);                         //2
@@ -71,19 +59,6 @@ class Curl {
         //================================================
         $resultCurl['error'] = $res === true ? false : true;      
         //=================================================
-
-        //================= ELIMINAR HACIA ABAJO  ========================
-        
-        if(REPORTERRORACTIVE){
-            echo __FILE__ . " linea: " . __LINE__;
-            echo "<br/>";
-            echo "contenido de res = curl_exec: ";
-            echo "<br/>";
-            print_r($res);
-        }
-
-        //================= ELIMINAR HACIA ARRIBA ========================
-
 
         curl_close($curl);
         if($resultCurl['error']){           

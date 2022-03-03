@@ -44,9 +44,15 @@ class CargarStatsVrops {
      */
     static function procesarArchivo(array $statArrayInfValues){  //todos los archivos   
        
+        include_once HOME . '/constantes.php';
         include_once HOME . '/controller/utils/classBitacora.php';
+        include_once HOME . '/controller/utils/classFechas.php';
+        include_once HOME . '/vROps/classVropsConf.php';
         //controller\utils\classBitacora.php
         //D:\xampp\htdocs\STI\controller\utils\classBitacora.php
+        
+        $vropsServer = VropsConf::getCampo('vropsServer')['vropsServer'];
+        
         self::$proceso['registros']=0;
         $numReg=0;        
         $total = count($statArrayInfValues);
@@ -68,8 +74,9 @@ class CargarStatsVrops {
                 $fecha = $regStat['timestamps']; //Arreglo con todas las horas
                 $metrica = strval($regStat['statKey']['key']);
                 $valores = $regStat['data']; //Arreglo de valores           
-                foreach($valores as $ind=>$valor){  //se varían los valores de cada metrica                
-                    $arrayStats[$numReg]="('". $resourceId . "', '" . strval($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "')";                         
+                foreach($valores as $ind=>$valor){  //se varían los valores de cada metrica 
+                    //Fechas::getDatefromMiliSeconds(               
+                    $arrayStats[$numReg]="('". $resourceId . "', '" . Fechas::getDatefromMiliSeconds($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "', '" . $vropsServer . "')";                         
                     $numReg++;          //Si numReg > 1000 hay que ejecutar el insert en la BD                    
                     if ($numReg>1000){
                         $a=5;
@@ -194,7 +201,7 @@ class CargarStatsVrops {
             -Generar un informe de estadísticas de registros procesados
         */
 
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id SERIAL, recursos_id VARCHAR(50) NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL, fecha VARCHAR NOT NULL )"; 
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id SERIAL, recursos_id VARCHAR(50) NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL, fecha VARCHAR NOT NULL, servidor VARCHAR NOT NULL )"; 
         
         $registros = $objcon->insertar($consultaCreaTabla);  //Crea la tabla si no existe
 

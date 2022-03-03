@@ -9,7 +9,7 @@ ini_set('max_execution_time', '-1');
 include_once '../constantes.php';
 include_once '../controller/utils/classDecodeJsonFile.php';
 //include_once './classVropsToken.php';
-$home = HOME;
+
 include_once HOME . '/vROps/classVropsToken.php';
 include_once HOME . '/vROps/classVropsConf.php';
 
