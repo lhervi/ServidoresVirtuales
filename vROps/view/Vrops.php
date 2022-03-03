@@ -3,6 +3,7 @@
 include "../view/../../view/encabezado.php";
 include "../view/../../view/menu.php";
 
+
 if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 if (!isset($_SESSION['login']) || $_SESSION['login']===false){
@@ -30,7 +31,13 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
                         <div class="border border-secondary p-3 mb-2 bg-light text-dark rounded">
                         <div id="loader" class="loader" style="display:none;"></div>
             
-                            <form id="enviarForma" action="../genStats.php" method="post" class="form-group">  
+                            <form id="enviarForma" action="../genStats.php" method="post" class="form-group">
+
+                                
+
+                                <div class="form-group form-check-inline"><h5>Servidor: <br/></h5>    
+                                    
+                                </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Fecha del lapso a optener<br/></h5>               
                                     <label for="mesConsulta">Mes a obtener</label>    

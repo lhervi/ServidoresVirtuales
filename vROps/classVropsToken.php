@@ -49,10 +49,7 @@ class VropsToken{
 
     static function VropsParamToken(){
         
-        include_once 'classCurl.php';  
-        ///var/www/html/STISCR/vROps/classCurl.php  
-        //C:\xampp\htdocs\STISCR\vROps\classCurl.php
-        //Y:\STISCR\vROps\classCurl.php
+        include_once 'classCurl.php';      
         
         $objConf = new VropsConf("tipoVmwareToken"); //arreglo con los datos de la configuración que provienen de vROpsConf.json
         $param = $objConf->getParam();
@@ -165,34 +162,6 @@ class VropsToken{
         $ValidityOk= (is_integer($tokenInfo['validity']) &&  $tokenInfo['validity'] > 0) ? true : false; //verifica que el tiempo sea válido
         $expiresAtOk=strlen($tokenInfo['expiresAt'])>0 ? true : false; //valida que haya un tiempo de expirado 
         
-        //============================= ELIMINAR HACIA ABAJO  =======================
-
-        if(REPORTERRORACTIVE){
-            echo __FILE__ . " linea: " . __LINE__;
-            echo "<br/>";
-            echo "tokenInfo: ";            
-            print_r($tokenInfo);        
-            echo "<br/>";
-            echo "tokenOk: ";           
-            print_r($TokenOk);        
-            echo "<br/>";
-            echo "ValidityOk: ";   
-            print_r(strval($ValidityOk)); 
-            echo "<br/>";
-            if (is_bool($ValidityOk)) {                
-                echo "<br/>";
-                var_dump($ValidityOk);
-            }
-            echo "<br/>";
-            echo "expiresAtOk: ";            
-            print_r($expiresAtOk);  
-            echo "<br/><br/>";      
-            echo "=========================================";
-        }
-
-        //============================= ELIMINAR HACIA ARRIBA =======================
-        
-        
         if ($TokenOk && $ValidityOk && $expiresAtOk){
             return true;            
         }else{            
@@ -212,20 +181,7 @@ class VropsToken{
     static function validaToken(array $tokenInfo){
 
         $tokenInfo['error']=true; //Este valor cambiará si todo está bien
-
-        //============================= ELIMINAR HACIA ABAJO  =======================
-
-        if(REPORTERRORACTIVE){
-            echo __FILE__ . " linea: " . __LINE__;
-            echo "<br/>";
-            echo "tokenInfo: ";
-            echo "<br/>";
-            print_r($tokenInfo);        
-            echo "=========================================";
-        }
-
-        //============================= ELIMINAR HACIA ARRIBA =======================
-        
+ 
         if (array_key_exists('token', $tokenInfo) && array_key_exists('validity', $tokenInfo) && array_key_exists('expiresAt', $tokenInfo)){
            
             if (self::tokenOk($tokenInfo)){

@@ -2,7 +2,10 @@
 
 if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
-if (!array_key_exists('login', $_SESSION) || $_SESSION['login']===false){
+$ExisteLogin = array_key_exists('login', $_SESSION);
+$loginFalso = $_SESSION['login']===false;
+
+if (!$ExisteLogin || $loginFalso){
     header("Location: ../vROps/view/ingreso.php", true); 
 }
 

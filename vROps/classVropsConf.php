@@ -311,19 +311,15 @@ class VropsConf{
      * 
      */
     static function getCampo(string $campo=null, array $campos=null, $tipo=null, $resourceKinds=null){
-        include_once '../constantes.php';
-        include_once '../controller/utils/classDecodeJsonFile.php'; 
-
-        $conf = DecodeJF::decodeJsonFile(ARCHIVODECONFIGURACION); //Se inicializa el objeto con el arreglo de configuración vROpsConf.json        
-       
+        
+        include_once HOME . "/constantes.php";         
+        include_once HOME . "/controller/utils/classDecodeJsonFile.php";        
+                
+        $conf = DecodeJF::decodeJsonFile(ARCHIVODECONFIGURACION);
+        
         if ($conf['error']){
             $error['error'] = true;
-            $error['mensaje'] = "no se pudo acceder al archivo de configuración";
-            /*
-                echo "<br/><br/>".HOME.ARCHIVODECONFIGURACION . "   " . __LINE__;
-                echo "<br/><br/> HOME: " . HOME . "   " . __LINE__;
-                echo "<br/><br/>ARCHIVODECONFIGURACION: " . ARCHIVODECONFIGURACION . "   " . __LINE__;
-            */
+            $error['mensaje'] = "no se pudo acceder al archivo de configuración";            
             return $error;        
         }
         

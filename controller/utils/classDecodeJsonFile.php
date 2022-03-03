@@ -48,7 +48,9 @@ class DecodeJF {
     static function decodeJsonFile(string $file){
 
         //include_once '../../constantes.php'; //constantes.php  controller\utils\classDecodeJsonFile.php
-        include_once __DIR__ . '/../../constantes.php';             
+        //include_once __DIR__ . '/../../constantes.php';
+        
+        //include_once "./../../constantes.php";
                 
         if (file_exists($file)){
 
@@ -90,6 +92,10 @@ class DecodeJF {
             $error['mensaje']="no se encontró el archivo: " .  $file;
             return $error;
         }        
+    }
+
+    static function prueba(){
+        return 5;
     }
 
 }

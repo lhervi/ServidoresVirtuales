@@ -2,7 +2,11 @@
 
 if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
-if(array_key_exists("login", $_SESSION) && $_SESSION['login']===true){
+$loginOk=false;
+$existeLogin = array_key_exists("login", $_SESSION);
+if($existeLogin) $loginOk = $_SESSION['login']===true;
+
+if($loginOk && $existeLogin){
     header("Location: /STISCR/vROps/view/Vrops.php", true);
     ///var/www/html/STISCR/vROps/view/Vrops.php
 }
@@ -15,7 +19,20 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 //Error -------------------------------------------
+
+include_once "../classVropsConf.php";
 include "../view/../../view/encabezado.php";
+
+function servers(){
+    $servers = VropsConf::getCampo('vropsServers');
+    if($servers['error']){
+        die('no se pudo obtener la lista de servidores del archivo de configuración');
+    }else{
+        foreach($servers['vropsServers'] as $ind=>$serv){
+            echo "<option value='" . $ind . "'>" . $serv . "</option>" . PHP_EOL;
+        }
+    }
+}
 
 ?>
 <body class="m-0 vh-100 row justify-content-center align-items-center">
@@ -33,11 +50,20 @@ include "../view/../../view/encabezado.php";
                     <lable for="userBA">Usuario</lable><br>
                     <input type="text" Id="userBA" name="userBA" placeholder="usuarioBA"><br><br>
                     <lable for="passwordBA">Password</lable><br>
-                    <input type="password" Id="passwordBA" name="passwordBA"><br><br>
-                    
+                    <input type="password" Id="passwordBA" name="passwordBA"><br><br>                    
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="vropsServer">Servidor</label>
+                        </div>
+                        <select class="custom-select" id="vropsServer" name="vropsServer">
+                            <?php servers(); ?>
+                        </select>
+                    </div>                   
+                    <br><br>
                 </div>
 
                     <div><button id="submit" type="submit" class="btn btn-primary">Enviar</button></div><br>
+                   
                     <?php                       
                         
                         if (isset($_SESSION['loging'])===true){

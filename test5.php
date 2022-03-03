@@ -1,7 +1,12 @@
 <?php
 
-include "./constantes.php";
+include_once "./controller/utils/classDecodeJsonFile.php";
 
-echo "<pre><h2> " . URLTAIL . " </h2></pre>";
+include "./constantes.php";
+$a=5;
+$conf = DecodeJF::decodeJsonFile(ARCHIVODECONFIGURACION);
+var_dump($conf);
+
+//echo "<pre><h2> " . URLTAIL . " </h2></pre>";
 
 ?>
