@@ -35,8 +35,9 @@ class VropsToken{
         include_once 'classVropsConf.php';
         include_once 'classCurl.php';
         include_once '../controller/utils/classDecodeJsonFile.php';
-        include_once '../controller/utils/classBitacora.php';
+        include_once '../controller/utils/classBitacora.php';        
         
+        //===== [CORREGIR] ======
         $confArch = DecodeJF::decodeJsonFile(HOME.VROPS."vROpsConf.json");
         if ($confArch['error']){
             $tokenInfo['error']=true;
@@ -96,20 +97,7 @@ class VropsToken{
 
             $tokenInfo['error']=true;  //significa que no se pudo leer el archivo de configuración que contiene la ubicación y nombre del archivo del token.
 
-            $tokenInfo['mensaje']=$confArch['mensaje'];
-
-             //============================= ELIMINAR HACIA ABAJO  =======================
-
-            if(REPORTERRORACTIVE){
-                echo __FILE__ . " linea: " . __LINE__;
-                echo "<br/>";
-                echo "tokenInfo: ";
-                echo "<br/>";
-                print_r($tokenInfo);        
-                echo "=========================================";
-            }
-
-            //============================= ELIMINAR HACIA ARRIBA =======================
+            $tokenInfo['mensaje']=$confArch['mensaje'];            
 
             return $tokenInfo;
 
@@ -120,20 +108,7 @@ class VropsToken{
             
             if ($tokenInfo['error']){
 
-                $tokenInfo['mensaje']=$tokenInfo['mensaje'];
-
-                //============================= ELIMINAR HACIA ABAJO  =======================
-
-                if(REPORTERRORACTIVE){
-                    echo __FILE__ . " linea: " . __LINE__;
-                    echo "<br/>";
-                    echo "tokenInfo: ";
-                    echo "<br/>";
-                    print_r($tokenInfo);        
-                    echo "=========================================";
-                }
-
-            //============================= ELIMINAR HACIA ARRIBA =======================
+                $tokenInfo['mensaje']=$tokenInfo['mensaje'];                
 
                 return $tokenInfo;
 

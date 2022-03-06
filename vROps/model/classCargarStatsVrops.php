@@ -137,7 +137,7 @@ class CargarStatsVrops {
         }
     }
 
-    static function listFileToArray(string $file){
+    static function listFileToArray(string $file, $archJson){
         $archFileDir=array();
         if(file_exists($file)){
             $fileOpen = fopen($file, "r");
@@ -145,7 +145,14 @@ class CargarStatsVrops {
                 while(!feof($fileOpen)){
                     $arch=fgets($fileOpen);
                     if ($arch!==null){
-                        $archFileDir[]=trim($arch);
+                        if ($archJson){    
+                            //ej.: {"nombreArchSalida":"nonArchSalida.txt", "resourceKinds":"virtualmachine"}                                                   
+                            $archFileDir[]=json_decode(trim($arch), true);//                            
+                            $archFileDir['archJson']=true;
+                        }else{
+                            $archFileDir['archJson']=false;
+                            $archFileDir[]=trim($arch);
+                        }                        
                     }                    
                 }
                 $archFileDir['error'] = false;
@@ -164,14 +171,14 @@ class CargarStatsVrops {
      * para que sea usad posteriormente
      * @return array 'error' false si todo salió bien, y verdadero más un mensaje descriptivo del error 'mensaje' si hubo algún problema
      */
-    static function jsonStatsListToFile($archStats){   //crea un archivo con las rutas de los archivos a procesar
+    static function jsonStatsListToFile($archStats, bool $archJson=false){   //crea un archivo con las rutas de los archivos a procesar
         
         //$archStats = HOME.SALIDAS."statsList.json";       
-        $resultArch = self::listFileToArray($archStats);
+        $resultArch = self::listFileToArray($archStats, $archJson);
 
         if(array_key_exists('error', $resultArch) &&  !$resultArch['error']) {
             //$fileOpen = fopen($archStats, "r");
-            //$result = file_put_contents(HOME.SALIDAS."listFileStats.json", json_encode($resultArch));
+            //$result = file_put_contents(HOME.SALIDAS."listFileStats.json", json_encode($resultArch));        
                       
             return $resultArch;
             
@@ -201,7 +208,7 @@ class CargarStatsVrops {
             -Generar un informe de estadísticas de registros procesados
         */
 
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id SERIAL, recursos_id VARCHAR(50) NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL, fecha VARCHAR NOT NULL, servidor VARCHAR NOT NULL )"; 
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id int, recursos_id VARCHAR(50) NOT NULL, metrica VARCHAR(100) NOT NULL, valor VARCHAR NOT NULL, fecha VARCHAR NOT NULL, servidor VARCHAR NOT NULL )"; 
         
         $registros = $objcon->insertar($consultaCreaTabla);  //Crea la tabla si no existe
 
@@ -212,13 +219,15 @@ class CargarStatsVrops {
         
         //Contiene todas las direcciones de los archivos json de estadísticas
         $archStats = HOME.SALIDAS."statsAllFileList.txt";
+        $archStatsJson = HOME.SALIDAS."statsAllJsonFileList.txt";
 
         $result = self::jsonStatsListToFile($archStats); //Regresa un arreglo con los nombres de los archivos
+        $resultJson = self::jsonStatsListToFile($archStatsJson);
         
         if ($result['error']){
             die($result['mensaje']);
         }else{
-            unset($result['error']);
+            //unset($result['error']);
             $error = self::procesarLoteDeFileStat($result);
             if ($error['error']){
                 die ("<br/><h2>no se procesaron todos los archivos</h2>");
@@ -236,6 +245,8 @@ class CargarStatsVrops {
         }
         
         file_put_contents(HOME . SALIDAS . "resultProcesJsonToPostgres.json", json_encode(self::$proceso));
+
+        //========== [PENDIENTE]  Eliminar todos los archivos de la lista
 
        
 

@@ -11,8 +11,8 @@ class VropsConf{
 
     function __construct(string $tipo="tipoVmwareToken", $resourceKinds=null, string $vropsServer=null){ 
 
-        include_once '../constantes.php';
-        include_once '../controller/utils/classDecodeJsonFile.php';        
+        //include_once '../constantes.php';
+        include_once HOME . '/controller/utils/classDecodeJsonFile.php';        
         
         $conf = DecodeJF::decodeJsonFile(ARCHIVODECONFIGURACION); //Se inicializa el objeto con el arreglo de configuración vROpsConf.json        
               
@@ -157,7 +157,7 @@ class VropsConf{
     }
 
     function getNomArch(){
-        include_once '../constantes.php';        
+        //include_once  '/var/www/html/STISCR/constantes.php'; ///var/www/html/STISCR/vROps/classVropsConf.php      
         if(($this->conf['tipo']=="tipoMediciones") || ($this->conf['tipo']=="tipoResourceKinds")){
             $arch = HOME . SALIDAS . $this->getResourceKinds() . $this->conf[$this->conf['tipo']]['arch'];
         }else{

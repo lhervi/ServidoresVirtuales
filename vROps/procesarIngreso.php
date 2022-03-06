@@ -39,11 +39,7 @@ if ($confArray['error']){
     //Validar usuario y contraseña a través de clase    --------- PENDIENTE -----------
 
     //============= [MEJORAR] =============== [CAMBIAR] ==========================
-
-    //file_put_contents(HOME . VROPS . "vROpsConf.json", json_encode($confArray));
-    
-    //file_put_contents(HOME . VROPS . "vROpsConf.json", "{");
-    
+       
     $jsonContent = "{" . PHP_EOL;
     foreach($confArray as $ind=>$data){        
         if ($ind=="end") {

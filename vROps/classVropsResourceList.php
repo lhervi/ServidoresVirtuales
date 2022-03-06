@@ -107,15 +107,22 @@ class VropsResourceList{
                     //$resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
                    
                     // eliminar??
+                    //Esto crearía un nombre de archivo por tipo de recurso
                     $nomArchivo = HOME . SALIDAS . $resourceKinds . "ResourceListArray.json";
                     // eliminar??
                     
+                    //Crea el archivo con el nombre acorde al tipo de recurso
                     file_put_contents($nomArchivo, json_encode($resourceListArray));  
                     
-                    if (file_exists(HOME . SALIDAS . ALLRESOURCELIST, json_encode($resourceListArray))){
+                    //Esto debería eliminar el archivo que contiene todos los recursos juntos
+                    //Deshabilitado [REVISAR] [PENDIENTE]
+                    /*
+                    if (file_exists(HOME . SALIDAS . ALLRESOURCELIST)){
+                        //, json_encode($resourceListArray) [Este código estaba en el if como 2do parámetro y daba error]
                         $f = fopen(HOME . SALIDAS . ALLRESOURCELIST, "w");
                         fclose($f);
                     }
+                    */
                     
                     file_put_contents(HOME . SALIDAS . ALLRESOURCELIST, json_encode($resourceListArray), FILE_APPEND);    
 
@@ -170,7 +177,7 @@ class VropsResourceList{
                 $avance = $segmentosArray['error'] ? SEGMENTOS : $segmentosArray['segmentos'];               
 
                 $nombre = $resourceKinds;
-                $nombre .= Fechas::fechaHoy("completa");
+                //$nombre .= Fechas::fechaHoy("completa");
                 $correlativo=100;
                 $arregloDeNombresdeIds['resourceKinds']=$resourceKinds; //Crea un arreglo con el nombre del contenido de la variable $resourceKinds
                
