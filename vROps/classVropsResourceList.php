@@ -49,6 +49,8 @@ class VropsResourceList{
         
         $tokenInfo=VropsToken::getToken();
 
+        $server = VropsConf::getCampo('vropsServer');
+
         if ($tokenInfo['error']){     
 
 
@@ -80,11 +82,14 @@ class VropsResourceList{
                 }elseif(array_key_exists('resourceList', $FileArr)){
     
                     $resourceListInfo['error']=false;
+
+
                    
                     foreach ($FileArr['resourceList'] as $ind=>$resource){		
                         
                         if ($resource){
                             
+                            $rlArray['vropsServer'] = $server;
                             $rlArray['name'] = $resource['resourceKey']['name'];
                             $rlArray['identifier'] = $resource['identifier'];
                             $rlArray['adapterKindKey'] = $resource['resourceKey']['adapterKindKey'];
@@ -102,29 +107,22 @@ class VropsResourceList{
                     
                     $resourceListInfo['resourceList'] = $resourceListArray;
                     $resourceListInfo['error'] = false;
-
-                    //Al parecer esta linea está repetida
-                    //$resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
-                   
-                    // eliminar??
-                    //Esto crearía un nombre de archivo por tipo de recurso
+                    
                     $nomArchivo = HOME . SALIDAS . $resourceKinds . "ResourceListArray.json";
-                    // eliminar??
+                    // [ELIMINAR] ¿¿eliminar??
                     
                     //Crea el archivo con el nombre acorde al tipo de recurso
-                    file_put_contents($nomArchivo, json_encode($resourceListArray));  
+                    file_put_contents($nomArchivo, json_encode($resourceListArray)); 
                     
-                    //Esto debería eliminar el archivo que contiene todos los recursos juntos
-                    //Deshabilitado [REVISAR] [PENDIENTE]
-                    /*
-                    if (file_exists(HOME . SALIDAS . ALLRESOURCELIST)){
-                        //, json_encode($resourceListArray) [Este código estaba en el if como 2do parámetro y daba error]
-                        $f = fopen(HOME . SALIDAS . ALLRESOURCELIST, "w");
-                        fclose($f);
-                    }
-                    */
-                    
-                    file_put_contents(HOME . SALIDAS . ALLRESOURCELIST, json_encode($resourceListArray), FILE_APPEND);    
+                    $allResourceList = HOME . SALIDAS . ALLRESOURCELIST;
+                   
+                    $allResourceListProvisional = DecodeJF::decodeJsonFile($allResourceList);
+                    if(!$allResourceListProvisional['error']){
+                        unset($allResourceListProvisional['error']);                        
+                        $resourceListArray = array_merge($resourceListArray, $allResourceListProvisional);
+                    } 
+
+                    file_put_contents(HOME . SALIDAS . ALLRESOURCELIST, json_encode($resourceListArray));    
 
                     return $resourceListInfo;
 

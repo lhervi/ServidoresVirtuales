@@ -5,13 +5,14 @@
     ini_set('max_execution_time', '-1');
     ini_set('display_errors', 1);
 
+    include_once '../constantes.php';
     include_once '../view/encabezado.php';
     include_once 'classVropsToken.php';
     include_once 'classVropsResourceList.php';
     include_once '../controller/utils/classFechas.php';
-    include_once '../vROps/classCurl.php';
-    include_once '../constantes.php';
+    include_once '../vROps/classCurl.php';    
     include_once 'model/classCargarStatsVrops.php';
+    include_once './model/classCargarResourceList.php';
     ?>
     <body class="m-0 vh-100 row justify-content-start align-items-center">
         <div class="container col-auto">
@@ -57,8 +58,8 @@
                     }
 
                     //============ Fin de obtención de token de acceso ================//
-
-                    //------------------------------------------------------------------------------------------------------------
+                    //-------------------------------------------------------------------
+                   
 
                     file_put_contents(HOME.SALIDAS.'indiceDeConsultas.json', '{"indiceDeConsultas":0}');
 
@@ -78,7 +79,21 @@
                         echo "<h3>1- Procesando: " . $resourceKinds . "</h3>";                        
                         echo "<div>";
                         echo "<br/>";
-                    
+
+                        //===========================================================================
+
+                         //===== Creación y carga en la BD de la lista de recursos "resourceList" ---
+                        $file = HOME . SALIDAS . ALLRESOURCELIST;
+                        $arrayProv = CargarResourceList::readResourceListArray($file);
+                        $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+                        
+                        echo ("<div><h2> fin del proceso de carga de a lista de " . $resourceKinds . " </h2></div><br/>");
+                        //[ELIMINAR]  cambiar esta linea por un echo
+
+                        // ==== Fin de la reación y carga en la BD de la lista de recursos "resourceList"                    
+                        //-------------------------------------------------------------------------------
+
+                        //===========================================================================
                         $campos = $camposForStats['campos']; //'camposArray contiene todos los campos para execCurl, menos porciones "REVISAR"
                         
                         
@@ -88,6 +103,9 @@
                         //1. Leer el arreglo de servidores y para cada servidor, ejecutar el resto del programa, pasando el nombre del servidor a procesar                        
                         
                         //Recupera el arreglo de strings con las direcciones de los servidores
+
+                        //Deshabilitado provisional
+                        /*
                         $vropsServerArray = VropsConf::getCampo('vropsServer');
 
                         if ($vropsServerArray['error']){
@@ -95,9 +113,11 @@
                         }else{                            
                             $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $vropsServerArray['vropsServer']);
                         }
+                        */
 
                     }
-
+                    //[ELIMINAR] [Cambiar el "die" por un "echo" o una salida estructurada informando la culminación de la creación del resourcelist]
+                    die("Procesado provisional del resourceList");
 
                     if ($resultCurl['error']){
                         die($resultCurl["mensaje"]);

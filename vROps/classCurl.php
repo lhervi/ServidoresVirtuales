@@ -249,12 +249,14 @@ class Curl {
                     $param['arch'] = $nonArchSalida;                  //asigna el nombre de cada archivo de salida con las estadísticas para el curl                                           
                     $param['campos'] = $camposResult[$ind]['campos']; //asigna los campos en formato json a param
                     $nonArchSalidaArray[]=$nonArchSalida;             //Arreglo para registrar todos los nombres de los archivos de salida
-                    file_put_contents(HOME.SALIDAS."statsAllFileList.txt", $nonArchSalida.PHP_EOL, FILE_APPEND);
-                    
+                    $nombreArchSalidaJson = '{"nombreArchSalida":"' . $nonArchSalida . '", "resourceKinds":"' . $resourceKinds . '"}';
+                    file_put_contents(HOME.SALIDAS."statsAllFileList.txt", $nonArchSalida . PHP_EOL, FILE_APPEND);
+                    file_put_contents(HOME.SALIDAS."statsAllJsonFileList.txt",$nombreArchSalidaJson . PHP_EOL, FILE_APPEND);
                     $paramArray[$ind] = $param;                   //asigna este param al arreglo de parámetros
                     $ind++;
                 }             
             }
+            
 
             if(!is_null($paramArray)){
                 //---------------------------- información de consulta ---------------------

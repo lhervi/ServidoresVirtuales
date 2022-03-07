@@ -22,7 +22,9 @@ class CargarStatsVrops {
     static function insertStats(array $arrayStats){
         include_once 'classVropsConnection.php';
         
-        $insertStr= "INSERT INTO vmware_metricas (recursos_id, fecha, metrica, valor)";
+        //========== [ACTUALIZAR] ====================== Actualizar el insert ya que la tabla
+        //irecursos_id, fecha, metrica, valor, resourcekinds, servidor
+        $insertStr= "INSERT INTO vmware_metricas (recursos_id, fecha, metrica, valor, resourcekinds, servidor)";
         $insertStr .= " VALUES ";
         $insertStr .= implode(", ", $arrayStats);
         $result = VropsConexion::insertar($insertStr);
@@ -42,7 +44,7 @@ class CargarStatsVrops {
      * @param  array $statArrayInfValues recibe un arreglo con los valores a ser procesados
      * @return bool false si hubo un error en el proceso
      */
-    static function procesarArchivo(array $statArrayInfValues){  //todos los archivos   
+    static function procesarArchivo(array $statArrayInfValues, $resourceKinds){  //todos los archivos   
        
         include_once HOME . '/constantes.php';
         include_once HOME . '/controller/utils/classBitacora.php';
@@ -51,6 +53,7 @@ class CargarStatsVrops {
         //controller\utils\classBitacora.php
         //D:\xampp\htdocs\STI\controller\utils\classBitacora.php
         
+        //En el acrchivo de configuración está el nombre del servidor que se está procesando
         $vropsServer = VropsConf::getCampo('vropsServer')['vropsServer'];
         
         self::$proceso['registros']=0;
@@ -75,12 +78,16 @@ class CargarStatsVrops {
                 $metrica = strval($regStat['statKey']['key']);
                 $valores = $regStat['data']; //Arreglo de valores           
                 foreach($valores as $ind=>$valor){  //se varían los valores de cada metrica 
-                    //Fechas::getDatefromMiliSeconds(               
-                    $arrayStats[$numReg]="('". $resourceId . "', '" . Fechas::getDatefromMiliSeconds($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "', '" . $vropsServer . "')";                         
+                    
+                    
+                    $arrayStats[$numReg]="('". $resourceId . "', '" . Fechas::getDatefromMiliSeconds($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "', '" . $resourceKinds . "', '" . $vropsServer . "')";                         
+
                     $numReg++;          //Si numReg > 1000 hay que ejecutar el insert en la BD                    
                     if ($numReg>1000){
                         $a=5;
+                        //====================================================
                         $resultInsert = self::insertStats($arrayStats);  //llama al proceso de inserción de registros pasando el arreglo con los 1000 datos
+                        //====================================================
                         self::$proceso['registros']++;
                         $numReg = 0; //Inicializa el contador
                         $arrayStats = null;                   //inicializa el arreglo                        
@@ -112,12 +119,22 @@ class CargarStatsVrops {
         if ($listArchArray){
             self::$proceso['files']=0;
             foreach($listArchArray as $dirFileStats){
-                $cont = file_get_contents($dirFileStats);
+                //$listArchArray[n]['nombreArchSalida'] = "nonArchSalida.txt"
+                //$listArchArray[n]['resourceKinds'] = "virtualmachine"
+                $solDirFileStats ??= $dirFileStats['nombreArchSalida'];
+                if(!is_file($solDirFileStats)){
+                    $a=5;
+                    continue;
+                }
+                $cont = file_get_contents($dirFileStats['nombreArchSalida']);
                 if($cont){
                     $statArrayInfo = json_decode($cont, true); //metricas por archivo
                     if($statArrayInfo){
                         if(array_key_exists('values', $statArrayInfo) && count($statArrayInfo['values'])>0){
-                            $result = self::procesarArchivo($statArrayInfo['values']);
+//===================================================================================================
+                            $result = self::procesarArchivo($statArrayInfo['values'], $dirFileStats['resourceKinds']);
+//===================================================================================================
+
                             self::$proceso['files']++;
                             if (!$result){                        
                                 $error['error'] = true;
@@ -146,7 +163,10 @@ class CargarStatsVrops {
                     $arch=fgets($fileOpen);
                     if ($arch!==null){
                         if ($archJson){    
-                            //ej.: {"nombreArchSalida":"nonArchSalida.txt", "resourceKinds":"virtualmachine"}                                                   
+                            //ej.: {"nombreArchSalida":"nonArchSalida.txt", "resourceKinds":"virtualmachine"} 
+                            //$arreglo[n]['nombreArchSalida'] = "nonArchSalida.txt"
+                            //$arreglo[n]['resourceKinds'] = "virtualmachine"
+
                             $archFileDir[]=json_decode(trim($arch), true);//                            
                             $archFileDir['archJson']=true;
                         }else{
@@ -176,16 +196,16 @@ class CargarStatsVrops {
         //$archStats = HOME.SALIDAS."statsList.json";       
         $resultArch = self::listFileToArray($archStats, $archJson);
 
-        if(array_key_exists('error', $resultArch) &&  !$resultArch['error']) {
-            //$fileOpen = fopen($archStats, "r");
-            //$result = file_put_contents(HOME.SALIDAS."listFileStats.json", json_encode($resultArch));        
+        if(array_key_exists('error', $resultArch) &&  !$resultArch['error']) {            
                       
             return $resultArch;
             
         }else{
+
             $resultArch['error']=true;
             $resultArch['mensaje'] = "no pudo crearse el archivo " . HOME.SALIDAS."listFileStats.json";
             return $resultArch;
+
         }
     }
         
@@ -208,7 +228,8 @@ class CargarStatsVrops {
             -Generar un informe de estadísticas de registros procesados
         */
 
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id int, recursos_id VARCHAR(50) NOT NULL, metrica VARCHAR(100) NOT NULL, valor VARCHAR NOT NULL, fecha VARCHAR NOT NULL, servidor VARCHAR NOT NULL )"; 
+        //irecursos_id, fecha, metrica, valor, resourcekinds, servidor
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id serial, recursos_id VARCHAR(100) NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR(100) NOT NULL, valor VARCHAR(50) NOT NULL,  resourcekinds VARCHAR(50) NOT NULL, servidor VARCHAR NOT NULL)"; 
         
         $registros = $objcon->insertar($consultaCreaTabla);  //Crea la tabla si no existe
 
@@ -221,14 +242,14 @@ class CargarStatsVrops {
         $archStats = HOME.SALIDAS."statsAllFileList.txt";
         $archStatsJson = HOME.SALIDAS."statsAllJsonFileList.txt";
 
-        $result = self::jsonStatsListToFile($archStats); //Regresa un arreglo con los nombres de los archivos
-        $resultJson = self::jsonStatsListToFile($archStatsJson);
-        
+        //$result = self::jsonStatsListToFile($archStats, true); //Regresa un arreglo con los nombres de los archivos
+        $result = self::jsonStatsListToFile($archStatsJson, true);
+
         if ($result['error']){
             die($result['mensaje']);
         }else{
-            //unset($result['error']);
-            $error = self::procesarLoteDeFileStat($result);
+            //unset($result['error']);            
+            $error = self::procesarLoteDeFileStat($result); //
             if ($error['error']){
                 die ("<br/><h2>no se procesaron todos los archivos</h2>");
                 
@@ -244,11 +265,10 @@ class CargarStatsVrops {
             }
         }
         
+        
         file_put_contents(HOME . SALIDAS . "resultProcesJsonToPostgres.json", json_encode(self::$proceso));
 
         //========== [PENDIENTE]  Eliminar todos los archivos de la lista
-
-       
 
         //Para cada archivo leído: 
             //Pasar cada archivo a formato arreglo. Para esto crear un método aparte que dado un archivo json de estadísticas, 

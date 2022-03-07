@@ -38,6 +38,7 @@ $file = HOME . SALIDAS . ALLRESOURCELIST;
 <?php
 
     $cols=1; //Se inicia el contador en uno porque hay una celda adicional que corresponde con el número de registro
+        
     $arrayProv = CargarResourceList::readResourceListArray($file);
 
     //crea el encabezado de la tabla 
@@ -49,15 +50,21 @@ $file = HOME . SALIDAS . ALLRESOURCELIST;
     }
 
     //pasa la información a la base de datos
+    /*
     $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
 
     if ($result>0){ //evalúa si se insertaron los registros en la base de datos
       echo "<tr><td align='center' colspan='". $cols ."'><div><h2> Se incertaron " . $result  . " registros</h2></div></td></tr>";
     }
+    */
 ?>
 </tr>
 
 <?php
+
+//$file = HOME . SALIDAS . ALLRESOURCELIST;
+//$arrayProv = CargarResourceList::readResourceListArray($file);
+//$result = CargarResourceList::insertRegistrosResourceList($arrayProv);
 
 //Llena la tabla con los valores de los campos
 foreach($arrayProv as $ind => $reg){

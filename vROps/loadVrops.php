@@ -10,14 +10,17 @@
 ?>
     <body class="m-0 vh-100 row justify-content-start align-items-center">
         <div class="container col-auto">
+            <div><h2>Proceso de Carga de Estadísticas en la BD</h2></div><br/>
 
 <?php
-   $dale = true;
+   
+   $dale = true; //[ELIMINAR]
+
    if (isset($_POST['continuar']) || $dale){
     
         echo "<h2>Iniciando el proceso de carga</h2>";
 
-        CargarStatsVrops::cargarStats();
+        CargarStatsVrops::cargarStats(); 
 
         echo '<div class="w-100"  max-width: 100%; style="background-color: #eee; height: 250px; max-width: 100%;">';
         echo "<br/><h3>Culminó la carga</h3><br/>";
