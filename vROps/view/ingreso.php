@@ -2,6 +2,9 @@
 
 if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
+/*
+//======= [REVISAR] Desactivado el reenvío a vrops.php dado que ahora se permite el cambio de servidor
+
 $loginOk=false;
 $existeLogin = array_key_exists("login", $_SESSION);
 if($existeLogin) $loginOk = $_SESSION['login']===true;
@@ -10,6 +13,7 @@ if($loginOk && $existeLogin){
     header("Location: /STISCR/vROps/view/Vrops.php", true);
     ///var/www/html/STISCR/vROps/view/Vrops.php
 }
+*/
 
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', '-1');
@@ -23,6 +27,13 @@ ini_set('display_errors', '1');
 include_once "../classVropsConf.php";
 include "../view/../../view/encabezado.php";
 
+include_once '../../controller/utils/classUtils.php';
+
+$directoio = HOME . SALIDAS;
+Utils::limpiarDirectorio($directoio);
+$directoio = HOME . STATS;
+Utils::limpiarDirectorio($directoio);
+
 function servers(){
     $servers = VropsConf::getCampo('vropsServers');
     if($servers['error']){
@@ -32,6 +43,7 @@ function servers(){
             echo "<option value='" . $ind . "'>" . $serv . "</option>" . PHP_EOL;
         }
     }
+
 }
 
 ?>

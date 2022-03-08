@@ -49,10 +49,9 @@ class VropsResourceList{
         
         $tokenInfo=VropsToken::getToken();
 
-        $server = VropsConf::getCampo('vropsServer');
+        $server = VropsConf::getCampo('vropsServer')['vropsServer'];
 
         if ($tokenInfo['error']){     
-
 
             $error['mensaje'] = $tokenInfo['mensaje'];
             $error['error'] = true;  

@@ -63,7 +63,7 @@ class Curl {
         curl_close($curl);
         if($resultCurl['error']){           
             $resultCurl['mensaje'] = "hubo un problema al ejecutar el curl";
-            echo "Error en la linea " . __LINE__ . " en: " . __FILE__ . "<br/><br/>";            
+            die("la consulta al servidor no fue exitosa " . __LINE__ . " en: " . __FILE__ . "<br/><br/>");            
             return $resultCurl;
         }else{
             $resultCurl['mensaje'] = "todo bien";

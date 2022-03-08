@@ -8,6 +8,7 @@
     include_once '../constantes.php';
     include_once '../view/encabezado.php';
     include_once 'classVropsToken.php';
+    include_once './classVropsConf.php';
     include_once 'classVropsResourceList.php';
     include_once '../controller/utils/classFechas.php';
     include_once '../vROps/classCurl.php';    
@@ -18,6 +19,8 @@
         <div class="container col-auto">
 
                 <?php
+
+                $server = VropsConf::getCampo('vropsServer')['vropsServer'];
 
                     // -----------------------------------------------  S A L T O  --------------------------------------
                     //============ Procesamiento de entradas ================//
@@ -82,10 +85,22 @@
 
                         //===========================================================================
 
-                         //===== Creación y carga en la BD de la lista de recursos "resourceList" ---
+                        //===== Crear la lista de recursos "resourceList" ---
                         $file = HOME . SALIDAS . ALLRESOURCELIST;
                         $arrayProv = CargarResourceList::readResourceListArray($file);
-                        $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+                        //===== Fin de crear la lista de recursos "resourceList" ---------------------
+                        //----------------------------------------------------------------------------
+                        //===== Creación y cargar en la BD de la lista de recursos "resourceList" ----
+
+                        //--------[PENDIENTE] 
+                        //1 Preguntar acá si se desea pasar la información a la BD
+                        //2 Comprobar que la información no haya sido cargada previamente
+                        //3 Advertir si los registros ya existen en la BD o la conclusión de la carga
+                        
+                        //----------- [PROVISIONAL]-----------------[HABILITAR DESPUÉS DE CARAGAR LAS ESTADÍSTICAS]                        
+                        //$result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+
+                        //===== Fin de la creación y carga en la BD de la lista de recursos "resourceList" ---
                         
                         echo ("<div><h2> fin del proceso de carga de a lista de " . $resourceKinds . " </h2></div><br/>");
                         //[ELIMINAR]  cambiar esta linea por un echo
@@ -96,16 +111,6 @@
                         //===========================================================================
                         $campos = $camposForStats['campos']; //'camposArray contiene todos los campos para execCurl, menos porciones "REVISAR"
                         
-                        
-                        //============== I T E R A C I O N E S   P O R   S E R V I D O R =============//
-                        //Aquí debo decirle qué servidor procesar y hacer las iteraciones desde acá 
-                        //Pasos:
-                        //1. Leer el arreglo de servidores y para cada servidor, ejecutar el resto del programa, pasando el nombre del servidor a procesar                        
-                        
-                        //Recupera el arreglo de strings con las direcciones de los servidores
-
-                        //Deshabilitado provisional
-                        /*
                         $vropsServerArray = VropsConf::getCampo('vropsServer');
 
                         if ($vropsServerArray['error']){
@@ -113,11 +118,11 @@
                         }else{                            
                             $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $vropsServerArray['vropsServer']);
                         }
-                        */
+                        
 
                     }
-                    //[ELIMINAR] [Cambiar el "die" por un "echo" o una salida estructurada informando la culminación de la creación del resourcelist]
-                    die("Procesado provisional del resourceList");
+                                                      
+                    echo("<div><h2>Se ha completado el procesamiento de resourceList</h2></div><br/>");
 
                     if ($resultCurl['error']){
                         die($resultCurl["mensaje"]);
@@ -125,6 +130,7 @@
 
                         //#28EB76 color central https://color.adobe.com/es/create/color-wheel
                         //echo "================================================================";
+                        
                         echo '<div class="w-100" style="background-color: #BCF53D; height: 250px; max-width: 100%;">';
                         echo "<h3> La información de los recursos ha sido obtenida exitosamente</h3>";                        
                         echo "<br/><h3>2- Inicia el proceso de generación de estadísticas</h3>";   
@@ -160,7 +166,7 @@
                             }        
                             
                             echo '<div class="w-100" style="background-color: #BCF53D; height: 250px; max-width: 100%;">';
-                            echo "<br/><h2>La información está lista para pasarse a la base de datos</h2><br/>";                           
+                            echo "<br/><h2>La información del servidor" . $server . "está lista para pasarse a la base de datos</h2><br/>";                           
                             echo "</div>"; 
 
                             echo '<div class="w-100" style="padding :15px background-color: #EEE; height: 250px; max-width: 100%;">';

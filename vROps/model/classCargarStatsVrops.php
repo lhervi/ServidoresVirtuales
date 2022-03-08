@@ -122,11 +122,16 @@ class CargarStatsVrops {
                 //$listArchArray[n]['nombreArchSalida'] = "nonArchSalida.txt"
                 //$listArchArray[n]['resourceKinds'] = "virtualmachine"
                 $solDirFileStats ??= $dirFileStats['nombreArchSalida'];
-                if(!is_file($solDirFileStats)){
+                if(!is_file($solDirFileStats) || $dirFileStats['nombreArchSalida']==""){
                     $a=5;
                     continue;
                 }
-                $cont = file_get_contents($dirFileStats['nombreArchSalida']);
+                try{
+                    $cont = file_get_contents($dirFileStats['nombreArchSalida']);
+                }catch(Exception $e){
+                    echo $e;
+                }
+               
                 if($cont){
                     $statArrayInfo = json_decode($cont, true); //metricas por archivo
                     if($statArrayInfo){
@@ -229,7 +234,7 @@ class CargarStatsVrops {
         */
 
         //irecursos_id, fecha, metrica, valor, resourcekinds, servidor
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id serial, recursos_id VARCHAR(100) NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR(100) NOT NULL, valor VARCHAR(50) NOT NULL,  resourcekinds VARCHAR(50) NOT NULL, servidor VARCHAR NOT NULL)"; 
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id serial, recursos_id VARCHAR NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL,  resourcekinds VARCHAR NOT NULL, servidor VARCHAR NOT NULL)"; 
         
         $registros = $objcon->insertar($consultaCreaTabla);  //Crea la tabla si no existe
 
@@ -258,24 +263,18 @@ class CargarStatsVrops {
             }else{
                 echo "<br/>";
                 echo '<div class="w-100" style="background-color: #BCF53D; height: 250px; max-width: 100%;">';                
-                echo "<br/><h1>Culminó con éxito la carga de los registros</h1>";
+                echo "<br/><h1>Culminó con éxito la carga de los registros</h1>";                
                 echo '</div>';                
                 echo "<br/>";
+                echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
                 return true;
             }
         }
         
-        
         file_put_contents(HOME . SALIDAS . "resultProcesJsonToPostgres.json", json_encode(self::$proceso));
-
-        //========== [PENDIENTE]  Eliminar todos los archivos de la lista
-
-        //Para cada archivo leído: 
-            //Pasar cada archivo a formato arreglo. Para esto crear un método aparte que dado un archivo json de estadísticas, 
-            //regrese un arreglo de arreglos, donde cada valor es un string con los mil registros (parametrizable) a insertar
        
     }
-                 
+                
 }        
 
 ?>

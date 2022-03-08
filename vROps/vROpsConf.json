@@ -7,7 +7,7 @@
 "vropsServer":"https:\/\/vrops.intra.banesco.com",
 "proxy":"prxsrv.intra.banesco.com:9090",
 "segmentos":100,
-"certfirefox":"multi_part_sapl8442.pem",
+"certfirefox":"vrops.pem",
 "header":["Content-Type: application\/json","Accept: application\/json"],
 "VmwareToken":"VmwareToken.json",
 "resourceKinds":["virtualmachine","hostsystem"],

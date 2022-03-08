@@ -35,11 +35,17 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
 
                                 
 
-                                <div class="form-group form-check-inline"><h5>Servidor: <br/></h5>    
+                                <?php 
+                                    include_once './../classVropsConf.php';
+                                    $server = VropsConf::getCampo('vropsServer')['vropsServer'];
+                                    echo '<div id="server" class="form-group form-check-inline"><h5>Servidor: ' . $server . '<br/></h5>'; 
+                                    echo '<label for="server" id="labelServer" style="cursor:pointer">Cambiar servidor-></label>';
+                                
+                                ?>
                                     
                                 </div><br/><br/>
 
-                                <div class="form-group form-check-inline"><h5>Fecha del lapso a optener<br/></h5>               
+                                <div class="form-group form-check-inline"><h5>Fecha del lapso <br/></h5>               
                                     <label for="mesConsulta">Mes a obtener</label>    
                                     <input type="month" id="mesConsulta" name="mesConsulta">                                                 
                                 </div><br/><br/>
@@ -82,6 +88,12 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
             document.getElementById("loader").style.display= "block";
             document.getElementById('enviarForma').submit();
         }            
+
+        document.getElementById("server").addEventListener("click", function(){
+            //alert ("Estoy aquí");
+            location.href = "/STISCR/vROps/view/ingreso.php";            
+        })
+        
 
     </script>
     <?php include_once '../../view/bodyScripts.php';?>

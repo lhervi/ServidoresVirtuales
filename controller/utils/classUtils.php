@@ -84,20 +84,14 @@ class Utils{
 
        return $result; //Regresa el arreglo con el número de archivos eliminados y excluidos        
     }     
-
-    /*
-    static function limpiarDirectorio(string $directorio){
-
-        $listado = scandir($directorio);    
-        unset($listado[array_search('..', $listado, true)]);
-        unset($listado[array_search('.', $listado, true)]);    
-        foreach($listado as $file){
-            $fileToDelete = $directorio . "/" . $file;
-            unset($fileToDelete);
-        }        
-        return true;
-    } 
-    */
+       
+    /**
+     * limpiarDirectorio método estático para eliminar los archivos de un directorio
+     *
+     * @param  string $dir  la dirección del directorio que será limpiado
+     * @param  array $exceptions un arreglo co las direcciones de los archivos a excluir
+     * @return void
+     */
     static function limpiarDirectorio(string $dir, array $exceptions = array()){
     
         $listado = scandir($dir);    
@@ -110,7 +104,12 @@ class Utils{
             
             if($noExcluido){           
                 $f = $dir . "/" . $file;
-                unlink($f);
+                if (is_dir($f)){
+                    continue;
+                }else{
+                    unlink($f);
+                }
+                
             }        
         }    
         return true;

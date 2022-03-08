@@ -24,9 +24,35 @@ class CargarResourceList{
         $consultaCreaTabla .= "alertsOfResource VARCHAR NOT NULL, symptomsOfResource VARCHAR NOT NULL, statKeysOfResource VARCHAR NOT NULL, "; 
         $consultaCreaTabla .= "latestStatsOfResource VARCHAR NOT NULL, latestPropertiesOfResource VARCHAR NOT NULL, credentialsOfResource VARCHAR NOT NULL)"; 
 
-        $result = VropsConexion::insertar($consultaCreaTabla);       
+        $result = VropsConexion::insertar($consultaCreaTabla);  
+        
+        file_put_contents("consulta.txt","");
 
         return $result;
+        
+    }
+
+    static function insertar($consultaInsert, $strInsert){
+      include_once 'classVropsConnection.php';
+
+      $consultaInsert .= implode(", ", $strInsert);
+      file_put_contents("consulta.txt", $strInsert, FILE_APPEND);
+      $result = VropsConexion::insertar($consultaInsert);
+      return $result;
+    }
+    
+
+    //=========================================================
+    // INICIALIZAR LA CONSULTA
+    //=========================================================
+
+    static function iniConsulta(){
+      $consultaInsert = "INSERT INTO vmware_recursos (servidor, nombre, recursos_id, adapterKindKey, tipo, ";
+      $consultaInsert .= "linkToSelf, relationsOfResource, propertiesOfResource, "; 
+      $consultaInsert .= "alertsOfResource, symptomsOfResource, statKeysOfResource, "; 
+      $consultaInsert .= "latestStatsOfResource, latestPropertiesOfResource, credentialsOfResource) "; 
+      $consultaInsert .= "VALUES ";
+      return $consultaInsert;
     }
 
     //=========================================================
@@ -43,20 +69,11 @@ class CargarResourceList{
       $strInsert = array();
       
       $tope=0; //contador de registros para insertar el número máximo definido en la constante NUMREGINSERT
-      
-      $consultaInsert = "INSERT INTO vmware_recursos (servidor, nombre, recursos_id, adapterKindKey, tipo, ";
-      $consultaInsert .= "linkToSelf, relationsOfResource, propertiesOfResource, "; 
-      $consultaInsert .= "alertsOfResource, symptomsOfResource, statKeysOfResource, "; 
-      $consultaInsert .= "latestStatsOfResource, latestPropertiesOfResource, credentialsOfResource) "; 
-      $consultaInsert .= "VALUES ";
+            
+      $consultaInsert = self::iniConsulta();
       $registrosAlmacenados=0;
       
       foreach($registros as $campos){
-        
-        //foreach($campos as $campo){
-          //colocar comillas aquí a cada campo 
-          //$campo = "'" . $campo . "'";
-        //}
 
         //contruir el string con los valores a insertar        
         $strInsert[] = "('" . implode("','", $campos) . "') ";
@@ -64,11 +81,9 @@ class CargarResourceList{
         $tope++; //tope se incrementa fuera del if y dentro del foreach
         
         if ($tope>NUMREGINSERT){ //inserta un lote de registros de acuerdo al tope definido como NUMREGINSERT
-         
-          $consultaInsert .= implode(", ", $strInsert); //Cuando se alcanzan el tope, se añaden los valores
-          file_put_contents("consulta.txt", $strInsert);
-          //die;
-          $result = VropsConexion::insertar($consultaInsert);          
+          
+          $result = self::insertar($consultaInsert, $strInsert);
+
           if (!$result){
             die("ocurrió un error al intentar grabar a información de los resourceList en la BD");
           }else{
@@ -76,13 +91,13 @@ class CargarResourceList{
           }
           $tope=0;
           $strInsert=array();
+          $consultaInsert = self::iniConsulta();
         }
 
       }
 
       if ($tope>0){  //inserta los últimos registros que hayan quedado fuera de los lotes 
-        $consultaInsert .= implode(", ", $strInsert);
-        VropsConexion::insertar($consultaInsert);
+        $result = self::insertar($consultaInsert, $strInsert);
         $registrosAlmacenados+=$tope;
       }
       return $registrosAlmacenados;
@@ -142,44 +157,9 @@ class CargarResourceList{
                 $arrayProv[]=$prov;
                 
               }
-      
-              
-          
           return $arrayProv;    
         }
       }
-
-      
-    
-    /*
-      function loadResourceList(string $resourceListFile){ //Recibir el nombre del archivo a cargar
-        include_once HOME . "/STISCR/vROps/model/classVropsConnection.php";
-        include_once HOME . "/STISCR/controller/utils/classDecodeJsonFile.php";
-
-        $resourceListArray = DecodeJF::decodeJsonFile($resourceListFile);
-
-        if ($resourceListArray['error']){
-            die($resourceListArray['mensaje']);
-        }else{
-           
-            $insertStr= "INSERT INTO vmware_recursos (nombre, indentificador, tipo_de_adaptador, recursos_id, ";
-            $insertStr .= "linkToSelf, relationsOfResource, propertiesOfResource, alertsOfResource, symptomsOfResource, ";
-            $insertStr .= "statKeysOfResource, latestStatsOfResource, latestPropertiesOfResource, credentialsOfResource)";
-            $insertStr .= " VALUES ";
-            foreach($resourceListArray as $registro){
-                $arrayProv[] = $registro['nombre'];    
-
-            }            
-        }
-        
-        //Convertir el archivo en un arreglo (listo)
-        //Si la tabla no existe en la BD, crearla (listo)
-        //Recorrer el arreglo (listo)
-        //Escribir la información en lotes de 1000 registros (listo)
-
-    }
-    */
-
 }
 
 ?>
