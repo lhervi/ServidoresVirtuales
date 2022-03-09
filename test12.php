@@ -9,43 +9,37 @@
     return $func;
  }
 
-    $clase = function($str){
+    $clase = function($str, int $tam=3){
         static $val=true;
+        
         if ($val){
             $val = false;
-            return "<div class='estatus1'>$str</div>";            
+            return "<div class='estatus1'><h" . $tam . ">" . $str . "</h" . $tam . "</div>";            
         }else{
             $val = true;
-            return "<div class='estatus2'>$str</div>";            
+            return "<div class='estatus2'><h" . $tam . ">" . $str . "</h" . $tam . "</div>";           
         }
     }
 
+    
+
 ?>
 
-<style>
-    div.estatus1 {
-        background-color: #BCF53D; 
-        height: 250px; 
-        max-width: 100%
-    }
-
-    div.estatus2 {
-        background-color: #19D4BD; 
-        height: 250px; 
-        max-width: 100%
-    }
-</style>
 
 <body>
 <br/>
 <?php
+
+function estiloEstatus(){
+    return null;
+}
 
  echo $clase(" Culminó con éxito la carga de los registros");
  echo $clase("resultado1");      
  echo $clase("prueba de resultados");
  echo $clase("mas resultados que mostrar");
  echo '<div id="regresar" style="cursor:pointer; width:200px"><h3>>>>Regresar</h3></div>';
- echo "<script>" . PHP_EOL;     
+ echo "<script>" . PHP_EOL;      
  echo (enlace('regresar', INICIO));
  echo "</script>";
 
@@ -74,9 +68,6 @@ $func = function (string $fName, array $param){
 $arg = array('regresar', INICIO);
 */
 ?>
-
-
-
 
 </body>
 </html>

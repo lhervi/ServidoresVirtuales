@@ -1,4 +1,18 @@
 
+  
+  
+div.estatus1{
+  background-color: #BCF53D; 
+  height: 250px; 
+  max-width: 100%;
+}
+
+div.estatus2{
+  background-color: #19D4BD; 
+  height: 250px; 
+  max-width: 100%;
+}
+
 .forma2 {    
     padding-left:3%;
   }
