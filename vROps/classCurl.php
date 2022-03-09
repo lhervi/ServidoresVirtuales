@@ -177,8 +177,7 @@ class Curl {
                 
                 if($result['result']==false){
                     die("se perdió la conexión con el servidor vmware");                                        
-                } 
-
+                }
                 return $error;
                 
             }else{                                                       

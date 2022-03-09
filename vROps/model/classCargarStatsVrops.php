@@ -168,10 +168,6 @@ class CargarStatsVrops {
                     $arch=fgets($fileOpen);
                     if ($arch!==null){
                         if ($archJson){    
-                            //ej.: {"nombreArchSalida":"nonArchSalida.txt", "resourceKinds":"virtualmachine"} 
-                            //$arreglo[n]['nombreArchSalida'] = "nonArchSalida.txt"
-                            //$arreglo[n]['resourceKinds'] = "virtualmachine"
-
                             $archFileDir[]=json_decode(trim($arch), true);//                            
                             $archFileDir['archJson']=true;
                         }else{
@@ -267,6 +263,12 @@ class CargarStatsVrops {
                 echo '</div>';                
                 echo "<br/>";
                 echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
+                echo "<script>" . PHP_EOL;
+                $func = "document.getElementById('regresar').addEvenListener('click',function(){";
+                echo PHP_EOL;
+                $func .= "location.href =" . INICIO . PHP_EOL . ";})";                
+                echo $func . PHP_EOL;
+                echo "</script>";
                 return true;
             }
         }

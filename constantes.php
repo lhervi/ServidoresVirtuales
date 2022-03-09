@@ -17,6 +17,8 @@ define("URLTAIL", URLVROPSTAIL . PAGESIZE); //Concatena el string en el que term
 
 define("HOME", __DIR__);
 
+define("INICIO", "/STISCR/vROps/view/ingreso.php");
+
 define("ARCHIVODECONFIGURACION", HOME."/vROps/vROpsConf.json");
 
 define("VROPSLOGFILE", "/vROps/errors/vROpsErrors.log");

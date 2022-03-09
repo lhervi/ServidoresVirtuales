@@ -1,4 +1,4 @@
-    <?php
+<?php
     if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
     ini_set('memory_limit', '-1');
@@ -15,10 +15,42 @@
     include_once 'model/classCargarStatsVrops.php';
     include_once './model/classCargarResourceList.php';
     ?>
+
+    <style>
+
+    div.estatus1 {
+
+        background-color: #BCF53D; 
+        height: 250px; 
+        max-width: 100%
+
+    }
+
+    div.estatus2 {
+
+        background-color: #BCF53D; 
+        height: 250px; 
+        max-width: 100%
+
+        }
+
+    </style>
+
     <body class="m-0 vh-100 row justify-content-start align-items-center">
         <div class="container col-auto">
 
                 <?php
+
+                $clase = function(){
+                    static $val=true;
+                    if ($val){
+                        return "class='estatus1";
+                        $val = false;
+                    }else{
+                        return "class='estatus2";
+                        $val = true;
+                    }
+                }
 
                 $server = VropsConf::getCampo('vropsServer')['vropsServer'];
 
@@ -97,12 +129,13 @@
                         //2 Comprobar que la información no haya sido cargada previamente
                         //3 Advertir si los registros ya existen en la BD o la conclusión de la carga
                         
+                        //================================= P R O V I S I O N A L ============================
                         //----------- [PROVISIONAL]-----------------[HABILITAR DESPUÉS DE CARAGAR LAS ESTADÍSTICAS]                        
                         //$result = CargarResourceList::insertRegistrosResourceList($arrayProv);
 
                         //===== Fin de la creación y carga en la BD de la lista de recursos "resourceList" ---
                         
-                        echo ("<div><h2> fin del proceso de carga de a lista de " . $resourceKinds . " </h2></div><br/>");
+                        echo ("<div class='estatus'><h2> fin del proceso de carga de a lista de " . $resourceKinds . " </h2></div><br/>");
                         //[ELIMINAR]  cambiar esta linea por un echo
 
                         // ==== Fin de la reación y carga en la BD de la lista de recursos "resourceList"                    
@@ -122,7 +155,7 @@
 
                     }
                                                       
-                    echo("<div><h2>Se ha completado el procesamiento de resourceList</h2></div><br/>");
+                    echo("<div class='estatus'><h2>Se ha completado el procesamiento de resourceList</h2></div><br/>");
 
                     if ($resultCurl['error']){
                         die($resultCurl["mensaje"]);
@@ -131,7 +164,7 @@
                         //#28EB76 color central https://color.adobe.com/es/create/color-wheel
                         //echo "================================================================";
                         
-                        echo '<div class="w-100" style="background-color: #BCF53D; height: 250px; max-width: 100%;">';
+                        echo '<div  class="estatus" >';
                         echo "<h3> La información de los recursos ha sido obtenida exitosamente</h3>";                        
                         echo "<br/><h3>2- Inicia el proceso de generación de estadísticas</h3>";   
                         echo "</div>";                         
@@ -166,12 +199,12 @@
                             }        
                             
                             echo '<div class="w-100" style="background-color: #BCF53D; height: 250px; max-width: 100%;">';
-                            echo "<br/><h2>La información del servidor" . $server . "está lista para pasarse a la base de datos</h2><br/>";                           
+                            echo "<br/><h2>La información del servidor" . $server . " está lista para pasarse a la base de datos</h2><br/>";                           
                             echo "</div>"; 
 
                             echo '<div class="w-100" style="padding :15px background-color: #EEE; height: 250px; max-width: 100%;">';
                                 echo "<form action='loadVrops.php' method='POST'>";
-                                echo "<input type='submit'value='Continuar' id='continuar'><br/><br/>";
+                                echo "<input type='submit'value='continuar' id='continuar'><br/><br/>";
                                 echo "<label for='continuar'>Presione el botón para continuar</label>";                                                       
                                 echo "</form>";
                             echo "</div>";

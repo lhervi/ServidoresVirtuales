@@ -92,6 +92,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
         document.getElementById("server").addEventListener("click", function(){
             //alert ("Estoy aquí");
             location.href = "/STISCR/vROps/view/ingreso.php";            
+            
         })
         
 

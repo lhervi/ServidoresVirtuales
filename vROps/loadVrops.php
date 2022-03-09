@@ -13,10 +13,11 @@
             <div><h2>Proceso de Carga de Estadísticas en la BD</h2></div><br/>
 
 <?php
-   
-   $dale = true; //[ELIMINAR]
 
-   if (isset($_POST['continuar']) || $dale){
+$seguir = isset($_POST['continuar']);
+$seguir=true;
+   
+   if ($seguir){
     
         echo "<h2>Iniciando el proceso de carga</h2>";
 
