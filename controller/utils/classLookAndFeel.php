@@ -33,7 +33,13 @@ class LookAndFeel{
                 $val = true;
                 return "<div class='estatus2'><spam><h" . $tam . ">" . $str . "</h" . $tam . "<spam></div>";           
             }
-        }
+    }
+
+    static function estatus($str, int $tam=3){                
+        return "<div class='estatus'><spam><h" . $tam . ">" . $str . "</h" . $tam . "<spam></div>";            
+        
+        
+    }
 
 }
 

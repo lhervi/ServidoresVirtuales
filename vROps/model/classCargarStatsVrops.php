@@ -252,23 +252,12 @@ class CargarStatsVrops {
             //unset($result['error']);            
             $error = self::procesarLoteDeFileStat($result); //
             if ($error['error']){
-                die ("<br/><h2>no se procesaron todos los archivos</h2>");
+                return $error;                
+                //=========== [PENDIENTE] [IMPORTANTE] En este punto debe hacerse un roll back
+            }else{                
                 
-                //En este punto debe hacerse un roll back
-
-            }else{
-                echo "<br/>";
-                echo '<div class="w-100" style="background-color: #BCF53D; height: 250px; max-width: 100%;">';                
-                echo "<br/><h1>Culminó con éxito la carga de los registros</h1>";                
-                echo '</div>';                
-                echo "<br/>";
-                echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
-                echo "<script>" . PHP_EOL;
-                $func = "document.getElementById('regresar').addEvenListener('click',function(){";
-                echo PHP_EOL;
-                $func .= "location.href =" . INICIO . PHP_EOL . ";})";                
-                echo $func . PHP_EOL;
-                echo "</script>";
+                $result['error']=false;
+                $result['mensaje'] = "Culminó con éxito la carga de los registros";
                 return true;
             }
         }

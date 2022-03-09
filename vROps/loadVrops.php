@@ -10,8 +10,8 @@
 ?>
     <body class="m-0 vh-100 row justify-content-start align-items-center">
         <div class="container col-auto">
+            <br/>
             <div><h2>Proceso de Carga de Estadísticas en la BD</h2></div><br/>
-
 <?php
 
 $seguir = isset($_POST['continuar']);
@@ -19,9 +19,20 @@ $seguir=true;
    
    if ($seguir){
     
-        echo "<h2>Iniciando el proceso de carga</h2>";
+        echo "<div class='estatus'><h2>Iniciando el proceso de carga</h2>";
 
-        CargarStatsVrops::cargarStats(); 
+        $result = CargarStatsVrops::cargarStats(); 
+
+        echo "<br/><h1>Culminó con éxito la carga de los registros</h1>";                
+                echo '</div>';                
+                echo "<br/>";
+                echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
+                echo "<script>" . PHP_EOL;
+                $func = "document.getElementById('regresar').addEvenListener('click',function(){";
+                echo PHP_EOL;
+                $func .= "location.href =" . INICIO . PHP_EOL . ";})";                
+                echo $func . PHP_EOL;
+                echo "</script>";
 
         echo '<div class="w-100"  max-width: 100%; style="background-color: #eee; height: 250px; max-width: 100%;">';
         echo "<br/><h3>Culminó la carga</h3><br/>";
