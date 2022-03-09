@@ -1,16 +1,22 @@
 
   
-  
-div.estatus1{
-  background-color: #BCF53D; 
+div.estatus, div.estatus1, div.estatus2{
   height: 250px; 
+  min-height: 150px;
   max-width: 100%;
+  padding: 30px; 
+  align-items: center;
+  display: flex;  
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
 }
 
+div.estatus1{
+  background-color: #BCF53D; 
+}
 div.estatus2{
-  background-color: #19D4BD; 
-  height: 250px; 
-  max-width: 100%;
+  background-color: #19D4BD;     
 }
 
 .forma2 {    
