@@ -17,7 +17,8 @@ class LookAndFeel{
     }
         
     /**
-     * clase método estático que regresa un <div> que contiene un <spam> y cuyo
+     * clase método estático que regresa un <div> que contiene un <spam> en el que se muestra
+     * un text que se pasa como parámetro
      *
      * @param  string $str un string con el mensaje a insertar
      * @param  int $tam Determina el tamaño de la fuente y por defecto su valor es 3
@@ -36,9 +37,24 @@ class LookAndFeel{
     }
 
     static function estatus($str, int $tam=3){                
-        return "<div class='estatus'><spam><h" . $tam . ">" . $str . "</h" . $tam . "<spam></div>";            
-        
-        
+        return "<div class='estatus'><spam><h" . $tam . ">" . $str . "</h" . $tam . "<spam></div>";
+    }
+    
+    /**
+     * loader 
+     *
+     * @param  mixed $class
+     * @return void
+     */
+    static function loader(string $class="loader"){        
+        return '<div id="loader" class="' . $class . '" style="display:none;"></div>';
+    }
+
+    static function functionShowLoader(){
+            $show = 'function enviar(){' . PHP_EOL;
+            $show .= 'document.getElementById("loader").style.visibility= "visible";' . PHP_EOL;
+            $show .= 'document.getElementById("loader").style.display= "block";' . PHP_EOL . '}';
+            return $show;                   
     }
 
 }

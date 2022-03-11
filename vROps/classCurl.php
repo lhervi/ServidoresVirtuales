@@ -52,6 +52,8 @@ class Curl {
      */
     
     static function execParamCurl($param){
+        include_once '../controller/utils/classErrors.php';       
+
         $curl = curl_init();
         self::curlSetOpt($curl, $param);   //configura el Curl
         //Curl::curlSetOpt($curl, $param); //configura el Curl    
@@ -61,9 +63,10 @@ class Curl {
         //=================================================
 
         curl_close($curl);
-        if($resultCurl['error']){           
-            $resultCurl['mensaje'] = "hubo un problema al ejecutar el curl";
-            die("la consulta al servidor no fue exitosa " . __LINE__ . " en: " . __FILE__ . "<br/><br/>");            
+        if($resultCurl['error']){            
+            $mensaje = "hubo un problema al ejecutar el curl la consulta al servidor no fue exitosa ";
+            $resultCurl['mensaje'] = $mensaje;            
+            RegistError::logError($mensaje, __FILE__, __LINE__, 2);            
             return $resultCurl;
         }else{
             $resultCurl['mensaje'] = "todo bien";
@@ -247,9 +250,9 @@ class Curl {
             
                     $param['arch'] = $nonArchSalida;                  //asigna el nombre de cada archivo de salida con las estadísticas para el curl                                           
                     $param['campos'] = $camposResult[$ind]['campos']; //asigna los campos en formato json a param
-                    $nonArchSalidaArray[]=$nonArchSalida;             //Arreglo para registrar todos los nombres de los archivos de salida
+                    $nonArchSalidaArray[] = $nonArchSalida;             //Arreglo para registrar todos los nombres de los archivos de salida
                     $nombreArchSalidaJson = '{"nombreArchSalida":"' . $nonArchSalida . '", "resourceKinds":"' . $resourceKinds . '"}';
-                    file_put_contents(HOME.SALIDAS."statsAllFileList.txt", $nonArchSalida . PHP_EOL, FILE_APPEND);
+                    //file_put_contents(HOME.SALIDAS."statsAllFileList.txt", $nonArchSalida . PHP_EOL, FILE_APPEND); ==[ELIMINAR]
                     file_put_contents(HOME.SALIDAS."statsAllJsonFileList.txt",$nombreArchSalidaJson . PHP_EOL, FILE_APPEND);
                     $paramArray[$ind] = $param;                   //asigna este param al arreglo de parámetros
                     $ind++;

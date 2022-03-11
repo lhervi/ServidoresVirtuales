@@ -5,11 +5,19 @@
  */
 class CargarResourceList{
 
+    static int $contadorDeRegistros=0;
+    /*
+    function __construct()
+    {
+      self::$contadorDeRegistros=0;
+    }
+    */
+
     
     /**
      * crearResourceListTable Función estática que crea la tabla vmware_recursos si no existe
      *
-     * @return $result es un arreglo que
+     * @return array $result es un arreglo con el resultado de la consulta
      */
     //=========================================================
     // CREAR TABLA  
@@ -32,12 +40,15 @@ class CargarResourceList{
         
     }
 
-    static function insertar($consultaInsert, $strInsert){
+    //static function insertar($consultaInsert, $strInsert){
+    static function insertar($strInsert){
       include_once 'classVropsConnection.php';
-
-      $consultaInsert .= implode(", ", $strInsert);
+      $valoresConsulta = implode(", ", $strInsert);
+      $consultaInsert = self::iniConsulta() . $valoresConsulta;
       file_put_contents("consulta.txt", $strInsert, FILE_APPEND);
-      $result = VropsConexion::insertar($consultaInsert);
+
+      $result = VropsConexion::insertar($consultaInsert);    
+       
       return $result;
     }
     
@@ -60,8 +71,7 @@ class CargarResourceList{
     //=========================================================
 
     static function insertRegistrosResourceList(array $registros){ //recibe un arreglo con los registos a insertar
-
-      //include_once './classVropsConnection.php';
+      
       include_once 'classVropsConnection.php';
 
       self::crearResourceListTable();
@@ -70,36 +80,38 @@ class CargarResourceList{
       
       $tope=0; //contador de registros para insertar el número máximo definido en la constante NUMREGINSERT
             
-      $consultaInsert = self::iniConsulta();
+      //$consultaInsert = self::iniConsulta();
       $registrosAlmacenados=0;
       
       foreach($registros as $campos){
 
         //contruir el string con los valores a insertar        
-        $strInsert[] = "('" . implode("','", $campos) . "') ";
+        $strInsert[] = "('" . implode("','", $campos) . "') ";  
+        
+        self::$contadorDeRegistros++;
         
         $tope++; //tope se incrementa fuera del if y dentro del foreach
         
         if ($tope>NUMREGINSERT){ //inserta un lote de registros de acuerdo al tope definido como NUMREGINSERT
           
-          $result = self::insertar($consultaInsert, $strInsert);
+          //=====================================================
+          $result = self::insertar($strInsert);
+          //=====================================================
 
           if (!$result){
-            die("ocurrió un error al intentar grabar a información de los resourceList en la BD");
-          }else{
-            $registrosAlmacenados+=$tope;
+            die("ocurrió un error al intentar grabar a información de los resourceList en la BD");          
           }
           $tope=0;
-          $strInsert=array();
-          $consultaInsert = self::iniConsulta();
+          $strInsert=array();          
         }
-
       }
 
       if ($tope>0){  //inserta los últimos registros que hayan quedado fuera de los lotes 
-        $result = self::insertar($consultaInsert, $strInsert);
+        //======================================================
+        $result = self::insertar($strInsert);
+        //===================================================
         $registrosAlmacenados+=$tope;
-      }
+      }      
       return $registrosAlmacenados;
     }
 
@@ -153,7 +165,6 @@ class CargarResourceList{
                   }         
                 }
                 
-        
                 $arrayProv[]=$prov;
                 
               }

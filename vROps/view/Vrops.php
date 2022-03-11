@@ -81,7 +81,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
                 </div>
             </div>
         </div>
-    <script text/javascript>
+    <script text/javascript>        
 
         function enviar(){                                
             document.getElementById("loader").style.visibility= "visible"; 
@@ -90,7 +90,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
         }            
 
         document.getElementById("server").addEventListener("click", function(){
-            //alert ("Estoy aquí");
+           
             location.href = "/STISCR/vROps/view/ingreso.php";            
             
         })

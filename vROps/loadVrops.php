@@ -7,6 +7,7 @@
 
     include_once '../view/encabezado.php';
     include_once 'model/classCargarStatsVrops.php';
+    include_once './../controller/utils/classLookAndFeel.php';
 ?>
     <body class="m-0 vh-100 row justify-content-start align-items-center">
         <div class="container col-auto">
