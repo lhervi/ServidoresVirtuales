@@ -42,7 +42,7 @@ class RegistError{
 
         $errorArray[]= $error;
 
-        $result = file_put_contents(json_encode($errorArray),VROPSLOGFILE);        
+        $result = file_put_contents(json_encode($errorArray), VROPSLOGFILE);        
         return $result;
     }
 }

@@ -44,10 +44,12 @@ class CargarResourceList{
     static function insertar($strInsert){
       include_once 'classVropsConnection.php';
       $valoresConsulta = implode(", ", $strInsert);
-      $consultaInsert = self::iniConsulta() . $valoresConsulta;
-      file_put_contents("consulta.txt", $strInsert, FILE_APPEND);
+      $consultaInsert = self::iniConsulta() . $valoresConsulta;     
 
       $result = VropsConexion::insertar($consultaInsert);    
+      
+
+      file_put_contents("consulta.txt", $strInsert, FILE_APPEND);
        
       return $result;
     }
@@ -111,6 +113,7 @@ class CargarResourceList{
         $result = self::insertar($strInsert);
         //===================================================
         $registrosAlmacenados+=$tope;
+
       }      
       return $registrosAlmacenados;
     }
@@ -119,7 +122,7 @@ class CargarResourceList{
     // OBTENER LA LISTA DE LOS RECURSOS DE UN ARCHIVO
     //=========================================================
 
-    static function readResourceListArray(string $file,   bool $linkActive=false){
+    static function readResourceListArray(string $file,   bool $linkActive=false, $vaciar=true){
        
         include_once __DIR__ . '/../../constantes.php';        
         include_once HOME . '/controller/utils/classDecodeJsonFile.php';        
@@ -168,6 +171,9 @@ class CargarResourceList{
                 $arrayProv[]=$prov;
                 
               }
+          if ($vaciar){
+            file_put_contents($file, ""); //Se vacía el archivo de la lista de recursos al finalizar la carga 
+          }          
           return $arrayProv;    
         }
       }

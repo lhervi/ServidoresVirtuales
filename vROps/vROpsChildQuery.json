@@ -1,0 +1,37 @@
+{
+    "relationshipType" : "CHILD",
+    "resourceIds" : [ "52aa02da-83a7-4ec8-bb2e-2f499c857847", "5c7fc364-e34a-4fda-9818-a59fd3aae0d9" ],
+    "resourceQuery" : {
+      "name" : [ "vRealize Operations Manager Node-vRealize Cluster Node" ],
+      "regex" : null,
+      "adapterKind" : [ "VMWARE" ],
+      "resourceKind" : [ "virtualmachine" ],                  
+      "resourceState" : [ "STARTED", "STOPPED" ],
+      "resourceStatus" : [ "DATA_RECEIVING" ],
+      "resourceHealth" : null,
+      "parentId" : null,     
+      "propertyName" : null,
+      "propertyValue" : null,
+      "statKey" : null,      
+      "propertyConditions" : {
+        "conjunctionOperator" : "OR",
+        "condition" : [ {
+          "key" : "property_name",
+          "operator" : "EQ",
+          "stringValue" : "property_value",
+          "doubleValue" : null
+        } ]
+      },
+      "statConditions" : {
+        "conjunctionOperator" : "OR",
+        "condition" : [ {
+          "key" : "stat|key1",
+          "operator" : "LT_EQ",
+          "stringValue" : null,
+          "doubleValue" : 1.0
+        } ]
+      },
+      "includeRelated" : null
+    },
+    "hierarchyDepth" : 5
+  }

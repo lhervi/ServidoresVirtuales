@@ -25,109 +25,134 @@
     <body class="m-0 vh-100 row justify-content-start align-items-center">
         <div class="container col-auto">
 
-        <?php                
+        <?php      
 
-            $server = VropsConf::getCampo('vropsServer')['vropsServer'];
+            $vropsServerArray  = VropsConf::getCampo('vropsServer');
 
-                // -----------------------------------------------  S A L T O  --------------------------------------
-                //============ Procesamiento de entradas ================//
-                //Revisar entradas ======== I N C L U I R ========
+            if ($vropsServerArray['error']){
+                $mensaje = "no se pudo obtener el listado de servidores vrops";
+                RegistError::logError($mensaje, __FILE__, __LINE__, 2);
+                die ($mensaje);
+            }else{
+                $server = VropsConf::getCampo('vropsServer')['vropsServer'];
+            }
+
+            // -----------------------------------------------  S A L T O  --------------------------------------
+            //============ Procesamiento de entradas ================//
+            //Revisar entradas ======== I N C L U I R ========
+            
+            if(isset($_POST["mesConsulta"])){
                 
-                if(isset($_POST["mesConsulta"])){
-                    
-                    $begin = $_POST["mesConsulta"] . "-01";
-                    $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);
+                $begin = $_POST["mesConsulta"] . "-01";
+                $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);
 
+            }
+            
+            $intervalType = array_key_exists("intervalType", $_POST) ? $_POST["intervalType"] : "HOURS";
+            $intervalQuantifier = array_key_exists("intervalQuantifier", $_POST) ? intval($_POST["intervalQuantifier"]) : 1;
+            $rollUpType = array_key_exists("rollUpType", $_POST) ? $_POST["rollUpType"] : "AVG";
+
+            foreach($_POST as $ind=>$val){
+                if("resourceKinds"==$val){
+                    $resourceKindsArray[] = $ind;
                 }
+            }
+            
+            $resourceKinds = array_key_exists("resourceKinds", $_POST) ? $_POST["resourceKinds"] : "virtualmachine";
+
+            //============ Fin de Procesamiento de entradas ================//
+
+            //------------------------------------------------------------------------------------------------------------
+
+            //============ Obtención de token de acceso ================//
                 
-                $intervalType = array_key_exists("intervalType", $_POST) ? $_POST["intervalType"] : "HOURS";
-                $intervalQuantifier = array_key_exists("intervalQuantifier", $_POST) ? intval($_POST["intervalQuantifier"]) : 1;
-                $rollUpType = array_key_exists("rollUpType", $_POST) ? $_POST["rollUpType"] : "AVG";
+            $tokenInfo=VropsToken::getToken();
 
-                foreach($_POST as $ind=>$val){
-                    if("resourceKinds"==$val){
-                        $resourceKindsArray[] = $ind;
-                    }
-                }
+            if ($tokenInfo['error']){
+                RegistError::logError($tokenInfo["mensaje"], __FILE__, __LINE__, 2);
+                die('{"error":true, "mensaje":' . $tokenInfo["mensaje"] . '}');  //Se detiene el programa en caso de que ocurra un error al obtener el token
+            }else{
+                $token = $tokenInfo['token'];
+                $_SESSION['tokenOk']=true;
+            }
+
+            //============ Fin de obtención de token de acceso ================//
+            //-------------------------------------------------------------------                   
+
+            file_put_contents(HOME.SALIDAS.'indiceDeConsultas.json', '{"indiceDeConsultas":0}');
+
+            echo LookAndFeel::estatus("Estatus del procesamiento de los ResourceKinds", 1);
+
+            
+            //----------------------------------------------------------------------------------
+            //======================== CREACIÓN DE LA LISTA DE RECURSOS ========================
+
+            foreach($resourceKindsArray as $resourceKinds){
+                //Crea una lista de recursos que se almacena completa en allResorceList.json
+                VropsResourceList::getResourceList($resourceKinds);
+
+            }
+
+            //===== Crear la lista de recursos "resourceList" ---
+            $file = HOME . SALIDAS . ALLRESOURCELIST;
+            
+            $arrayProv = CargarResourceList::readResourceListArray($file);
+            //===== Fin de crear la lista de recursos "resourceList" ---------------------
+            //----------------------------------------------------------------------------
                 
-                $resourceKinds = array_key_exists("resourceKinds", $_POST) ? $_POST["resourceKinds"] : "virtualmachine";
+            //===== Creación y cargar en la BD de la lista de recursos "resourceList" ----
 
-                //============ Fin de Procesamiento de entradas ================//
+            //================ [PENDIENTE] ==============================================
+            //1 Preguntar acá si se desea pasar la información a la BD
+            //2 Comprobar que la información no haya sido cargada previamente
+            //3 Advertir si los registros ya existen en la BD o la conclusión de la carga
+                                    
+            
+            //$result = CargarResourceList::insertRegistrosResourceList($arrayProv);
 
-                //------------------------------------------------------------------------------------------------------------
 
-                //============ Obtención de token de acceso ================//
+            //[OJO OJO] Hay que vaciar a allResourceList.json después de pasar su contenido a la BD
+
+            //===== Fin de la creación y carga en la BD de la lista de recursos "resourceList" ---
+
+            echo LookAndFeel::estatusX("fin del proceso de carga de la lista de " . $resourceKinds);
+
+            echo LookAndFeel::estatusX("Se ha completado el procesamiento de resourceList", 2);
+
+
+            foreach($resourceKindsArray as $resourceKinds){            
+                    
+            $camposForStats = VropsResourceList::getCamposForStats($begin, $end, $intervalType, $intervalQuantifier, $rollUpType, $resourceKinds);  //además crea el archivo campos.json
+
+            if ($camposForStats['error']){
+                RegistError::logError($camposForStats['mensaje'], __FILE__, __LINE__, 2);
+                die($camposForStats['mensaje']);
+            }
+            
+            echo LookAndFeel::estatus("Procesando ". $resourceKinds);  
+            
+            //===========================================================================
+            $campos = $camposForStats['campos']; //'camposArray contiene todos los campos para execCurl, menos porciones "REVISAR"
+            
+            //========================== [ELIMINAR] ==========================
+            /*
+            $vropsServerArray = VropsConf::getCampo('vropsServer');
+            
+            if ($vropsServerArray['error']){
+                $mensaje = "no se pudo obtener el listado de servidores vrops";
+                RegistError::logError($mensaje, __FILE__, __LINE__, 2);
+                die ($mensaje);
+            }else{                            
+                $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $vropsServerArray['vropsServer']);
+            }
+            */ 
+            //========================== [ELIMINAR] ==========================
+            
+            $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $server);
+
+            }
+
                 
-                $tokenInfo=VropsToken::getToken();
-
-                if ($tokenInfo['error']){
-                    RegistError::logError($tokenInfo["mensaje"], __FILE__, __LINE__, 2);
-                    die('{"error":true, "mensaje":' . $tokenInfo["mensaje"] . '}');  //Se detiene el programa en caso de que ocurra un error al obtener el token
-                }else{
-                    $token = $tokenInfo['token'];
-                    $_SESSION['tokenOk']=true;
-                }
-
-                //============ Fin de obtención de token de acceso ================//
-                //-------------------------------------------------------------------                   
-
-                file_put_contents(HOME.SALIDAS.'indiceDeConsultas.json', '{"indiceDeConsultas":0}');
-
-                echo LookAndFeel::estatus("Estatus del procesamiento de los ResourceKinds", 1);
-
-                foreach($resourceKindsArray as $resourceKinds){
-                            
-                    $camposForStats = VropsResourceList::getCamposForStats($begin, $end, $intervalType, $intervalQuantifier, $rollUpType, $resourceKinds);  //además crea el archivo campos.json
-
-                    if ($camposForStats['error']){
-                        RegistError::logError($camposForStats['mensaje'], __FILE__, __LINE__, 2);
-                        die($camposForStats['mensaje']);
-                    }
-                    
-                    echo LookAndFeel::estatus("Procesando ". $resourceKinds);                        
-
-                    //===========================================================================
-
-                    //===== Crear la lista de recursos "resourceList" ---
-                    $file = HOME . SALIDAS . ALLRESOURCELIST;
-                    $arrayProv = CargarResourceList::readResourceListArray($file);
-                    //===== Fin de crear la lista de recursos "resourceList" ---------------------
-                    //----------------------------------------------------------------------------
-                    
-                    //===== Creación y cargar en la BD de la lista de recursos "resourceList" ----
-
-                    //================ [PENDIENTE] ==============================================
-                    //1 Preguntar acá si se desea pasar la información a la BD
-                    //2 Comprobar que la información no haya sido cargada previamente
-                    //3 Advertir si los registros ya existen en la BD o la conclusión de la carga
-
-
-
-                                            
-                    $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
-
-                    //===== Fin de la creación y carga en la BD de la lista de recursos "resourceList" ---
-
-                    echo LookAndFeel::estatusX("fin del proceso de carga de la lista de " . $resourceKinds);
-
-                    //===========================================================================
-                    $campos = $camposForStats['campos']; //'camposArray contiene todos los campos para execCurl, menos porciones "REVISAR"
-                    
-                    $vropsServerArray = VropsConf::getCampo('vropsServer');
-
-                    if ($vropsServerArray['error']){
-                        $mensaje = "no se pudo obtener el listado de servidores vrops";
-                        RegistError::logError($mensaje, __FILE__, __LINE__, 2);
-                        die ($mensaje);
-                    }else{                            
-                        $resultCurl = Curl::prepareExecCurl($tokenInfo['token'], "tipoMediciones", $campos, $resourceKinds, $vropsServerArray['vropsServer']);
-                    }
-                    
-
-                }
-
-                echo LookAndFeel::estatusX("Se ha completado el procesamiento de resourceList", 2);
-
                 if ($resultCurl['error']){
                     die($resultCurl["mensaje"]);
                 }else{

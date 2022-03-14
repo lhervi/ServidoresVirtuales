@@ -39,7 +39,7 @@ class VropsResourceList{
      *      *
      * @return array
      */
-    static function getResourceList($resourceKinds){ //ahora sabe qué ResourceKind va a usar
+    static function getResourceList($resourceKinds){ //ahora sabe qué ResourceKind va a usar        
 
         include_once 'classVropsConf.php';
         include_once 'classCurl.php';
