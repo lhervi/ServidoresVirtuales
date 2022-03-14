@@ -1,7 +1,10 @@
 <?php
 
+include_once __DIR__ . '/../../constantes.php';
+include_once HOME . '/controller/utils/classUtils.php';
 include "../view/../../view/encabezado.php";
 include "../view/../../view/menu.php";
+
 
 
 if(session_status() !== PHP_SESSION_ACTIVE) session_start();
@@ -13,6 +16,11 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
     //D:\xampp\htdocs\STISCR\vROps\view\ingreso.php
     //http://localhost/vROps/view/ingreso.php
 }
+
+$directoio = HOME . SALIDAS;
+Utils::limpiarDirectorio($directoio);
+$directoio = HOME . STATS;
+Utils::limpiarDirectorio($directoio);
 
 ?>
  

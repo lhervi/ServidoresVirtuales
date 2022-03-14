@@ -18,10 +18,11 @@ class RegistError{
      * @return int|false un entero con el número de bytes registrados o falso si hubo error
      */
     static function logError(string $mensaje, string $archivo, int $linea, int $nivel=2){
-        include_once '../../constantes.php';   
-        include_once './vROps/classVropsConf.php';
-        include_once './classFechas.php';        
-        include_once './classDecodeJsonFile.php';
+        //include_once '../../constantes.php';   
+        include_once __DIR__ . '/../../constantes.php';   
+        include_once '/vROps/classVropsConf.php';
+        include_once 'classFechas.php';        
+        include_once 'classDecodeJsonFile.php';
         //Level 1->warning(no detienen la ejecución) 2->crítico (detiene la ejecución)
         
         if(is_file(VROPSLOGFILE)){
@@ -29,20 +30,23 @@ class RegistError{
             $errorArray = DecodeJF::decodeJsonFile(VROPSLOGFILE); 
         }
                 
-        $error['fecha'] = Fechas::fechaHoy("completa");
-        $error['archivo'] = $archivo;
-        $error['linea'] = $linea;
-        $error['mensaje'] = $mensaje;  
-        $error['nivel'] = $nivel;        
-        $error['vropsServer'] = VropsConf::getCampo('vropsServer')['vropsServer'];
-        $error['server']= $_SERVER['SERVER_ADDR'];
-        $error['remoteUser'] = $_SERVER['REMOTE_USER'];
-        $error['userIP'] = $_SERVER['REMOTE_ADDR'];
-        $error['userBrowser'] = get_browser(null, true);
+        $error['fecha'] = Fechas::fechaHoy("completa") . PHP_EOL;
+        $error['archivo'] = $archivo . PHP_EOL;
+        $error['linea'] = $linea . PHP_EOL;
+        $error['mensaje'] = $mensaje . PHP_EOL;  
+        $error['nivel'] = $nivel . PHP_EOL;        
+        $error['vropsServer'] = VropsConf::getCampo('vropsServer')['vropsServer'] . PHP_EOL;
+        $error['server']= $_SERVER['SERVER_ADDR'] . PHP_EOL;
+        $error['remoteUser'] = $_SERVER['REMOTE_USER'] . PHP_EOL;
+        $error['userIP'] = $_SERVER['REMOTE_ADDR'] . PHP_EOL;
+        //$error['userBrowser'] = get_browser(null, true);
 
         $errorArray[]= $error;
 
-        $result = file_put_contents(json_encode($errorArray), VROPSLOGFILE);        
+        $contenido = json_encode($errorArray);
+        
+        $result = file_put_contents(VROPSLOGFILE, $contenido);
+
         return $result;
     }
 }

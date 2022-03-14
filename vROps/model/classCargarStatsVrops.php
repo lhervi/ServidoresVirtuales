@@ -98,11 +98,7 @@ class CargarStatsVrops {
         }
         if ($numReg>0 && !is_null($arrayStats)){
 
-            $resultInsert = self::insertStats($arrayStats);
-            echo "================================================================";
-            echo "<br/><h4>insertando un remanente de ". $numReg .  " registros</h4><br/>";
-            echo "================================================================";
-            echo "<br/>";
+            $resultInsert = self::insertStats($arrayStats);           
             
         }
         return $resultInsert;
@@ -116,19 +112,24 @@ class CargarStatsVrops {
      */
     static function procesarLoteDeFileStat(array  $listArchArray){
         //Recibe un arreglo con todas las rutas de estadísticas y procesa una a una
+        include_once __DIR__ . '/../../controller/utils/classErrors.php';
         if ($listArchArray){
             self::$proceso['files']=0;
             foreach($listArchArray as $dirFileStats){
                 //$listArchArray[n]['nombreArchSalida'] = "nonArchSalida.txt"
                 //$listArchArray[n]['resourceKinds'] = "virtualmachine"
                 $solDirFileStats ??= $dirFileStats['nombreArchSalida'];
-                if(!is_file($solDirFileStats) || $dirFileStats['nombreArchSalida']==""){
-                    $a=5;
-                    continue;
-                }
                 try{
+
+                    if(!is_file($solDirFileStats) || $dirFileStats['nombreArchSalida']==""){
+                        $a=5;
+                        continue;
+                    }
+                
                     $cont = file_get_contents($dirFileStats['nombreArchSalida']);
+
                 }catch(Exception $e){
+                    RegistError::logError($e, )
                     echo $e;
                 }
                

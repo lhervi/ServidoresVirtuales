@@ -5,9 +5,11 @@
     ini_set('max_execution_time', '-1');
     ini_set('display_errors', 1);
 
+    include_once __DIR__ . '/../constantes.php';
     include_once '../view/encabezado.php';
-    include_once 'model/classCargarStatsVrops.php';
-    include_once './../controller/utils/classLookAndFeel.php';
+    include_once 'model/classCargarStatsVrops.php';   
+    include HOME . '/controller/utils/classLookAndFeel.php';
+    
 ?>
     <body class="m-0 vh-100 row justify-content-start align-items-center">
         <div class="container col-auto">
@@ -24,6 +26,17 @@ $seguir=true;
 
         $result = CargarStatsVrops::cargarStats(); 
 
+        echo LookAndFeel::estatus("Culminó con éxito la carga de los registros", 2);
+
+        echo "<script>" . PHP_EOL;
+        
+            echo LookAndFeel::enlace("regresar", INICIO);
+        
+        echo "<script>" . PHP_EOL;
+        
+        echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
+
+        /*
         echo "<br/><h1>Culminó con éxito la carga de los registros</h1>";                
                 echo '</div>';                
                 echo "<br/>";
@@ -38,6 +51,7 @@ $seguir=true;
         echo '<div class="w-100"  max-width: 100%; style="background-color: #eee; height: 250px; max-width: 100%;">';
         echo "<br/><h3>Culminó la carga</h3><br/>";
         echo "</div>";
+        */
 
    }
 

@@ -108,7 +108,7 @@
             //3 Advertir si los registros ya existen en la BD o la conclusión de la carga
                                     
             
-            //$result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+            $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
 
 
             //[OJO OJO] Hay que vaciar a allResourceList.json después de pasar su contenido a la BD

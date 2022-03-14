@@ -21,7 +21,7 @@ define("INICIO", "/STISCR/vROps/view/ingreso.php");
 
 define("ARCHIVODECONFIGURACION", HOME."/vROps/vROpsConf.json");
 
-define("VROPSLOGFILE", "/vROps/errors/vROpsErrors.json");
+define("VROPSLOGFILE", HOME . "/vROps/errors/vROpsErrors.json");
 
 define("SALIDAS", "/vROps/salidas/");
 define("STATS", "/vROps/salidas/stats/");
@@ -29,6 +29,7 @@ define ("VROPS", "/vROps/");
 define ("VROPSVIEW", "/vROps/view/");
 define ("CONTROLLER", "/controller/");
 define ("ERRORES", "Errores.json");
+define("ERRORLOG", HOME.VROPS."/errors/vROpsErrors.json");
 define("CSS", "/view/css/");
 
 //define("VROPSVIEW", HOME . VROPS . "/view/");

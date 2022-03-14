@@ -1,0 +1,18 @@
+{"0":
+    {
+        "fecha":"202231460",
+        "archivo":"\/var\/www\/html\/STISCR\/vROps\/classCurl.php",
+        "linea":69,"mensaje":"hubo un problema al ejecutar el curl la consulta al servidor no fue exitosa ",
+        "nivel":2,"vropsServer":"https:\/\/vrops.intra.banesco.com",
+        "server":"10.150.11.158",
+        "remoteUser":null,"userIP":"10.124.14.154",
+        "userBrowser":false},"error":false,
+
+        "1":{
+            "fecha":"202231460",
+            "archivo":"\/var\/www\/html\/STISCR\/vROps\/classCurl.php",
+            "linea":69,"mensaje":"hubo un problema al ejecutar el curl la consulta al servidor no fue exitosa ",
+            "nivel":2,"vropsServer":"https:\/\/vrops.intra.banesco.com",
+            "server":"10.150.11.158","remoteUser":null,
+            "userIP":"10.124.14.154",
+            "userBrowser":false}}
