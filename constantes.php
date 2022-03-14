@@ -29,7 +29,7 @@ define ("VROPS", "/vROps/");
 define ("VROPSVIEW", "/vROps/view/");
 define ("CONTROLLER", "/controller/");
 define ("ERRORES", "Errores.json");
-define("ERRORLOG", HOME.VROPS."/errors/vROpsErrors.json");
+define("ERRORLOGJSONFILE", HOME.VROPS."/errors/vROpsErrors.json");
 define("CSS", "/view/css/");
 
 //define("VROPSVIEW", HOME . VROPS . "/view/");
