@@ -41,20 +41,46 @@ class LookAndFeel{
     }
     
     /**
-     * loader 
+     * loader método estático para manejar un objeto loader desde javascript
      *
-     * @param  mixed $class
-     * @return void
+     * @param  string $class el nombre de la clase, por defecto es "loader"
+     * @return string regresa el html que corresponde al Loader
      */
     static function loader(string $class="loader"){        
         return '<div id="loader" class="' . $class . '" style="display:none;"></div>';
     }
-
-    static function functionShowLoader(){
-            $show = 'function enviar(){' . PHP_EOL;
+    
+    /**
+     * showLoader método estático que muestra el objeto loader
+     *
+     * @return void
+     */
+    static function showLoader(){            
+            $show = 'function showLoader(e){' . PHP_EOL;
             $show .= 'document.getElementById("loader").style.visibility= "visible";' . PHP_EOL;
             $show .= 'document.getElementById("loader").style.display= "block";' . PHP_EOL . '}';
             return $show;                   
+    }
+
+    static function bindLoaderSubmit($id){        
+        $func = "e.preventDefault()";
+        $func .= "document.getElementById('$id').addEventListener('click',function(){" . PHP_EOL; 
+        $func .= "document.getElementById('enviarForma').submit();";   
+        $func .= PHP_EOL . "location.href ='" . $link . "';" . PHP_EOL . "})" . PHP_EOL;                    
+        return $func;
+    }            
+        
+    
+    
+    /**
+     * hideLoader método estático que oculta el objeto loader
+     *
+     * @return void
+     */
+    static function hideLoader(){
+        $show = 'function hideLoader(){' . PHP_EOL;       
+        $show .= 'document.getElementById("loader").style.display= "none";' . PHP_EOL . '}';
+        return $show;                   
     }
 
 }

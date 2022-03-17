@@ -123,7 +123,9 @@ class VropsResourceList{
 
                     file_put_contents(HOME . SALIDAS . ALLRESOURCELIST, json_encode($resourceListArray));    
 
-                    return $resourceListInfo;
+                    //=========================== SALIDA ========================================
+                    return $resourceListInfo;  //['resourceList'] y ['error']
+                    //=========================== SALIDA ========================================
 
                 }else{
                     $error['mensaje'] = "hay un error en la lista de recursos";

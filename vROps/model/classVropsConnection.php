@@ -52,14 +52,15 @@ class VropsConexion {
                 $datos = $result->fetchAll();                
                 return $datos;                              
             }catch(PDOException $e){
-                $datos[0] = TRUE;
-                $datos[1]= "hubo un error al realizar la consulta. " . $e->getMessage();
+                $datos[0] = true;
+                $datos[1]= "hubo un error al realizar la consulta. " . $e->getMessage();                
+                $datos['noHayDatos']=true;
                 return $datos;
             }
                   
         }else{
-            $datos[0] = TRUE;
-            $datos[1]= "la consulta está vacía";
+            $datos[0] = true;
+            $datos[1]= "la consulta está vacía";            
             return $datos;
         }
     }

@@ -51,7 +51,7 @@ class Curl {
      * @return array
      */
     
-    static function execParamCurl($param){
+    static function execParamCurl($param, $ind=0){
         include_once '../controller/utils/classErrors.php';       
 
         $curl = curl_init();
@@ -64,7 +64,7 @@ class Curl {
 
         curl_close($curl);
         if($resultCurl['error']){            
-            $mensaje = "hubo un problema al ejecutar el curl la consulta al servidor no fue exitosa ";
+            $mensaje = "hubo un problema al ejecutar el cur, la consulta " . $ind . "al servidor no fue exitosa ";
             $resultCurl['mensaje'] = $mensaje;            
             RegistError::logError($mensaje, __FILE__, __LINE__, 2);            
             return $resultCurl;
@@ -170,9 +170,12 @@ class Curl {
         $bitacora['numDeParametros']=count($paramArray);
         
         foreach($paramArray as $ind=>$param){
-            $resultCurl['error']=self::execParamCurl($param);
+            if($ind==14){
+                $a=5;
+            }
+            $resultCurl['error']=self::execParamCurl($param, $ind);
             if($resultCurl['error']){
-                echo "Error en la linea " . __LINE__ . " en: " . __FILE__ . "<br/><br/>";
+                //echo "Error en la linea " . __LINE__ . " en: " . __FILE__ . "<br/><br/>";
                 $error['error'] = true;
                 $error['mensaje'] .= "hubo un error al procesar " . $param['arch'] . PHP_EOL;
                 $bitacora['IndiceDelerror']=$ind;

@@ -20,7 +20,7 @@ class RegistError{
     static function logError(string $mensaje, string $archivo, int $linea, int $nivel=2){
         //include_once '../../constantes.php';   
         include_once __DIR__ . '/../../constantes.php';   
-        include_once '/vROps/classVropsConf.php';
+        include_once HOME . '/vROps/classVropsConf.php';
         include_once 'classFechas.php';        
         include_once 'classDecodeJsonFile.php';
         //Level 1->warning(no detienen la ejecución) 2->crítico (detiene la ejecución)
@@ -37,7 +37,7 @@ class RegistError{
         $error['nivel'] = $nivel . PHP_EOL;        
         $error['vropsServer'] = VropsConf::getCampo('vropsServer')['vropsServer'] . PHP_EOL;
         $error['server']= $_SERVER['SERVER_ADDR'] . PHP_EOL;
-        $error['remoteUser'] = $_SERVER['REMOTE_USER'] . PHP_EOL;
+        //$error['remoteUser'] = $_SERVER['REMOTE_USER'] . PHP_EOL;
         $error['userIP'] = $_SERVER['REMOTE_ADDR'] . PHP_EOL;
         //$error['userBrowser'] = get_browser(null, true);
 

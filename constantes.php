@@ -40,6 +40,7 @@ define("VROPSERROREMAILTO","lhervi@gmail.com");
 // ------------------ R U T A S -------------------------------------
 
 define('SEGMENTOS', 2000);
+define("NUMREGPARACOMPROBAR", 10);
 define("ARCHIVOSDEIDS", "IdsFilesNames.json");
 
 // ------------------ E S T I L O S -------------------------------------

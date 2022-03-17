@@ -22,43 +22,44 @@ $seguir=true;
    
    if ($seguir){
     
-        echo "<div class='estatus'><h2>Iniciando el proceso de carga</h2>";
+        echo LookAndFeel::estatus("Iniciando el proceso de carga", 2);
 
-        $result = CargarStatsVrops::cargarStats(); 
+        echo "<br/>";
 
-        echo LookAndFeel::estatus("Culminó con éxito la carga de los registros", 2);
+        $result ??= CargarStatsVrops::cargarStats();
 
-        echo "<script>" . PHP_EOL;
+        $error ??= isset($result['error']) ? $result['error'] : true;
+
+        if($error){
+            echo LookAndFeel::estatus($result['mensaje'], 2);
+        }else{
+            echo LookAndFeel::estatus("Culminó con éxito la carga de los registros", 2);
+        }        
+
+        echo "<br/>";        
         
-            echo LookAndFeel::enlace("regresar", INICIO);
-        
-        echo "<script>" . PHP_EOL;
-        
-        echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
-
-        /*
-        echo "<br/><h1>Culminó con éxito la carga de los registros</h1>";                
-                echo '</div>';                
-                echo "<br/>";
-                echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
-                echo "<script>" . PHP_EOL;
-                $func = "document.getElementById('regresar').addEvenListener('click',function(){";
-                echo PHP_EOL;
-                $func .= "location.href =" . INICIO . PHP_EOL . ";})";                
-                echo $func . PHP_EOL;
-                echo "</script>";
-
-        echo '<div class="w-100"  max-width: 100%; style="background-color: #eee; height: 250px; max-width: 100%;">';
-        echo "<br/><h3>Culminó la carga</h3><br/>";
-        echo "</div>";
-        */
+        //echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';  
+        echo LookAndFeel::estatus('<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>', 2);
+        echo "<br/><br/>";       
 
    }
 
 ?>
-
-<?php include '../view/bodyScripts.php'; ?>           
-                
         </div>
+
+
+<?php 
+
+    echo "<script>" . PHP_EOL;
+        
+        echo LookAndFeel::enlace("regresar", INICIO);
+        
+    echo "</script>" . PHP_EOL;        
+
+include '../view/bodyScripts.php'; 
+
+?>           
+                
+        
     </body>
 </html>

@@ -13,7 +13,23 @@ class CargarResourceList{
     }
     */
 
+    //================ BORRAR TABLA ===============================
     
+    static function eliminarResourceListTable(){    
+        
+      include_once 'classVropsConnection.php';
+
+      $consultaEliminaTabla = "DROP TABLE IF EXISTS vmware_recursos";
+
+      $result = VropsConexion::insertar($consultaEliminaTabla);
+
+      return $result;
+      
+  }
+
+
+
+
     /**
      * crearResourceListTable Función estática que crea la tabla vmware_recursos si no existe
      *
@@ -39,6 +55,43 @@ class CargarResourceList{
         return $result;
         
     }
+
+    //======================== TEST ========================
+    static function yaEstanLosDatos(array $registros){
+
+      include_once __DIR__ . '/../../constantes.php'; 
+      $iniConsultaPrueba = "SELECT recursos_id From vmware_recursos WHERE recursos_id IN ";   
+      $finConsultaPrueba = ";";
+      $arrayReg= array();
+      foreach($registros as $ind=>$reg){
+        if($ind == NUMREGPARACOMPROBAR) break;  //Tope de la cantidad de registros para comprobar
+        $arrayReg[] = $reg['identifier'];        
+      }
+      
+      $valConsulta =  "('" . implode("','", $arrayReg ) . "') ";
+      
+      $consulta = $iniConsultaPrueba . $valConsulta . $finConsultaPrueba;
+
+      $resultConsulta = VropsConexion::consultar($consulta);
+
+      $esArray= is_array($resultConsulta);
+      $hayCero = array_key_exists(0, $resultConsulta);
+      
+      if($hayCero){
+        $esVerdadero = $resultConsulta[0] === true;
+      }else{
+        $esVerdadero=false;
+      }
+      
+
+      if($esArray && $hayCero && $esVerdadero){
+        return false;
+      }else{
+        return true;
+      }
+      
+    }
+    //======================== FIN TEST ========================
 
     //static function insertar($consultaInsert, $strInsert){
     static function insertar($strInsert){
@@ -76,46 +129,61 @@ class CargarResourceList{
       
       include_once 'classVropsConnection.php';
 
-      self::crearResourceListTable();
-      
-      $strInsert = array();
-      
-      $tope=0; //contador de registros para insertar el número máximo definido en la constante NUMREGINSERT
-            
-      //$consultaInsert = self::iniConsulta();
-      $registrosAlmacenados=0;
-      
-      foreach($registros as $campos){
+      //self::eliminarResourceListTable(); //se elimina la tabla antes de crearla
 
-        //contruir el string con los valores a insertar        
-        $strInsert[] = "('" . implode("','", $campos) . "') ";  
+      //Probar si los registros ya están en la BD
+      if(self::yaEstanLosDatos($registros)){
+
+        $error['error']=true;
+        $error['mensaje']= "los datos ya se encontraban en la BD, si requiere reemplazarlos, contacte al administrados del sistema";
+        return $error;
+
+      }else{
+
+        self::$contadorDeRegistros=0;
+
+        self::crearResourceListTable(); 
         
-        self::$contadorDeRegistros++;
+        $strInsert = array();
         
-        $tope++; //tope se incrementa fuera del if y dentro del foreach
+        $tope=0; //contador de registros para insertar el número máximo definido en la constante NUMREGINSERT
+              
+        //$consultaInsert = self::iniConsulta();
+        $registrosAlmacenados=0;
         
-        if ($tope>NUMREGINSERT){ //inserta un lote de registros de acuerdo al tope definido como NUMREGINSERT
+        foreach($registros as $campos){
+
+          //contruir el string con los valores a insertar        
+          $strInsert[] = "('" . implode("','", $campos) . "') "; 
           
-          //=====================================================
-          $result = self::insertar($strInsert);
-          //=====================================================
+          $tope++; //tope se incrementa fuera del if y dentro del foreach
+          
+          if ($tope>NUMREGINSERT){ //inserta un lote de registros de acuerdo al tope definido como NUMREGINSERT
 
-          if (!$result){
-            die("ocurrió un error al intentar grabar a información de los resourceList en la BD");          
+            self::$contadorDeRegistros+=NUMREGINSERT;
+            
+            //=====================================================
+            $result = self::insertar($strInsert);
+            //=====================================================
+
+            if (!$result){
+              die("ocurrió un error al intentar grabar a información de los resourceList en la BD");          
+            }
+            $tope=0;
+            $strInsert=array();          
           }
-          $tope=0;
-          $strInsert=array();          
         }
-      }
 
-      if ($tope>0){  //inserta los últimos registros que hayan quedado fuera de los lotes 
-        //======================================================
-        $result = self::insertar($strInsert);
-        //===================================================
-        $registrosAlmacenados+=$tope;
+          if ($tope>0){  //inserta los últimos registros que hayan quedado fuera de los lotes 
+            //======================================================
+            $result = self::insertar($strInsert);
+            //===================================================
+            
+            self::$contadorDeRegistros+=$tope;
 
-      }      
-      return $registrosAlmacenados;
+          }      
+          return self::$contadorDeRegistros; //Número de registros(recursos) procesados        
+      }        
     }
 
     //=========================================================
@@ -173,8 +241,10 @@ class CargarResourceList{
               }
           if ($vaciar){
             file_put_contents($file, ""); //Se vacía el archivo de la lista de recursos al finalizar la carga 
-          }          
-          return $arrayProv;    
+          } 
+          //============== SALIDA ===================================         
+          return $arrayProv; //regresa un arreglo de arreglos con la información
+          //============== SALIDA ===================================         
         }
       }
 }

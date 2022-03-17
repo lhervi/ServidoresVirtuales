@@ -1,3 +1,5 @@
+
+
 <?php
     if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
@@ -16,16 +18,24 @@
     include_once './model/classCargarResourceList.php';
     include_once './../controller/utils/classLookAndFeel.php';
     include_once './../controller/utils/classErrors.php';
+    
 
     
     $_SESSION['genStats']=isset($_SESSION['genStats']) ?  $_SESSION['genStats']++ : 0;
 
     ?>
 
-    <body class="m-0 vh-100 row justify-content-start align-items-center">
+    <body class="m-0 vh-100 row justify-content-start align-items-center" id="cuerpo">
         <div class="container col-auto">
 
         <?php      
+
+            function regresar(){
+                echo LookAndFeel::estatus('<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>', 2);
+                echo "<script> " . PHP_EOL;
+                echo LookAndFeel::enlace('regresar', INICIO);
+                echo "</script> " . PHP_EOL;
+            }
 
             $vropsServerArray  = VropsConf::getCampo('vropsServer');
 
@@ -89,8 +99,14 @@
 
             foreach($resourceKindsArray as $resourceKinds){
                 //Crea una lista de recursos que se almacena completa en allResorceList.json
-                VropsResourceList::getResourceList($resourceKinds);
-
+                $result = VropsResourceList::getResourceList($resourceKinds);
+                if ($result['error']){
+                    echo LookAndFeel::estatus($result['mensaje']);
+                    regresar();
+                    die();
+                }else{
+                    echo LookAndFeel::estatusX("se obtuvo  la información de " . $resourceKinds . " correctamente");
+                }
             }
 
             //===== Crear la lista de recursos "resourceList" ---
@@ -105,19 +121,34 @@
             //================ [PENDIENTE] ==============================================
             //1 Preguntar acá si se desea pasar la información a la BD
             //2 Comprobar que la información no haya sido cargada previamente
-            //3 Advertir si los registros ya existen en la BD o la conclusión de la carga
-                                    
+            //3 Advertir si los registros ya existen en la BD o la conclusión de la carga                                    
             
             $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+
+            
+            //Si ya los registros se encuentran en la BD se detiene la ejecución
+            if (isset($result['error']) && $result['error'] ){
+                echo LookAndFeel::estatusX($result['mensaje']);
+                
+                regresar();
+                die();               /*
+                echo LookAndFeel::estatus('<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>', 2);
+                echo "<script> . " . PHP_EOL;
+                echo LookAndFeel::enlace('->regresar', INICIO);
+                echo "</script> . " . PHP_EOL;
+                */
+            }
+
+            echo LookAndFeel::estatusX("Se registraron " . $result . " registros en la BD");
 
 
             //[OJO OJO] Hay que vaciar a allResourceList.json después de pasar su contenido a la BD
 
             //===== Fin de la creación y carga en la BD de la lista de recursos "resourceList" ---
 
-            echo LookAndFeel::estatusX("fin del proceso de carga de la lista de " . $resourceKinds);
+            //echo LookAndFeel::estatusX("fin del proceso de carga de la lista de " . $resourceKinds);
 
-            echo LookAndFeel::estatusX("Se ha completado el procesamiento de resourceList", 2);
+            echo LookAndFeel::estatusX("Se ha completado el procesamiento de la lista de recursos", 2);
 
 
             foreach($resourceKindsArray as $resourceKinds){            
@@ -191,21 +222,55 @@
                         }        
 
                         echo LookAndFeel::estatusX("La información del servidor <strong>" . $server . " </strong>está lista para pasarse a la base de datos", 2);
-                        
+
+                        echo LookAndFeel::loader();
+
+                       
                         echo '<div class="w-100" style="padding :15px background-color: #EEE; height: 250px; max-width: 100%;">';
-                            echo "<form action='loadVrops.php' method='POST'>";
+                            echo "<form action='loadVrops.php' method='POST' id='enviarEstadisticas'>";
                             echo "<br/>";
                             echo "<input type='submit'value='continuar' id='continuar'><br/><br/>";
                             echo "<label for='continuar'>Presione el botón para continuar</label>";                                                       
                             echo "</form>";
                         echo "</div>";
+                        
                                                                 
                     } 
                 }
 
+                
+                
+               
+                
+
         ?>
 
-                <?php include '../view/bodyScripts.php'; ?>
+                      
+                
+            <?php 
+            include '../view/bodyScripts.php'; 
+
+            /*
+            echo "<script> " . PHP_EOL;
+            echo LookAndFeel::showLoader();
+            echo "<script> " . PHP_EOL;
+            */
+
+            ?>            
+            <script>               
+                
+                document.getElementById('cuerpo').addEventListener('load', function(){
+                   document.getElementById("loader").style.display= "none";
+                })
+
+                document.getElementById('continuar').addEventListener('click', function(e){
+                    e.preventDefault();
+                    document.getElementById("loader").style.visibility= "visible"; 
+                    document.getElementById("loader").style.display= "block";
+                    document.getElementById("enviarEstadisticas").submit();
+                })
+
+            </script>
                 
         </div>
     </body>

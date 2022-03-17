@@ -83,7 +83,7 @@ class CargarStatsVrops {
                     $arrayStats[$numReg]="('". $resourceId . "', '" . Fechas::getDatefromMiliSeconds($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "', '" . $resourceKinds . "', '" . $vropsServer . "')";                         
 
                     $numReg++;          //Si numReg > 1000 hay que ejecutar el insert en la BD                    
-                    if ($numReg>1000){
+                    if ($numReg>1000){  //Cambiar por una constante
                         $a=5;
                         //====================================================
                         $resultInsert = self::insertStats($arrayStats);  //llama al proceso de inserción de registros pasando el arreglo con los 1000 datos
@@ -118,27 +118,37 @@ class CargarStatsVrops {
             foreach($listArchArray as $dirFileStats){
                 //$listArchArray[n]['nombreArchSalida'] = "nonArchSalida.txt"
                 //$listArchArray[n]['resourceKinds'] = "virtualmachine"
-                $solDirFileStats ??= $dirFileStats['nombreArchSalida'];
+                if(isset($dirFileStats['nombreArchSalida'])){
+                    $solDirFileStats ??= $dirFileStats['nombreArchSalida'];
+                }
+                
                 try{
 
-                    if(!is_file($solDirFileStats) || $dirFileStats['nombreArchSalida']==""){
+                    if(!is_file($solDirFileStats)){
                         $a=5;
                         continue;
                     }
                 
-                    $cont = file_get_contents($dirFileStats['nombreArchSalida']);
+                    if (isset($dirFileStats['nombreArchSalida'])){
+                        $cont = file_get_contents($dirFileStats['nombreArchSalida']);
+                    }
+                    
 
                 }catch(Exception $e){
-                    RegistError::logError($e, )
-                    echo $e;
+                    RegistError::logError($e, __FILE__, __LINE__);
+                    die($e);
                 }
                
                 if($cont){
                     $statArrayInfo = json_decode($cont, true); //metricas por archivo
-                    if($statArrayInfo){
-                        if(array_key_exists('values', $statArrayInfo) && count($statArrayInfo['values'])>0){
+                    if(isset($statArrayInfo['values'])){
+                        //if(array_key_exists('values', $statArrayInfo) && count($statArrayInfo['values'])>0){
+                            if(count($statArrayInfo['values'])>0){
 //===================================================================================================
-                            $result = self::procesarArchivo($statArrayInfo['values'], $dirFileStats['resourceKinds']);
+                            $val ??= $statArrayInfo['values'];
+                            $reKind ??= $dirFileStats['resourceKinds'];
+
+                            $result = self::procesarArchivo($val, $reKind);
 //===================================================================================================
 
                             self::$proceso['files']++;
@@ -253,15 +263,32 @@ class CargarStatsVrops {
             //unset($result['error']);            
             $error = self::procesarLoteDeFileStat($result); //
             if ($error['error']){
+                $error['mensaje'] = "hubo un error en el procesamiento del archivo de estadísticas";
                 return $error;                
                 //=========== [PENDIENTE] [IMPORTANTE] En este punto debe hacerse un roll back
             }else{                
                 
                 $result['error']=false;
                 $result['mensaje'] = "Culminó con éxito la carga de los registros";
-                return true;
+                return $result;
             }
         }
+
+        //----------------------------------------------------------------------------
+
+        echo "<br/>";
+
+        echo "<script>" . PHP_EOL;
+        
+            echo LookAndFeel::enlace("regresar", INICIO);
+        
+        echo "<script>" . PHP_EOL;
+
+        echo "<br/>";
+        
+        echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';
+        
+        //----------------------------------------------------------------------------
         
         file_put_contents(HOME . SALIDAS . "resultProcesJsonToPostgres.json", json_encode(self::$proceso));
        
