@@ -7,10 +7,26 @@
 class CargarStatsVrops {    
     
     static public $proceso = array();
+    static int $contadorInsertar=1000;
     //Lee el listado de archivos y los convierte uno a uno a arreglo
     //Para cada arreglo de estadísticas, crea un objeto que regresa un arreglo de string
     //Cada string del arreglo, son los 1000 registros (configurable) a ser insertados en la BD
     //El número de registros a insertar se lee desde vropsConfigDB.php
+
+    /*
+    static function comprobar(array $muestra){
+        
+        $consulta = "select * from vm_waremetricas where recursos_id in ('";
+        $tope=0;
+        
+        foreach ($muestra as $reg){                
+            $valores = implode("', '", $muesta);
+        }
+            
+        $consulta .= $valores . "');";
+
+    }
+    */
     
     /**
      * insertStats
@@ -22,12 +38,14 @@ class CargarStatsVrops {
     static function insertStats(array $arrayStats){
         include_once 'classVropsConnection.php';
         
-        //========== [ACTUALIZAR] ====================== Actualizar el insert ya que la tabla
-        //irecursos_id, fecha, metrica, valor, resourcekinds, servidor
-        $insertStr= "INSERT INTO vmware_metricas (recursos_id, fecha, metrica, valor, resourcekinds, servidor)";
-        $insertStr .= " VALUES ";
+        $insertStr = "INSERT INTO vmware_metricas (recursos_id, fecha, metrica, valor, resourcekinds, servidor)";
+        $insertStr .= " VALUES ";      
+
         $insertStr .= implode(", ", $arrayStats);
+
+
         $result = VropsConexion::insertar($insertStr);
+        
         if($result){
             $error['error'] = false;
             return $error;
@@ -36,6 +54,49 @@ class CargarStatsVrops {
             $error['mensaje'] = "hubo un error al insertar los registros en la BD";
             return $error;
         }
+    }
+
+
+    static function procesarValores(array $valores, string $resourceId, array $fecha, string $metrica, $valor, string $resourceKinds, string $vropsServer){
+        //LLena un arreglo y para cuando hay mil registros
+        
+        $arrayStats = array(); //se inicializa el arreglo donde se vaciarán los valores a insertar
+        $numReg=0; //Inicializa el contador de registros que controla el máximo número de valores a insertar (1000 registros)
+
+        foreach($valores as $ind=>$valor){  //se varían los valores de cada metrica 
+                    
+            //$a = $indStat; //Comparar con $numreg [PROVISIONAL][ELIMINAR]
+                        //En caso de que coincida con $numReg, sustituir
+
+            //$arrayStats[$numReg]="('". $resourceId . "', '" . Fechas::getDatefromMiliSeconds($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "', '" . $resourceKinds . "', '" . $vropsServer . "')";                         
+            $arrayStats[]="('". $resourceId . "', '" . Fechas::getDatefromMiliSeconds($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "', '" . $resourceKinds . "', '" . $vropsServer . "')";                         
+
+            $numReg++;          //Si numReg > 1000 hay que ejecutar el insert en la BD                    
+
+            if ($numReg>1000){  //Cambiar por una constante               
+                //====================================================
+                $resultInsert = self::insertStats($arrayStats);  //llama al proceso de inserción de registros pasando el arreglo con los 1000 datos
+                //====================================================
+                
+                if ($resultInsert['error']){
+                    return $resultInsert;
+                }
+                
+                self::$proceso['registros']++;
+                $numReg = 0; //Inicializa el contador
+                $arrayStats = null;                   //inicializa el arreglo                        
+            }
+        }
+
+        //cuando sale del foreach es que ya se terminaron los valores, pero... pueden haber remanentes, por eso lo siguiente:
+        //Si el número de resgistros es mayor a 0 pero menor a mil, hay que insertar esos registros
+        if ($numReg>0 && !is_null($arrayStats)){
+            $resultInsert = self::insertStats($arrayStats);           
+            $arrayStats = null;   //Esta inicialización no estaba antes del 17/3/2020 18:18       
+            $numReg = 0;
+        }
+
+        return $resultInsert;  //Esta instrucción se ejecuta siempre
     }
     
     /**
@@ -50,58 +111,47 @@ class CargarStatsVrops {
         include_once HOME . '/controller/utils/classBitacora.php';
         include_once HOME . '/controller/utils/classFechas.php';
         include_once HOME . '/vROps/classVropsConf.php';
-        //controller\utils\classBitacora.php
-        //D:\xampp\htdocs\STI\controller\utils\classBitacora.php
         
         //En el acrchivo de configuración está el nombre del servidor que se está procesando
         $vropsServer = VropsConf::getCampo('vropsServer')['vropsServer'];
         
         self::$proceso['registros']=0;
-        $numReg=0;        
-        $total = count($statArrayInfValues);
-        if($total<=0) {
+        
+        $numReg=0;                
+
+        if(count($statArrayInfValues)==0) {
             die("no hay archivos que procesar");
         }
+
         $cantDeStat=0;
+
         foreach($statArrayInfValues as $statInfo){ //iterando los registros dentro de cada archivo de stats
 
             Bitacora::avance("Procesando el recurso: " . $statInfo['resourceId']);
             
-            $cantDeStat++; //cuenta el numero de registros en total
+            $cantDeStat++; //cuenta el numero de registros en total [ELIMINAR???][ELIMINAR]
             
             $resourceId = strval($statInfo['resourceId']);
-            self::$proceso['resourceId'][]=$resourceId;
-            
-            foreach($statInfo['stat-list']['stat'] as $regStat){                
+            self::$proceso['resourceId'][]=$resourceId;  //[ELIMINAR]
 
+            $contadorProv = count($statInfo['stat-list']['stat']); //[PROVISIONAL][ELIMINAR]
+            
+            foreach($statInfo['stat-list']['stat'] as $indStat=>$regStat){    
+                
                 $fecha = $regStat['timestamps']; //Arreglo con todas las horas
                 $metrica = strval($regStat['statKey']['key']);
-                $valores = $regStat['data']; //Arreglo de valores           
-                foreach($valores as $ind=>$valor){  //se varían los valores de cada metrica 
-                    
-                    
-                    $arrayStats[$numReg]="('". $resourceId . "', '" . Fechas::getDatefromMiliSeconds($fecha[$ind]) . "', '" . $metrica . "', '". strval($valor) . "', '" . $resourceKinds . "', '" . $vropsServer . "')";                         
-
-                    $numReg++;          //Si numReg > 1000 hay que ejecutar el insert en la BD                    
-                    if ($numReg>1000){  //Cambiar por una constante
-                        $a=5;
-                        //====================================================
-                        $resultInsert = self::insertStats($arrayStats);  //llama al proceso de inserción de registros pasando el arreglo con los 1000 datos
-                        //====================================================
-                        self::$proceso['registros']++;
-                        $numReg = 0; //Inicializa el contador
-                        $arrayStats = null;                   //inicializa el arreglo                        
-                    }
+                $valores = $regStat['data']; //Arreglo de valores
+                
+                //======================== 
+                $result = self::procesarValores($valores, $resourceId, $fecha, $metrica, $valor, $resourceKinds, $vropsServer);
+                //========================
+                if ($result['error']){
+                    return $result;  //Si ocurre un error, se detine la ejecución del foreach y se regresa el error y el mensaje
                 }
             }
             // Aquí se debe preguntar si el arrglo tiene datos, y de tenerlos, insertarlos
         }
-        if ($numReg>0 && !is_null($arrayStats)){
-
-            $resultInsert = self::insertStats($arrayStats);           
-            
-        }
-        return $resultInsert;
+        return $result;  //Regresa ['error']= false si no hay error o verdadero si lo hubo
     }
         
     /**
@@ -123,16 +173,13 @@ class CargarStatsVrops {
                 }
                 
                 try{
-
                     if(!is_file($solDirFileStats)){
                         $a=5;
                         continue;
-                    }
-                
+                    }                
                     if (isset($dirFileStats['nombreArchSalida'])){
                         $cont = file_get_contents($dirFileStats['nombreArchSalida']);
-                    }
-                    
+                    }                  
 
                 }catch(Exception $e){
                     RegistError::logError($e, __FILE__, __LINE__);
@@ -145,19 +192,19 @@ class CargarStatsVrops {
                         //if(array_key_exists('values', $statArrayInfo) && count($statArrayInfo['values'])>0){
                             if(count($statArrayInfo['values'])>0){
 //===================================================================================================
-                            $val ??= $statArrayInfo['values'];
-                            $reKind ??= $dirFileStats['resourceKinds'];
+                                $val ??= $statArrayInfo['values'];
+                                $reKind ??= $dirFileStats['resourceKinds'];
 
-                            $result = self::procesarArchivo($val, $reKind);
-//===================================================================================================
+                                $result = self::procesarArchivo($val, $reKind);
+    //===================================================================================================
 
-                            self::$proceso['files']++;
-                            if (!$result){                        
-                                $error['error'] = true;
-                                $error['mensaje'] = "no se pudo decodificar el archivo";
-                                return $error;
-                            }
-                        }                      
+                                self::$proceso['files']++;
+                                if ($result['error']){                        
+                                    $error['error'] = true;
+                                    $error['mensaje'] = "no se pudo decodificar el archivo";
+                                    return $error;
+                                }
+                            }                      
                     }
                 }                
             }
