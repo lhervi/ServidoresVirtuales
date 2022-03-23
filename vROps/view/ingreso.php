@@ -105,18 +105,15 @@ function servers(){
 <?php include '../../view/bodyScripts.php';?>
 
 <script>    
-    function todoOk(){               
-        userBa = document.getElementById("userBA").value == "" ? false : true;
-        passwordBA = document.getElementById("passwordBA").value == "" ? false : true;             
-        return userBA && passwordBA;
-    }
-
-    function habilitar(){
-        if (todoOk()){            
-            document.getElementById('submit').disabled=false;
-        }else{            
-            document.getElementById('submit').disabled=true;
-        }
+    
+    function habilitar(){   
+        const userBaInput =  document.getElementById("userBA");
+        const passwordBAInput = document.getElementById("passwordBA");
+        
+        todoOk = ((userBaInput.value !="") && (passwordBAInput.value != "")) ? true : false;
+            
+        document.getElementById('submit').disabled=!todoOk; 
+        //console.log('todo ok : ' + todoOk.toString() + '  userBa: ' + userBaInput.value + '  pass: ' + passwordBAInput.value);       
     }
     
     document.getElementById("userBA").addEventListener('keypress', habilitar);

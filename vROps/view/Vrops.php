@@ -81,7 +81,7 @@ Utils::limpiarDirectorio($directoio);
                                     <input type="checkbox" id="hostsystem" name="hostsystem" value="resourceKinds" checked>
                                     <label for="hostsystem">Hostsystem</label>     
                                 </div><br/><br/>
-                                <div><button type="submit"  class="btn btn-primary" id="enviarForma" onclick="enviar()">Enviar</button></div>          
+                                <div><button type="submit"  class="btn btn-primary" id="enviarForma" disabled onclick="enviar()">Enviar</button></div>          
 
                             </form><br/><br/>      
                         </div>
@@ -89,7 +89,38 @@ Utils::limpiarDirectorio($directoio);
                 </div>
             </div>
         </div>
+        
     <script text/javascript>        
+        const mesConsulta =  document.getElementById("mesConsulta");
+        mesConsulta.addEventListener('keypress', habilitar);        
+        mesConsulta.addEventListener('change', habilitar);
+        mesConsulta.addEventListener('change', rangoFechaOk);
+
+        function rangoFechaOk(){
+            
+            const fecha = mesConsulta.value;
+                        
+            const año = parseInt(fecha.substring(0, 4));
+            const mes = parseInt(fecha.substring(5));
+
+            fechaActual = new Date();
+
+            mesActual = fechaActual.getMonth();
+            añoActual = fechaActual.getFullYear();
+
+            diffAño = añoActual - año;
+            diffMes = mesActual - mes;
+
+
+            //año: ' + año + ' ' + 'mes: ' + mes);
+            
+        }
+
+        function habilitar(){                    
+                const mesOk = mesConsulta.disabled == "" ? true : false;                               
+        }
+    
+        
 
         function enviar(){                                
             document.getElementById("loader").style.visibility= "visible"; 
