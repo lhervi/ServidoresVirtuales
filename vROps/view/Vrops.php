@@ -90,7 +90,10 @@ Utils::limpiarDirectorio($directoio);
             </div>
         </div>
         
-    <script text/javascript>        
+    <script text/javascript>     
+    
+        <?php echo "const topeMeses = " . TOPEMESES . ";" . PHP_EOL; ?> 
+    
         const mesConsulta =  document.getElementById("mesConsulta");
         mesConsulta.addEventListener('keypress', habilitar);        
         mesConsulta.addEventListener('change', habilitar);
@@ -105,11 +108,19 @@ Utils::limpiarDirectorio($directoio);
 
             fechaActual = new Date();
 
-            mesActual = fechaActual.getMonth();
+            mesActual =  fechaActual.getMonth();
             añoActual = fechaActual.getFullYear();
 
-            diffAño = añoActual - año;
-            diffMes = mesActual - mes;
+            if (añoActual - año == 1){
+               mesActual += 12; //Compensa el número de meses de diferencia entre mes y mes actual
+            }else if((añoActual - año < 0) || (añoActual - año > 1)){                
+                return false;
+            }
+
+            diffMes = Math.abs(mesActual - mes)> 1 ? false : true;
+            
+            diffAño = Math.abs(añoActual - año)> topeMeses ? false : true;  //Si la diferencia en meses es 
+            
 
 
             //año: ' + año + ' ' + 'mes: ' + mes);

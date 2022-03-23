@@ -39,6 +39,7 @@ define("VROPSERROREMAILTO","lhervi@gmail.com");
 
 // ------------------ R U T A S -------------------------------------
 
+define ("TOPEMESES", 6); //El número de meses a acumular como histórico de estadísticas
 define('SEGMENTOS', 2000);
 define("NUMREGPARACOMPROBAR", 10);
 define("ARCHIVOSDEIDS", "IdsFilesNames.json");
