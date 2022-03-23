@@ -19,7 +19,6 @@ class getCSV {
     public ObjCSV $objCSV2;       
 
     function __construct($user, $password, $netRoute, $archivo, $tableClass="= class='table table-striped'"){
-    //function __construct($netRoute, $archivo, $tableClass="= class='table table-striped'"){
         $this->user = $user;
         $this->password = $password;
         $this->netRoute = $netRoute;
@@ -31,23 +30,11 @@ class getCSV {
         
         try{
 
-            //exec('net use '. $this->netRoute .' /user:"'.$this->user.'" "'.$this->password.'" /persistent:no');
-            shell_exec('net use '. $this->netRoute .' /user:"'.$this->user.'" "'.$this->password.'" /persistent:no');
+            exec('net use '. $this->netRoute .' /user:"'.$this->user.'" "'.$this->password.'" /persistent:no');
+            //shell_execute('net use '. $this->netRoute .' /user:"'.$this->user.'" "'.$this->password.'" /persistent:no');
+            if (($gestor = fopen($this->netRoute . "\\" . $this->archivo, "r")) !== FALSE) {
 
-            //preguntar en qué sistema operativo está el archivo
-
-            //=================================
-
-            //$os = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? "windows" : "Linux";
-            //$barra = $os == "windows" ? "\\" : "\/";
-            $barra = "\\";
-            
-            //==================================
-            $arch = $this->netRoute . $barra . $this->archivo;
-            
-            if (($gestor = fopen($arch, "r")) !== FALSE) {
-
-                $this->conf=stat($this->netRoute . $barra  . $this->archivo);
+                $this->conf=stat($this->netRoute . "\\" . $this->archivo);
 
                 $this->fecha = (date("Y-m-d H:i:s",$this->conf['mtime']));
             // Con este bucle obtengo los nombre de los encabezados del archivo y quedan almacenados en el arreglo $encabezado

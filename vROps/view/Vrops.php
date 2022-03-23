@@ -71,7 +71,7 @@ Utils::limpiarDirectorio($directoio);
                                 </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Tipo de intervalo</h5>
-                                    <label for="AVG">Hora</label>
+                                    <label for="AVG">AVG</label>
                                     <input type="radio" id="AVG" name="rollUpType" value="AVG" autofocus checked></br>               
                                 </div><br/><br/>
 

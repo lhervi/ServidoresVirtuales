@@ -50,6 +50,7 @@ Obtiene los atributos del archivo y los presenta por pantalla:
     //Crea el objeto getSCV con las credenciales suministradas en el archivo de configuración
     //global $t;
     $t = new getCSV($user, $password, $networkDrive, $archivo);    
+    //$t = new getCSV($networkDrive, $archivo);    
     //Carga los datos del archivo seleccionado en el objeto getSVC
     $t->loadFile();
 

@@ -58,11 +58,11 @@ function servers(){
                 <img src="../../view/../view/icons/people.svg" alt="ingreso" class="iconMedium">
 
                 <div class="form-group"><h2>Datos de acceso</h2><br>
-
+                    
                     <lable for="userBA">Usuario</lable><br>
-                    <input type="text" Id="userBA" name="userBA" placeholder="usuarioBA"><br><br>
+                    <input type="text" Id="userBA" name="userBA" placeholder="usuarioBA" class='campo'><br><br>
                     <lable for="passwordBA">Password</lable><br>
-                    <input type="password" Id="passwordBA" name="passwordBA"><br><br>                    
+                    <input type="password" Id="passwordBA" name="passwordBA" class='campo'><br><br>                    
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="vropsServer">Servidor</label>
@@ -74,7 +74,7 @@ function servers(){
                     <br><br>
                 </div>
 
-                    <div><button id="submit" type="submit" class="btn btn-primary">Enviar</button></div><br>
+                    <div><button id="submit" type="submit" class="btn btn-primary" disabled>Enviar</button></div><br>
                    
                     <?php                       
                         
@@ -103,6 +103,28 @@ function servers(){
 </div>
 
 <?php include '../../view/bodyScripts.php';?>
+
+<script>    
+    function todoOk(){               
+        userBa = document.getElementById("userBA").value == "" ? false : true;
+        passwordBA = document.getElementById("passwordBA").value == "" ? false : true;             
+        return userBA && passwordBA;
+    }
+
+    function habilitar(){
+        if (todoOk()){            
+            document.getElementById('submit').disabled=false;
+        }else{            
+            document.getElementById('submit').disabled=true;
+        }
+    }
+    
+    document.getElementById("userBA").addEventListener('keypress', habilitar);
+    document.getElementById("passwordBA").addEventListener('keypress', habilitar);
+    document.getElementById("userBA").addEventListener('change', habilitar);
+    document.getElementById("passwordBA").addEventListener('change', habilitar);
+
+</script>
 
 </body>
 </html>
