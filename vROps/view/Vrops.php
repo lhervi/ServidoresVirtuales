@@ -99,44 +99,44 @@ Utils::limpiarDirectorio($directoio);
         mesConsulta.addEventListener('change', habilitar);
         mesConsulta.addEventListener('change', rangoFechaOk);
 
-        function rangoFechaOk(){
-            
-            alert('hi rangoFecha');
-            const fecha = mesConsulta.value;
-                        
-            const año = parseInt(fecha.substring(0, 4));
-            const mes = parseInt(fecha.substring(5));
+        function rangoFechaOk(){        
+        
+        const fecha = mesConsulta.value;
+                    
+        const año = parseInt(fecha.substring(0, 4));
+        const mes = parseInt(fecha.substring(5));
 
-            fechaActual = new Date();
+        fechaActual = new Date();
 
-            mesActual =  fechaActual.getMonth();
-            añoActual = fechaActual.getFullYear();
+        mesActual =  fechaActual.getMonth() + 1; //se suma 1 porque enero comienza en 0 para la función
+        añoActual = fechaActual.getFullYear();
 
-            //--------------------------------------------------------------------
-            //Compensa el número de meses de diferencia entre mes y mes actual
-            
-            if((añoActual - año < 0) || (añoActual - año > 1)) return false;            
-            
-            if(añoActual - año == 1) mesActual += 12; 
-            
-            //--------------------------------------------------------------------
-            //Daddo que los meses están acomodados, se puede hacer el siguiente cálculo
-            if (mesActual-mes>0 && mesActual-mes<=topeMeses) return true;
-            
-            //regresa falso si no se cumple ninguna de las anteriores
-            return false;            
-        }
+        //--------------------------------------------------------------------
+        //Compensa el número de meses de diferencia entre mes y mes actual
+        
+        if((añoActual - año < 0) || (añoActual - año > 1)) return false;            
+        
+        if(añoActual - año == 1) mesActual += 12; 
+        
+        //--------------------------------------------------------------------
+        //Daddo que los meses están acomodados, se puede hacer el siguiente cálculo
+        if (mesActual-mes>0 && mesActual-mes<=topeMeses) return true;
+        
+        //regresa falso si no se cumple ninguna de las anteriores
+        return false;            
+    }
 
-        function habilitar(){                    
-                const mesOk = mesConsulta.disabled == "" ? true : false;
-                const fechaOk = rangoFechaOk() 
-                document.getElementById("enviarForma").enable= mesOk && fechaOk;
-                if(fechaOk){
-                    document.getElementById("alertaFecha").style.visibility=hidden;
-                }else{
-                    document.getElementById("alertaFecha").style.visibility=visible;
-                }
-        }
+    function habilitar(){                    
+            const mesOk = mesConsulta.disabled == "" ? true : false;
+            const fechaOk = rangoFechaOk() 
+            const todoBien = mesOk && fechaOk;
+            document.getElementById("enviarForma").enable= todoBien;
+            if(fechaOk){
+                document.getElementById("alertaFecha").style.visibility="hidden";
+            }else{
+                document.getElementById("alertaFecha").style.visibility="visible";
+            }
+    }
     
         
 
