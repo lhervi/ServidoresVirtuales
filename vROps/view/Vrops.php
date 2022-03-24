@@ -55,7 +55,7 @@ Utils::limpiarDirectorio($directoio);
 
                                 <div class="form-group form-check-inline"><h5>Fecha del lapso <br/></h5>               
                                     <label for="mesConsulta">Mes a obtener</label>    
-                                    <input type="month" id="mesConsulta" name="mesConsulta">                                                 
+                                    <input type="month" id="mesConsulta" name="mesConsulta"><div id="alertaFecha" style="visibility:hidden; color:red">La fecha no puede ser anterior a seis meses</div>                                            
                                 </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Intervalo de medición</h5>
@@ -93,7 +93,7 @@ Utils::limpiarDirectorio($directoio);
     <script text/javascript>     
     
         <?php echo "const topeMeses = " . TOPEMESES . ";" . PHP_EOL; ?> 
-    
+        
         const mesConsulta =  document.getElementById("mesConsulta");
         mesConsulta.addEventListener('keypress', habilitar);        
         mesConsulta.addEventListener('change', habilitar);
@@ -101,6 +101,7 @@ Utils::limpiarDirectorio($directoio);
 
         function rangoFechaOk(){
             
+            alert('hi rangoFecha');
             const fecha = mesConsulta.value;
                         
             const año = parseInt(fecha.substring(0, 4));
@@ -111,24 +112,30 @@ Utils::limpiarDirectorio($directoio);
             mesActual =  fechaActual.getMonth();
             añoActual = fechaActual.getFullYear();
 
-            if (añoActual - año == 1){
-               mesActual += 12; //Compensa el número de meses de diferencia entre mes y mes actual
-            }else if((añoActual - año < 0) || (añoActual - año > 1)){                
-                return false;
-            }
-
-            diffMes = Math.abs(mesActual - mes)> 1 ? false : true;
+            //--------------------------------------------------------------------
+            //Compensa el número de meses de diferencia entre mes y mes actual
             
-            diffAño = Math.abs(añoActual - año)> topeMeses ? false : true;  //Si la diferencia en meses es 
+            if((añoActual - año < 0) || (añoActual - año > 1)) return false;            
             
-
-
-            //año: ' + año + ' ' + 'mes: ' + mes);
+            if(añoActual - año == 1) mesActual += 12; 
             
+            //--------------------------------------------------------------------
+            //Daddo que los meses están acomodados, se puede hacer el siguiente cálculo
+            if (mesActual-mes>0 && mesActual-mes<=topeMeses) return true;
+            
+            //regresa falso si no se cumple ninguna de las anteriores
+            return false;            
         }
 
         function habilitar(){                    
-                const mesOk = mesConsulta.disabled == "" ? true : false;                               
+                const mesOk = mesConsulta.disabled == "" ? true : false;
+                const fechaOk = rangoFechaOk() 
+                document.getElementById("enviarForma").enable= mesOk && fechaOk;
+                if(fechaOk){
+                    document.getElementById("alertaFecha").style.visibility=hidden;
+                }else{
+                    document.getElementById("alertaFecha").style.visibility=visible;
+                }
         }
     
         
