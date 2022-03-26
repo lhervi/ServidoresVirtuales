@@ -205,7 +205,7 @@ class Fechas{
      * Si no se pasa una fecha, regresa la fecha actual en miliseconds
      * @return int un entero que representa la fecha en milisegundos
      */
-    static function getMilisecondsFromDate(string $fecha){
+    static function getMilisecondsFromDate(string $fecha=null){
     
         if(is_null($fecha)){
             $fecMili = new DateTime();

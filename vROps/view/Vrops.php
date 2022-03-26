@@ -55,7 +55,7 @@ Utils::limpiarDirectorio($directoio);
 
                                 <div class="form-group form-check-inline"><h5>Fecha del lapso <br/></h5>               
                                     <label for="mesConsulta">Mes a obtener</label>    
-                                    <input type="month" id="mesConsulta" name="mesConsulta"><div id="alertaFecha" style="visibility:hidden; color:red">La fecha no puede ser anterior a seis meses</div>                                            
+                                    <input type="month" id="mesConsulta" name="mesConsulta"><div id="alertaFecha" style="visibility:hidden; color:red">La fecha a consultar no puede ser anterior a seis meses, ni igual o posterior a la fecha actual</div>                                     
                                 </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Intervalo de medición</h5>
@@ -81,7 +81,7 @@ Utils::limpiarDirectorio($directoio);
                                     <input type="checkbox" id="hostsystem" name="hostsystem" value="resourceKinds" checked>
                                     <label for="hostsystem">Hostsystem</label>     
                                 </div><br/><br/>
-                                <div><button type="submit"  class="btn btn-primary" id="enviarForma" disabled onclick="enviar()">Enviar</button></div>          
+                                <div><button type="submit"  class="btn btn-primary" id="enviarForma" disabled>Enviar</button></div>          
 
                             </form><br/><br/>      
                         </div>
@@ -92,55 +92,70 @@ Utils::limpiarDirectorio($directoio);
         
     <script text/javascript>     
     
-        <?php echo "const topeMeses = " . TOPEMESES . ";" . PHP_EOL; ?> 
+        <?php
+            //Crea la lista de consultas en formato json para que pueda ser leído en JavaScript
+            include_once __DIR__ . '/../../constantes.php'; 
+            include_once HOME . '/vROps/classLista.php';
+            echo "const topeMeses = " . TOPEMESES . ";" . PHP_EOL;
+            $lista = Lista::getLista();            
+            echo "listaDeConsultas = " . $lista . ";";
+        ?> 
         
         const mesConsulta =  document.getElementById("mesConsulta");
+
         mesConsulta.addEventListener('keypress', habilitar);        
         mesConsulta.addEventListener('change', habilitar);
         mesConsulta.addEventListener('change', rangoFechaOk);
+        document.getElementById('enviarForma').addEventListener('click', e=>(){
 
+        });
+
+        function evalList(){
+
+        }
+        
         function rangoFechaOk(){        
         
-        const fecha = mesConsulta.value;
-                    
-        const año = parseInt(fecha.substring(0, 4));
-        const mes = parseInt(fecha.substring(5));
+            const fecha = mesConsulta.value;
+                        
+            const año = parseInt(fecha.substring(0, 4));
+            const mes = parseInt(fecha.substring(5));
 
-        fechaActual = new Date();
+            fechaActual = new Date();
 
-        mesActual =  fechaActual.getMonth() + 1; //se suma 1 porque enero comienza en 0 para la función
-        añoActual = fechaActual.getFullYear();
+            mesActual =  fechaActual.getMonth() + 1; //se suma 1 porque enero comienza en 0 para la función
+            añoActual = fechaActual.getFullYear();
 
-        //--------------------------------------------------------------------
-        //Compensa el número de meses de diferencia entre mes y mes actual
-        
-        if((añoActual - año < 0) || (añoActual - año > 1)) return false;            
-        
-        if(añoActual - año == 1) mesActual += 12; 
-        
-        //--------------------------------------------------------------------
-        //Daddo que los meses están acomodados, se puede hacer el siguiente cálculo
-        if (mesActual-mes>0 && mesActual-mes<=topeMeses) return true;
-        
-        //regresa falso si no se cumple ninguna de las anteriores
-        return false;            
-    }
+            //--------------------------------------------------------------------
+            //Compensa el número de meses de diferencia entre mes y mes actual
+            
+            if((añoActual - año < 0) || (añoActual - año > 1)) return false;            
+            
+            if(añoActual - año == 1) mesActual += 12; 
+            
+            //--------------------------------------------------------------------
+            //Daddo que los meses están acomodados, se puede hacer el siguiente cálculo
+            if (mesActual-mes>0 && mesActual-mes<=topeMeses) return true;
+            
+            //regresa falso si no se cumple ninguna de las anteriores
+            return false;            
+        }   
 
-    function habilitar(){                    
-            const mesOk = mesConsulta.disabled == "" ? true : false;
-            const fechaOk = rangoFechaOk() 
-            const todoBien = mesOk && fechaOk;
-            document.getElementById("enviarForma").enable= todoBien;
-            if(fechaOk){
-                document.getElementById("alertaFecha").style.visibility="hidden";
-            }else{
-                document.getElementById("alertaFecha").style.visibility="visible";
-            }
-    }
-    
+        function habilitar(){                    
+                const mesOk = mesConsulta.disabled == "" ? true : false;
+                const fechaOk = rangoFechaOk() 
+                const todoBien = mesOk && fechaOk;
+                document.getElementById("enviarForma").enable= todoBien;
+                if(fechaOk){
+                    document.getElementById("alertaFecha").style.visibility="hidden";
+                }else{
+                    document.getElementById("alertaFecha").style.visibility="visible";
+                }
+        }   
         
 
-        function enviar(){                                
+        function enviar(){           
+
             document.getElementById("loader").style.visibility= "visible"; 
             document.getElementById("loader").style.display= "block";
             document.getElementById('enviarForma').submit();

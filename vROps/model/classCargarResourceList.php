@@ -50,7 +50,7 @@ class CargarResourceList{
 
         $result = VropsConexion::insertar($consultaCreaTabla);  
         
-        file_put_contents("consulta.txt","");
+        //file_put_contents("consulta.txt","");[ELIMINAR]
 
         return $result;
         
@@ -99,11 +99,8 @@ class CargarResourceList{
       $valoresConsulta = implode(", ", $strInsert);
       $consultaInsert = self::iniConsulta() . $valoresConsulta;     
 
-      $result = VropsConexion::insertar($consultaInsert);    
-      
-
-      file_put_contents("consulta.txt", $strInsert, FILE_APPEND);
-       
+      $result = VropsConexion::insertar($consultaInsert);
+      //file_put_contents("consulta.txt", $strInsert, FILE_APPEND);[ELIMINAR]
       return $result;
     }
     

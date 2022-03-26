@@ -22,7 +22,7 @@
 
     
     $_SESSION['genStats']=isset($_SESSION['genStats']) ?  $_SESSION['genStats']++ : 0;
-
+    
     ?>
 
     <body class="m-0 vh-100 row justify-content-start align-items-center" id="cuerpo">
