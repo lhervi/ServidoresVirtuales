@@ -58,6 +58,10 @@ class VropsResourceList{
             return $error;
 
         }else{   
+            
+            if($resourceKinds=='hostsystem'){
+                $a=5; //[ELIMINAR] ============ parar y revisar
+            } 
 
             $resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
             //execCurl(string $token, string $tipo, string $campo=null, array $camposArray=null, $resourceKinds=null)
@@ -81,8 +85,6 @@ class VropsResourceList{
                 }elseif(array_key_exists('resourceList', $FileArr)){
     
                     $resourceListInfo['error']=false;
-
-
                    
                     foreach ($FileArr['resourceList'] as $ind=>$resource){		
                         
@@ -146,6 +148,10 @@ class VropsResourceList{
         
         $resourceList = self::getResourceList($resourceKinds);   //Pasa $resourceKinds para que sepa cuáles buscar
 
+        if ($resourceKinds=='hostsystem'){
+            $a=5;
+        }
+
         if ($resourceList['error']){
 
             $error['error'] = true;
@@ -181,7 +187,7 @@ class VropsResourceList{
                 $arregloDeNombresdeIds['resourceKinds']=$resourceKinds; //Crea un arreglo con el nombre del contenido de la variable $resourceKinds
                
                 for ($i=0; $i<$cantidadDeResourceId; $i+= $avance){
-                    //crear un nombre único para cada archivo
+                    //crear un nombre  único para cada archivo
                     $fileName = $nombre.$correlativo.".json"; //asigna un nombre único al grupo de archivos
                     $porcion[$fileName] = array_slice($resp, $i, $avance); //Selecciona la porción de Ids a almacenar                    
                     $arrayIdsFileName[$correlativo]=$fileName; //Crea un arreglo con el nombre del contenido de la variable $resourceKinds
@@ -191,15 +197,14 @@ class VropsResourceList{
                 foreach($porcion as $nomArch=>$slice){
                     file_put_contents(HOME.SALIDAS.$nomArch, json_encode($slice)); //Almacena en distintos archivos la porción de Ids en formato json 
                 }
-
+                
                 file_put_contents(HOME.SALIDAS.$resourceKinds.ARCHIVOSDEIDS, json_encode($arrayIdsFileName)); //Archivo que contiene los nombres de los archivos creados
 
-                // $porcion['error']  $porcion[$fileName]  $porcion['arrayIds']
                 $porcion['error'] = false;
                 $porcion['arrayIdsFileName'] = $arrayIdsFileName;   
                 
                 return $porcion;
-
+                
             }         
         }   
     }

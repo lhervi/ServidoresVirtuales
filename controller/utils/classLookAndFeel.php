@@ -62,7 +62,7 @@ class LookAndFeel{
             return $show;                   
     }
 
-    static function bindLoaderSubmit($id){        
+    static function bindLoaderSubmit($id, $link){        
         $func = "e.preventDefault()";
         $func .= "document.getElementById('$id').addEventListener('click',function(){" . PHP_EOL; 
         $func .= "document.getElementById('enviarForma').submit();";   

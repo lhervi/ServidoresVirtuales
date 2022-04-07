@@ -16,8 +16,6 @@ class Curl {
         
         $arch = fopen($param['arch'] , "w") or exit ("no se pudo abrir el archivo que almacenará el token");
         
-        //echo "el parámetro recibido en el Curl es: ";              
-
         curl_setopt($curl, CURLOPT_HTTPHEADER, $param['header']);                   //1
         curl_setopt($curl, CURLOPT_PROXY, $param['proxy']);                         //2
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);                         //3

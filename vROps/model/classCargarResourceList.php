@@ -28,8 +28,6 @@ class CargarResourceList{
   }
 
 
-
-
     /**
      * crearResourceListTable Función estática que crea la tabla vmware_recursos si no existe
      *
@@ -81,8 +79,7 @@ class CargarResourceList{
         $esVerdadero = $resultConsulta[0] === true;
       }else{
         $esVerdadero=false;
-      }
-      
+      }      
 
       if($esArray && $hayCero && $esVerdadero){
         return false;
@@ -126,16 +123,8 @@ class CargarResourceList{
       
       include_once 'classVropsConnection.php';
 
-      //self::eliminarResourceListTable(); //se elimina la tabla antes de crearla
+       $result = self::eliminarResourceListTable();
 
-      //Probar si los registros ya están en la BD
-      if(self::yaEstanLosDatos($registros)){
-
-        $error['error']=true;
-        $error['mensaje']= "los datos ya se encontraban en la BD, si requiere reemplazarlos, contacte al administrados del sistema";
-        return $error;
-
-      }else{
 
         self::$contadorDeRegistros=0;
 
@@ -180,7 +169,7 @@ class CargarResourceList{
 
           }      
           return self::$contadorDeRegistros; //Número de registros(recursos) procesados        
-      }        
+             
     }
 
     //=========================================================

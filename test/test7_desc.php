@@ -54,13 +54,14 @@ function curlSetOpt($curl, $param=[]){
     curl_setopt($curl, CURLOPT_FILE, $arch);                                    //14   
 }      
 
-/*$objConf = new VropsConf("tipoVmwareToken"); //arreglo con los datos de la configuración que provienen de vROpsConf.json
-$param = $objConf->getParam();
-foreach($param as $ind=>$val){
-    echoArray($ind, $val);
-}
-*/
+//$objConf = new VropsConf("tipoVmwareToken"); //arreglo con los datos de la configuración que provienen de vROpsConf.json
+$tipo = "tipoResourceKinds";
+//["virtualmachine","hostsystem"]
+$resourceKinds = "virtualmachine";
+$vropsServer = "vrops.intra.banesco.com";
 
+$objConf = new VropsConf($tipo, $resourceKinds, $vropsServer);
+$param = $objConf->getParam();
 
 $curl = curl_init(); 
 echo "<br/><br/>";

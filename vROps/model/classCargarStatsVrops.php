@@ -23,6 +23,8 @@ class CargarStatsVrops {
         
         $result = VropsConexion::consultar($dropQuery);
 
+        return $result;
+
     }
 
     /*
@@ -47,10 +49,11 @@ class CargarStatsVrops {
      * @return array 'error'= false si todo salió bien, false en caso contrario más, 
      * un mensaje 'mensaje' con la descripción del error
      */
-    static function insertStats(array $arrayStats){
+    static function insertStats(array $arrayStats, string $nombreTabla){
         include_once 'classVropsConnection.php';
         
-        $insertStr = "INSERT INTO vmware_metricas (recursos_id, fecha, metrica, valor, resourcekinds, servidor)";
+        //Añadir el nombre de la tabla 
+        $insertStr = "INSERT INTO " . $nombreTabla ." (recursos_id, fecha, metrica, valor, resourcekinds, servidor)";
         $insertStr .= " VALUES ";      
 
         $insertStr .= implode(", ", $arrayStats);
@@ -70,7 +73,7 @@ class CargarStatsVrops {
     //===================================================================================================
 
 
-    static function procesarValores(array $valores, string $resourceId, array $fecha, string $metrica, string $resourceKinds, string $vropsServer){
+    static function procesarValores(array $valores, string $resourceId, array $fecha, string $metrica, string $resourceKinds, string $vropsServer, string $nombreTabla){
         //LLena un arreglo y para cuando hay mil registros
         
         $arrayStats = array(); //se inicializa el arreglo donde se vaciarán los valores a insertar
@@ -88,7 +91,7 @@ class CargarStatsVrops {
 
             if ($numReg>1000){  //Cambiar por una constante    
                 //====================================================
-                $resultInsert = self::insertStats($arrayStats);  //llama al proceso de inserción de registros pasando el arreglo con los 1000 datos
+                $resultInsert = self::insertStats($arrayStats, $nombreTabla);  //llama al proceso de inserción de registros pasando el arreglo con los 1000 datos
                 //====================================================
                 if ($resultInsert['error']){ //Si ocurre un error, se sale del proceso
                     return $resultInsert;
@@ -101,7 +104,7 @@ class CargarStatsVrops {
         //cuando sale del foreach es que ya se terminaron los valores, pero... pueden haber remanentes, por eso lo siguiente:
         //Si el número de resgistros es mayor a 0 pero menor a mil, hay que insertar esos registros
         if ($numReg>0 && !is_null($arrayStats)){
-            $resultInsert = self::insertStats($arrayStats);           
+            $resultInsert = self::insertStats($arrayStats, $nombreTabla);           
             $arrayStats = null;   //Esta inicialización no estaba antes del 17/3/2020 18:18       
             $numReg = 0;
         }
@@ -117,7 +120,7 @@ class CargarStatsVrops {
      * @param  array $statArrayInfValues recibe un arreglo con los valores a ser procesados
      * @return bool false si hubo un error en el proceso
      */
-    static function procesarArchivo(array $statArrayInfValues, string $resourceKinds, string $arch){  //todos los archivos   
+    static function procesarArchivo(array $statArrayInfValues, string $resourceKinds, string $arch, string $nombreTabla){  //todos los archivos   
        
         include_once HOME . '/constantes.php';
         include_once HOME . '/controller/utils/classBitacora.php';
@@ -146,7 +149,7 @@ class CargarStatsVrops {
                 $valores = $regStat['data']; //Arreglo de valores
                 
                 //========================
-                $result = self::procesarValores($valores, $resourceId, $fecha, $metrica, $resourceKinds, $vropsServer);
+                $result = self::procesarValores($valores, $resourceId, $fecha, $metrica, $resourceKinds, $vropsServer, $nombreTabla);
                 //========================
                 if ($result['error']){
                     return $result;  //Si ocurre un error, se detine la ejecución del foreach y se regresa el error y el mensaje
@@ -165,7 +168,7 @@ class CargarStatsVrops {
      * todas las rutas.
      * @return array 'error' true si hubo error y 'mensaje' con la información de lo sucedido. 'error' false si todo salió bien.
      */
-    static function procesarLoteDeFileStat(array  $listArchArray){
+    static function procesarLoteDeFileStat(array  $listArchArray, string $nombreTabla){
         //Recibe un arreglo con todas las rutas de estadísticas y procesa una a una
         include_once __DIR__ . '/../../controller/utils/classErrors.php';
 
@@ -196,7 +199,7 @@ class CargarStatsVrops {
                 $reKind = $dirFileStats['resourceKinds'];
                 $arch = $dirFileStats['nombreArchSalida'];
 //===================================================================================================
-                $result = self::procesarArchivo($val, $reKind, $arch);
+                $result = self::procesarArchivo($val, $reKind, $arch, $nombreTabla);
 //===================================================================================================
                 if ($result['error']){      //Si hubiera un error se sale sin continuar                  
                     $error['error'] = true;
@@ -262,14 +265,20 @@ class CargarStatsVrops {
      * Método estático que procesa todas las estadísticas generadas por todos los tipos de recursos
      * @return array 'error' false si todo salió bien, y verdadero más un mensaje descriptivo del error 'mensaje' si hubo algún problema
      */
-    static function cargarStats(){
+    static function cargarStats(string $numMesTabla){
 
         include_once 'vropsConfigDB.php';
         include_once 'classVropsConnection.php';
 
         $objcon = new VropsConexion();        
+
+        //-------- Crear la tabla dependiendo del mes [PENDIENTE] ------------
         
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_metricas (id serial, recursos_id VARCHAR NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL,  resourcekinds VARCHAR NOT NULL, servidor VARCHAR NOT NULL, PRIMARY KEY(recursos_id, fecha, metrica))"; 
+        $nombreTabla= "vmware_metricas_" . $numMesTabla; //$numMesTabla = '01' | '02' | ... '12'
+
+        self::dropTable($nombreTabla);
+        
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $nombreTabla ." (id serial, recursos_id VARCHAR NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL,  resourcekinds VARCHAR NOT NULL, servidor VARCHAR NOT NULL, PRIMARY KEY(recursos_id, fecha, metrica))"; 
         
         $registros = $objcon->insertar($consultaCreaTabla);  //Crea la tabla si no existe
                 
@@ -285,7 +294,7 @@ class CargarStatsVrops {
         }else{
             if (isset($result['error'])) unset($result['error']);     
     //----------------------------------------------------------------                    
-            $error = self::procesarLoteDeFileStat($result);
+            $error = self::procesarLoteDeFileStat($result, $nombreTabla);
     //----------------------------------------------------------------
             if ($error['error']){
                 $error['mensaje'] = "hubo un error en el procesamiento del archivo de estadísticas";

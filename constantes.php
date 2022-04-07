@@ -25,7 +25,7 @@ define("VROPSLOGFILE", HOME . "/vROps/errors/vROpsErrors.json");
 
 define("SALIDAS", "/vROps/salidas/");
 define("STATS", "/vROps/salidas/stats/");
-define ("VROPS", "/vROps");
+define ("VROPS", "/vROps/");
 define ("VROPSVIEW", "/vROps/view/");
 define ("CONTROLLER", "/controller/");
 define ("ERRORES", "Errores.json");
@@ -41,7 +41,7 @@ define("VROPSERROREMAILTO","lhervi@gmail.com");
 
 define ("TOPEMESES", 5); //El número de meses a acumular como histórico de estadísticas
 define("TAMAÑOLISTACONSULTA", 12);
-define("LISTADECONSULTAS", HOME . VROPS . "/listaDeConsultas.json");
+define("LISTADECONSULTAS", HOME . VROPS . "listaDeConsultas.json");
 define('SEGMENTOS', 2000);
 define("NUMREGPARACOMPROBAR", 10);
 define("ARCHIVOSDEIDS", "IdsFilesNames.json");

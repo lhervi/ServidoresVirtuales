@@ -2,7 +2,7 @@
 
 <?php
     if(session_status() !== PHP_SESSION_ACTIVE) session_start();
-
+    
     ini_set('memory_limit', '-1');
     ini_set('max_execution_time', '-1');
     ini_set('display_errors', 1);
@@ -18,12 +18,15 @@
     include_once './model/classCargarResourceList.php';
     include_once './../controller/utils/classLookAndFeel.php';
     include_once './../controller/utils/classErrors.php';
+    include_once './classLista.php';
     
 
     
     $_SESSION['genStats']=isset($_SESSION['genStats']) ?  $_SESSION['genStats']++ : 0;
     
     ?>
+
+
 
     <body class="m-0 vh-100 row justify-content-start align-items-center" id="cuerpo">
         <div class="container col-auto">
@@ -54,22 +57,58 @@
             if(isset($_POST["mesConsulta"])){
                 
                 $begin = $_POST["mesConsulta"] . "-01";
-                $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);
+                $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);    
+                $_SESSION['numMesTabla'] = substr($_POST["mesConsulta"], 5);
 
             }
             
             $intervalType = array_key_exists("intervalType", $_POST) ? $_POST["intervalType"] : "HOURS";
             $intervalQuantifier = array_key_exists("intervalQuantifier", $_POST) ? intval($_POST["intervalQuantifier"]) : 1;
             $rollUpType = array_key_exists("rollUpType", $_POST) ? $_POST["rollUpType"] : "AVG";
-
+            
             foreach($_POST as $ind=>$val){
                 if("resourceKinds"==$val){
                     $resourceKindsArray[] = $ind;
                 }
             }
+             
+            $resourceKinds = array_key_exists("resourceKinds", $_POST) ? $_POST["resourceKinds"] : "virtualmachine";            
             
-            $resourceKinds = array_key_exists("resourceKinds", $_POST) ? $_POST["resourceKinds"] : "virtualmachine";
+           /*
+            $consulta = $begin . " " . $end . " " . $intervalType. " " . $end . " " . $intervalQuantifier . " ";
+            $consulta .= $rollUpType . " " . $end . implode(" ", $resourceKindsArray);
 
+            $consultaHash = hash("md5", $consulta);
+            */
+
+            //---------------------  VERIFICAR QUE LA CONSULTA NO HAYA SIDO REALIZADA ANTES ------------------            
+           /* ---------------------------- [REVISAR] ---------------------------------------------------------
+            $existe = Lista::existeEnLista($consultaHash);
+
+            if ($existe['existe']){ //[REVISAR] supuestamente llega un valor null
+
+                $mensaje = "Los datos ya habían sido cargados BD anteriormente el: " . $existe['fecha'];
+                
+                echo LookAndFeel::estatus($mensaje, 1);
+                
+                echo "<script>" . PHP_EOL;
+        
+                echo LookAndFeel::enlace("regresar", INICIO);
+        
+                echo "</script>" . PHP_EOL;     
+
+                die();
+            }else{
+                $arrayLIsta = Lista::getLista();
+                Lista::agregarConsulta($arrayLIsta, $consultaHash);
+            }
+            */
+            //---------------------------- [REVISAR] -------------------------------------------------
+
+            //-------------------------------------------------------------------------------------------------
+
+
+            
             //============ Fin de Procesamiento de entradas ================//
 
             //------------------------------------------------------------------------------------------------------------
@@ -96,18 +135,22 @@
             
             //----------------------------------------------------------------------------------
             //======================== CREACIÓN DE LA LISTA DE RECURSOS ========================
-
-            foreach($resourceKindsArray as $resourceKinds){
+            
+            //El proceso obtiene toda la lista de recursos, dado que toma los recursos definidos en el arreglo de vROpsConf.json
+            
+            foreach($resourceKindsArray as $resourceKinds){ //[REVISAR][ELIMINAE] Eliminar esta linea----------
+                
                 //Crea una lista de recursos que se almacena completa en allResorceList.json
+               
                 $result = VropsResourceList::getResourceList($resourceKinds);
                 if ($result['error']){
                     echo LookAndFeel::estatus($result['mensaje']);
                     regresar();
                     die();
                 }else{
-                    echo LookAndFeel::estatusX("se obtuvo  la información de " . $resourceKinds . " correctamente");
+                    echo LookAndFeel::estatusX("se obtuvo  la información de los recursos correctamente");
                 }
-            }
+            }  // [REVISAR][ELIMINAR] Eliminar esta llave que cierra el bucle, no es necesaria.
 
             //===== Crear la lista de recursos "resourceList" ---
             $file = HOME . SALIDAS . ALLRESOURCELIST;
@@ -127,16 +170,17 @@
 
             
             //Si ya los registros se encuentran en la BD se detiene la ejecución
+
             if (isset($result['error']) && $result['error'] ){
                 echo LookAndFeel::estatusX($result['mensaje']);
                 
                 regresar();
-                die();               /*
+                die();               
                 echo LookAndFeel::estatus('<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>', 2);
                 echo "<script> . " . PHP_EOL;
                 echo LookAndFeel::enlace('->regresar', INICIO);
                 echo "</script> . " . PHP_EOL;
-                */
+                
             }
 
             echo LookAndFeel::estatusX("Se registraron " . $result . " registros en la BD");

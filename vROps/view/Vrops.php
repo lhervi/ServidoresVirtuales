@@ -44,6 +44,9 @@ Utils::limpiarDirectorio($directoio);
                                 
 
                                 <?php 
+                                    
+                                    //Delegar a la clase classVropsInterface [PENDIENTE]
+                                    
                                     include_once './../classVropsConf.php';
                                     $server = VropsConf::getCampo('vropsServer')['vropsServer'];
                                     echo '<div id="server" class="form-group form-check-inline"><h5>Servidor: ' . $server . '<br/></h5>'; 
@@ -76,12 +79,17 @@ Utils::limpiarDirectorio($directoio);
                                 </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Tipo de Recurso</h5>
+                                    <?php  
+                                    //VropsInterface::getResourcelist();
+                                    
+                                    ?>
                                     <input type="checkbox" id="virtualmachine" name="virtualmachine" value="resourceKinds" checked>
                                     <label for="virtualmachine">Virtual Machine</label>
                                     <input type="checkbox" id="hostsystem" name="hostsystem" value="resourceKinds" checked>
                                     <label for="hostsystem">Hostsystem</label>     
                                 </div><br/><br/>
-                                <div><button type="submit"  class="btn btn-primary" id="enviarForma" disabled>Enviar</button></div>          
+                                <div><button type="submit"  class="btn btn-primary" id="botonEnviarForma" disabled>Enviar</button></div>
+                                <spam id="existeConsulta"></spam>          
 
                             </form><br/><br/>      
                         </div>
@@ -93,26 +101,26 @@ Utils::limpiarDirectorio($directoio);
     <script text/javascript>     
     
         <?php
+        
             //Crea la lista de consultas en formato json para que pueda ser leído en JavaScript
             include_once __DIR__ . '/../../constantes.php'; 
             include_once HOME . '/vROps/classLista.php';
             echo "const topeMeses = " . TOPEMESES . ";" . PHP_EOL;
-            $lista = Lista::getLista();            
-            echo "listaDeConsultas = " . $lista . ";";
+            //$lista = Lista::getLista();            
+            //echo "listaDeConsultas = " . $lista . ";";
+        
         ?> 
         
         const mesConsulta =  document.getElementById("mesConsulta");
 
+        const botonEnviar = document.getElementById('botonEnviarForma');
+
+        
+        mesConsulta.addEventListener('change', rangoFechaOk);
         mesConsulta.addEventListener('keypress', habilitar);        
         mesConsulta.addEventListener('change', habilitar);
-        mesConsulta.addEventListener('change', rangoFechaOk);
-        document.getElementById('enviarForma').addEventListener('click', e=>(){
-
-        });
-
-        function evalList(){
-
-        }
+        
+        botonEnviar.addEventListener('click', enviar);
         
         function rangoFechaOk(){        
         
@@ -129,23 +137,30 @@ Utils::limpiarDirectorio($directoio);
             //--------------------------------------------------------------------
             //Compensa el número de meses de diferencia entre mes y mes actual
             
-            if((añoActual - año < 0) || (añoActual - año > 1)) return false;            
+            if((añoActual - año < 0) || (añoActual - año > 1)) {
+                return false;            
+            }
             
-            if(añoActual - año == 1) mesActual += 12; 
+            if(añoActual - año == 1) {
+                mesActual += 12; 
+            }
             
             //--------------------------------------------------------------------
             //Daddo que los meses están acomodados, se puede hacer el siguiente cálculo
-            if (mesActual-mes>0 && mesActual-mes<=topeMeses) return true;
+            if (mesActual-mes>0 && mesActual-mes<=topeMeses){
+                return true;
+            }
             
             //regresa falso si no se cumple ninguna de las anteriores
             return false;            
         }   
 
-        function habilitar(){                    
+        function habilitar(){      
+                
                 const mesOk = mesConsulta.disabled == "" ? true : false;
                 const fechaOk = rangoFechaOk() 
                 const todoBien = mesOk && fechaOk;
-                document.getElementById("enviarForma").enable= todoBien;
+                document.getElementById("botonEnviarForma").disabled= !todoBien;
                 if(fechaOk){
                     document.getElementById("alertaFecha").style.visibility="hidden";
                 }else{
@@ -155,7 +170,7 @@ Utils::limpiarDirectorio($directoio);
         
 
         function enviar(){           
-
+           
             document.getElementById("loader").style.visibility= "visible"; 
             document.getElementById("loader").style.display= "block";
             document.getElementById('enviarForma').submit();
@@ -172,7 +187,3 @@ Utils::limpiarDirectorio($directoio);
     <?php include_once '../../view/bodyScripts.php';?>
     </body>
 </html>
-
-<?php
-
-?>

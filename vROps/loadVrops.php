@@ -1,6 +1,9 @@
 <?php
     if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
+   $numMesTabla = $_SESSION['numMesTabla'];
+   
+
     ini_set('memory_limit', '-1');
     ini_set('max_execution_time', '-1');
     ini_set('display_errors', 1);
@@ -24,7 +27,7 @@ $seguir=true;
     
         echo LookAndFeel::estatus("Iniciando el proceso de carga", 2);     
 
-        $result ??= CargarStatsVrops::cargarStats();
+        $result ??= CargarStatsVrops::cargarStats($numMesTabla);
 
         $error ??= isset($result['error']) ? $result['error'] : true;
 
