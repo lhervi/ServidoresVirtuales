@@ -17,8 +17,6 @@ define("URLTAIL", URLVROPSTAIL . PAGESIZE); //Concatena el string en el que term
 
 define("HOME", __DIR__);
 
-define("INICIO", "/STISCR/vROps/view/ingreso.php");
-
 define("ARCHIVODECONFIGURACION", HOME."/vROps/vROpsConf.json");
 
 define("VROPSLOGFILE", HOME . "/vROps/errors/vROpsErrors.json");
@@ -38,6 +36,20 @@ define("VROPSERROREMAILFROM","From: vROps programm");
 define("VROPSERROREMAILTO","lhervi@gmail.com");
 
 // ------------------ R U T A S -------------------------------------
+
+// ------------------ M E N U -------------------------------------
+
+define("MENUINICIO", "/STISCR/vROps/view/ingreso.php");
+define("MENUINDEX", "/STISCR/view/index.php");
+define("MENULINEABASE", "/STISCR/view/lineabase.php");
+define("MENUDASHBOARD", "/STISCR/view/Dashboard.php");
+define("MENUVROPS", "/STISCR/vROps/view/Vrops.php");
+
+//MENUINICIO, MENUINDEX, MENULINEABASE, MENUDASHBOARD, MENUVROPS
+
+
+// ------------------------------------------------------------------
+
 
 define ("TOPEMESES", 5); //El número de meses a acumular como histórico de estadísticas
 define("TAMAÑOLISTACONSULTA", 12);

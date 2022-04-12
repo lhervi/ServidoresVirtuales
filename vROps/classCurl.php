@@ -118,7 +118,9 @@ class Curl {
     //------------------------------------------------------ INICIO execCurlTipoMediciones  --------------------------------
 
     
-    
+    //[ELIMINAR] Eliminar esta función
+
+    /*
     static function retomarProcesamiento(){
 
         include_once '../controller/utils/classDecodeJsonFile.php';
@@ -153,6 +155,7 @@ class Curl {
             }
         }
     }
+    */
 
     //----------------------------------------------------------------------------------------------------
     // === PENDIENTE AQUI ===
@@ -348,7 +351,7 @@ class Curl {
                         $resultCurl['mensaje'] .= "se obtuvo un token" . PHP_EOL;
                         return $resultCurl;
                     }                
-            }else{
+            }else{ //tipoResourceKinds
                     $resultCurl['error']=self::execParamCurl($param);
                     if($resultCurl['error']){
                         $error['error'] = true;
@@ -361,7 +364,7 @@ class Curl {
                     }                                
             }         
         }
-    }
+    } 
 
 }
 

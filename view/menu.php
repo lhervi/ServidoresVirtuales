@@ -1,7 +1,11 @@
 <?php 
-//include_once __DIR__.'/../constantes.php';
-//D:\xampp\htdocs\STISCR\view\menu.php
+
+//MENUINICIO, MENUINDEX, MENULINEABASE, MENUDASHBOARD, MENUVROPS
+
+
+
 ?>
+
 <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">                  
@@ -11,10 +15,14 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/STISCR/view/index.php">Inicio</a>              
+                <!--<a class="nav-link active" aria-current="page" href="/STISCR/view/index.php">Inicio</a>-->
+                <a class="nav-link active" aria-current="page" href="<?php echo MENUINICIO ?>">Inicio</a>
               </li>
               <li class="nav-item">                  
                 <a class="nav-link" href="/STISCR/view/lineabase.php">Gestión de Linea Base</a>              
+              </li>
+              <li class="nav-item">                  
+                <a class="nav-link" href="/STISCR/view/Dashboard.php">Dashboard</a>              
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -22,7 +30,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="/STISCR/vROps/view/Vrops.php">vROps</a></li>                  
-                  <li><a class="dropdown-item" href="/STISCR/view/bsm.php">BSM</a></li>                  
+                  <!-- <li><a class="dropdown-item" href="/STISCR/view/bsm.php">BSM</a></li>-->                  
                   <li><a class="dropdown-item" href="/STISCR">Home</a></li>
                   <!--li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">Something else here</a></li-->

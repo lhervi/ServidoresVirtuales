@@ -79,14 +79,10 @@ Utils::limpiarDirectorio($directoio);
                                 </div><br/><br/>
 
                                 <div class="form-group form-check-inline"><h5>Tipo de Recurso</h5>
-                                    <?php  
-                                    //VropsInterface::getResourcelist();
-                                    
-                                    ?>
-                                    <input type="checkbox" id="virtualmachine" name="virtualmachine" value="resourceKinds" checked>
-                                    <label for="virtualmachine">Virtual Machine</label>
-                                    <input type="checkbox" id="hostsystem" name="hostsystem" value="resourceKinds" checked>
-                                    <label for="hostsystem">Hostsystem</label>     
+                                    <?php           
+                                    include_once './classVropsInterface.php';
+                                    echo VropsInterface::getHTMLResourceKinds();                                    
+                                    ?>                                   
                                 </div><br/><br/>
                                 <div><button type="submit"  class="btn btn-primary" id="botonEnviarForma" disabled>Enviar</button></div>
                                 <spam id="existeConsulta"></spam>          

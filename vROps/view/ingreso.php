@@ -78,22 +78,16 @@ function servers(){
                    
                     <?php                       
                         
-                        if (isset($_SESSION['loging'])===true){
-                        //if (true){
-                            $a=5;
-                            if($_SESSION['loging']===false){
-                                $a=5;
-
-                    ?>
-                                <div><lable for="submit">Acceso denegado</lable><br></div>
-                    <?php  
-                            }else{
-                                $a=5;
-                    ?>
-                                <div><lable for="submit">Acceso concedido</lable><br></div>
-                    <?php
-                            }    
-                        }        
+                        if (isset($_SESSION['loging']) && ($_SESSION['loging']===true)){
+                    
+                            echo '<div><lable for="submit">Acceso concedido</lable><br></div>';
+                     
+                        }elseif(isset($_SESSION['loging']) && ($_SESSION['loging']===false)){                                
+                    
+                            echo '<div><lable for="submit">Acceso denegado</lable><br></div>';
+                    
+                        }    
+                                
                     ?>
             </form>
 

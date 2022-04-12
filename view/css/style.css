@@ -1,4 +1,15 @@
 
+div.dashboardTitle {
+  margin-left: 0px;
+    
+  background-color: lightgray;
+  padding: 3px;
+  color: darkblue;
+}
+
+div.dashboard {
+  margin-left: 15px;    
+}
   
 div.estatus, div.estatus1, div.estatus2{
   height: 250px; 

@@ -6,7 +6,7 @@ $ExisteLogin = array_key_exists('login', $_SESSION);
 $loginFalso = $_SESSION['login']===false;
 
 if (!$ExisteLogin || $loginFalso){
-    header("Location: ../vROps/view/ingreso.php", true); 
+    header("Location: ../vROps/view/ingreso.php", true);
 }
 
 include_once "./../constantes.php";
@@ -20,7 +20,7 @@ include "menu.php";
     <body class="m-0 vh-100 col justify-content-left align-items-top">       
 
         <div class="container justify-content-left style="background-color: #eee; height: 150px;">
-            <h1><br><br><br>Salud Capacidad Redimiento</h1>
+            <h1><br><br><br>Salud, Capacidad y Redimiento</h1>
         <div/>
         
     <?php include "bodyScripts.php" ?>

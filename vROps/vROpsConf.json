@@ -8,7 +8,7 @@
 "proxy":"prxsrv.intra.banesco.com:9090",
 "segmentos":100,
 "certfirefox":"vrops.pem",
-"header":["Content-Type: application\/json","Accept: application\/json"],
+"header":["Content- Type: application\/json","Accept: application\/json"],
 "VmwareToken":"VmwareToken.json",
 "resourceKinds":["virtualmachine","hostsystem"],
 "virtualmachine":["cpu|usage_average","cpu|readyPct","cpu|costopPct","mem|vmMemoryDemand","mem|balloonPct","mem|consumedPct","virtualDisk|usage","guest|cpu_queue","guest|page.inRate_latest","guest|page.outRate_latest","guest|mem.physUsable_latest","guestfilesystem|percentage","guestfilesystem|capacity","guestfilesystem|usage_total","guestfilesystem|capacity_total","virtualDisk|totalReadLatency_average","virtualDisk|write_average","virtualDisk|totalWriteLatency_average","virtualDisk|read_average","virtualDisk|configured"],
