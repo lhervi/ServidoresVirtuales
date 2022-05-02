@@ -118,45 +118,6 @@ class Curl {
     //------------------------------------------------------ INICIO execCurlTipoMediciones  --------------------------------
 
     
-    //[ELIMINAR] Eliminar esta función
-
-    /*
-    static function retomarProcesamiento(){
-
-        include_once '../controller/utils/classDecodeJsonFile.php';
-
-        $bitacora = DecodeJF::decodeJsonFile(HOME.SALIDAS."bitacoraStat.json");
-        
-        if ($bitacora['error']){
-            echo "Error en la linea " . __LINE__ . " en: " . __FILE__ . "<br/><br/>";
-            die("no se pudo acceder a la bitácora ".HOME.SALIDAS."bitacoraStat.json");
-        }else{            
-            if ($bitacora['numDeParametros']<$bitacora['paramProcesados']){
-                $consultasArray=DecodeJF::decodeJsonFile(HOME.SALIDAS."consultas.json");
-                if ($consultasArray['error']){
-                    echo "Error en la linea " . __LINE__ . " en: " . __FILE__ . "<br/><br/>";
-                    die("no puedo realizarse la operación de recuperación del procesamiento de datos");
-                }else{
-                    $resourceKinds = $consultasArray['resourceKinds'];
-                    $desde = $bitacora['IndiceDelError'];                    
-                    $inicio = 0; 
-                    $paramArray=$consultasArray['paramArray'];
-
-                    foreach($consultasArray['paramArray'] as $ind =>$param){
-                        
-                        if ($inicio < $desde) {  //avanza hasta el lugar del último param que se ejecutó sin error
-                            $inicio++;
-                            continue;
-                        }
-                        $nuevoParamArray['$ind']=$param;
-                    }
-                    self::execCurlTipoMediciones($nuevoParamArray, $resourceKinds);
-                }
-            }
-        }
-    }
-    */
-
     //----------------------------------------------------------------------------------------------------
     // === PENDIENTE AQUI ===
     static function execCurlTipoMediciones($paramArray, $resourceKinds){      
