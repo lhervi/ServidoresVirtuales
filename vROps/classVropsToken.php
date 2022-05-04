@@ -48,17 +48,65 @@ class VropsToken{
         }
     }
 
+    static function tokenOkfromVrops(string $token){
+        $tokenArray = json_decode($token, true);
+        if(is_array($tokenArray) && self::tokenOk($tokenArray)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    static function getTokenFromVrops($param){
+        $curl = curl_init();
+
+        $curlParam = array(
+            CURLOPT_URL => $param['url'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_PROXY => $param['proxy'],
+            CURLOPT_PROXYUSERPWD => $param['userproxy'],
+            CURLOPT_HTTPAUTH => CURLAUTH_ANY,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_CAINFO => $param['certfirefox'],
+            CURLOPT_CUSTOMREQUEST => 'POST',           
+            //CURLOPT_POSTFIELDS =>'{' . ' "username" : "capacidad", "authSource" : "local", "password" : "Pa$$w0rd"' . '}',            
+            CURLOPT_POSTFIELDS => $param['campos'],   
+          /*
+          $campos se puede crear con el contenido del archivo de configuración
+          "userVrops":"capacidad", "passwordVrops":"Pa$$w0rd", "authSource":"local",
+          */     
+            CURLOPT_HTTPHEADER => array(
+              'Accept: application/json',
+              'Content-Type: application/json'
+            ),
+        );
+
+        curl_setopt_array($curl, $curlParam);
+        
+        $response = curl_exec($curl);        
+        curl_close($curl);        
+        file_put_contents(VMWARETOKENFILE, $response);
+        return self::tokenOkfromVrops($response);
+    }
+
     static function VropsParamToken(){
         
         include_once 'classCurl.php';      
         
         $objConf = new VropsConf("tipoVmwareToken"); //arreglo con los datos de la configuración que provienen de vROpsConf.json
         $param = $objConf->getParam();
-        $curl = curl_init();        
-        //echo  __DIR__ . '\classCurl.php' . "  " . __LINE__;
-        Curl::curlSetOpt($curl, $param); //configura el Curl
-        $result = curl_exec($curl);  //regresa true si no hubo error
-        curl_close($curl);
+        //$curl = curl_init();        
+        
+        //Cambiar por una nueva función que obtenga el token
+        //Curl::curlSetOpt($curl, $param); //configura el Curl
+        //$result = curl_exec($curl);  //regresa true si no hubo error
+        //curl_close($curl);
+        $result = self::getTokenFromVrops($param);
         if ($result===true){
 
             $tokenInfo = self::getTokenFromFile();  

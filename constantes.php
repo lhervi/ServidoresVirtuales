@@ -30,6 +30,8 @@ define ("ERRORES", "Errores.json");
 define("ERRORLOGJSONFILE", HOME.VROPS."/errors/vROpsErrors.json");
 define("CSS", "/view/css/");
 
+define("VMWARETOKENFILE", HOME . SALIDAS . "VmwareToken.json");
+
 //define("VROPSVIEW", HOME . VROPS . "/view/");
 
 define("VROPSERROREMAILFROM","From: vROps programm");

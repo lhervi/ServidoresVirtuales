@@ -195,7 +195,9 @@ class VropsConf{
     } 
 
     function getUserVrops(){                   
-        return json_encode(array("username" => $this->conf['userVrops'], "password" => $this->conf['passwordVrops']));
+       $user = (array('username' => $this->conf['userVrops'], 'password' => $this->conf['passwordVrops'], 'authSource' => $this->conf['authSource']));
+       $jsonUser = json_encode($user);
+       return $jsonUser;
     } 
 
     function getProxy(){        
@@ -282,7 +284,7 @@ class VropsConf{
         if (array_key_exists('token', $this->conf)){
             $param['token']= $this->conf['token'];            
         }else{
-            $param['campos']=$this->getUserVrops();
+            $param['campos']=$this->getUserVrops();  //contiene el usuario, el password y tipo de autenticación vrops
         }
         if (array_key_exists('campos', $this->conf)) {
             $param['campos']= $this->conf['campos'];            

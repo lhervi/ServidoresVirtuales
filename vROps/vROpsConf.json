@@ -3,6 +3,7 @@
 "passwordBA":"Banesco2021..",
 "userVrops":"capacidad",
 "passwordVrops":"Pa$$w0rd",
+"authSource":"local",
 "vropsServers":["https:\/\/vrops.intra.banesco.com","https:\/\/sapl8442.intra.banesco.com"],
 "vropsServer":"https:\/\/vrops.intra.banesco.com",
 "proxy":"prxsrv.intra.banesco.com:9090",
