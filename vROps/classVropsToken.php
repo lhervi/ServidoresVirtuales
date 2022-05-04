@@ -57,7 +57,7 @@ class VropsToken{
         }
     }
 
-    static function getTokenFromVrops($param){
+    static function getTokenFromVrops(array $param){
         $curl = curl_init();
 
         $curlParam = array(
@@ -73,17 +73,9 @@ class VropsToken{
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_CAINFO => $param['certfirefox'],
-            CURLOPT_CUSTOMREQUEST => 'POST',           
-            //CURLOPT_POSTFIELDS =>'{' . ' "username" : "capacidad", "authSource" : "local", "password" : "Pa$$w0rd"' . '}',            
-            CURLOPT_POSTFIELDS => $param['campos'],   
-          /*
-          $campos se puede crear con el contenido del archivo de configuración
-          "userVrops":"capacidad", "passwordVrops":"Pa$$w0rd", "authSource":"local",
-          */     
-            CURLOPT_HTTPHEADER => array(
-              'Accept: application/json',
-              'Content-Type: application/json'
-            ),
+            CURLOPT_CUSTOMREQUEST => 'POST',                       
+            CURLOPT_POSTFIELDS => $param['campos'],             
+            CURLOPT_HTTPHEADER => $param['header']            
         );
 
         curl_setopt_array($curl, $curlParam);
