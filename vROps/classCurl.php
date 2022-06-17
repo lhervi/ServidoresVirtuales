@@ -14,26 +14,29 @@ class Curl {
         
         //EVALUAR si cURL está instalado
         
-        $arch = fopen($param['arch'] , "w") or exit ("no se pudo abrir el archivo que almacenará el token");
+        //$arch = fopen($param['arch'] , "w") or exit ("no se pudo abrir el archivo que almacenará el token");
         
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $param['header']);                   //1
-        curl_setopt($curl, CURLOPT_PROXY, $param['proxy']);                         //2
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);                         //3
-        curl_setopt($curl, CURLOPT_URL, $param['url']);                             //4
-        curl_setopt($curl, CURLOPT_PROXYUSERPWD, $param['userproxy']);              //5
-                 
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);                           //6
-        curl_setopt($curl, CURLOPT_BINARYTRANSFER, true);                           //7
+        curl_setopt($curl, CURLOPT_URL, $param['url']);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_ENCODING, '');          
+        curl_setopt($curl, CURLOPT_MAXREDIRS, 10);    
+        curl_setopt($curl, CURLOPT_TIMEOUT, 0);       
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_PROXY, $param['proxy']);              
+        curl_setopt($curl, CURLOPT_PROXYUSERPWD, $param['userproxy']);   
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY); 
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);        
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);                           //8
         curl_setopt($curl, CURLOPT_CAINFO, $param['certfirefox']);                  //9
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 300);                            //10
+        //curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 300);                          //10
         if ($param['GET']){ 
             curl_setopt($curl, CURLOPT_HTTPGET, 1);                                 //11
         }else{
             curl_setopt($curl, CURLOPT_POST, 1);                                    //12
             curl_setopt($curl, CURLOPT_POSTFIELDS, $param['campos']);               //13
         }
-        curl_setopt($curl, CURLOPT_FILE, $arch);                                    //14   
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $param['header']);
+        //curl_setopt($curl, CURLOPT_FILE, $arch);
     }      
         
     /**
@@ -54,10 +57,26 @@ class Curl {
 
         $curl = curl_init();
         self::curlSetOpt($curl, $param);   //configura el Curl
-        //Curl::curlSetOpt($curl, $param); //configura el Curl    
+        //Curl::curlSetOpt($curl, $param); //configura el Curl 
         $res = curl_exec($curl);
+        $textError = '{"message":"The provided token for auth scheme \"vRealizeOpsToken\" is either invalid or has expired.","httpStatusCode":401,"apiErrorCode":1512}';
+        $contador = 0;
+        
+        while($res == $textError && $contador<20){            
+            curl_close($curl);
+            $param['token'] = VropsToken::getTokenFromVrops(null,true);
+            $curl = curl_init();
+            self::curlSetOpt($curl, $param);         
+            $res = curl_exec($curl);   
+            $contador++;         
+        }
+
+        $arch = $param['arch'];
+        file_put_contents($arch, $res);
+       
         //================================================
-        $resultCurl['error'] = $res === true ? false : true;      
+        //$resultCurl['error'] = $res === true ? false : true;      
+        $resultCurl['error'] = $res === false ? true : false;
         //=================================================
 
         curl_close($curl);
@@ -141,7 +160,9 @@ class Curl {
                 $error['error'] = true;
                 $error['mensaje'] .= "hubo un error al procesar " . $param['arch'] . PHP_EOL;
                 $bitacora['IndiceDelerror']=$ind;
-                $result=Utils::chequearConexion(HOSTVROPS);
+                $ServidorActual = VropsConf::getCampo('vropsServer')['vropsServer'];
+                //$result=Utils::chequearConexion(HOSTVROPS);
+                $result=Utils::chequearConexion($ServidorActual); //Esto verifica la conexión con el servidor de turno
                 
                 if($result['result']==false){
                     die("se perdió la conexión con el servidor vmware");                                        

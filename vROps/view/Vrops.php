@@ -1,11 +1,15 @@
 <?php
 
+if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 include_once __DIR__ . '/../../constantes.php';
 include_once HOME . '/controller/utils/classUtils.php';
 include "../view/../../view/encabezado.php";
 include "../view/../../view/menu.php";
 
-
+//ini_set('session.save_path', '/opt/lornis/STISCR/sessionData');
 
 if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
@@ -17,10 +21,13 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
     //http://localhost/vROps/view/ingreso.php
 }
 
-$directoio = HOME . SALIDAS;
-Utils::limpiarDirectorio($directoio);
-$directoio = HOME . STATS;
-Utils::limpiarDirectorio($directoio);
+// ========== [PROVISIONAL] [LINEAS COMENTADAS PROVISIONALMENTE]
+$excep = array(VMWARETOKENFILE);
+$directorio = HOME . SALIDAS;
+Utils::limpiarDirectorio($directorio, $excep);
+$directorio = HOME . STATS;
+Utils::limpiarDirectorio($directorio);
+//
 
 ?>
  

@@ -1,6 +1,12 @@
 <?php
 
-if(session_status() !== PHP_SESSION_ACTIVE) session_start();
+//ini_set('session.save_path', '/opt/lornis/STISCR/sessionData');
+
+if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+$_SESSION['prueba'] = 5;
 
 /*
 //======= [REVISAR] Desactivado el reenvío a vrops.php dado que ahora se permite el cambio de servidor
@@ -29,10 +35,12 @@ include "../view/../../view/encabezado.php";
 
 include_once '../../controller/utils/classUtils.php';
 
+/* ========== [PROVISIONAL] [LINEAS COMENTADAS PROVISIONALMENTE]
 $directoio = HOME . SALIDAS;
 Utils::limpiarDirectorio($directoio);
 $directoio = HOME . STATS;
 Utils::limpiarDirectorio($directoio);
+*/
 
 function servers(){
     $servers = VropsConf::getCampo('vropsServers');

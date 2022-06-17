@@ -15,11 +15,11 @@ class CargarResourceList{
 
     //================ BORRAR TABLA ===============================
     
-    static function eliminarResourceListTable(){    
+    static function eliminarResourceListTable($mesConsulta){    
         
       include_once 'classVropsConnection.php';
 
-      $consultaEliminaTabla = "DROP TABLE IF EXISTS vmware_recursos";
+      $consultaEliminaTabla = "DROP TABLE IF EXISTS vmware_recursos_". $mesConsulta;
 
       $result = VropsConexion::insertar($consultaEliminaTabla);
 
@@ -36,11 +36,11 @@ class CargarResourceList{
     //=========================================================
     // CREAR TABLA  
     //=========================================================
-    static function crearResourceListTable(){    
+    static function crearResourceListTable($mesConsulta){    
         
         include_once 'classVropsConnection.php';
 
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_recursos (servidor VARCHAR NOT NULL, nombre VARCHAR NOT NULL, ";
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_recursos_" . $mesConsulta . " (servidor VARCHAR NOT NULL, nombre VARCHAR NOT NULL, ";
         $consultaCreaTabla .= "recursos_id VARCHAR NOT NULL, adapterKindKey VARCHAR NOT NULL, tipo VARCHAR NOT NULL, ";        
         $consultaCreaTabla .= "linkToSelf VARCHAR NOT NULL, relationsOfResource VARCHAR NOT NULL, propertiesOfResource VARCHAR NOT NULL, "; 
         $consultaCreaTabla .= "alertsOfResource VARCHAR NOT NULL, symptomsOfResource VARCHAR NOT NULL, statKeysOfResource VARCHAR NOT NULL, "; 
@@ -119,16 +119,16 @@ class CargarResourceList{
     // INSERTAR DATOS 
     //=========================================================
 
-    static function insertRegistrosResourceList(array $registros){ //recibe un arreglo con los registos a insertar
+    static function insertRegistrosResourceList(array $registros, $mesConsulta){ //recibe un arreglo con los registos a insertar
       
       include_once 'classVropsConnection.php';
 
-       $result = self::eliminarResourceListTable();
+       $result = self::eliminarResourceListTable($mesConsulta);
 
 
         self::$contadorDeRegistros=0;
 
-        self::crearResourceListTable(); 
+        self::crearResourceListTable($mesConsulta); 
         
         $strInsert = array();
         

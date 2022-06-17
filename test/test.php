@@ -31,7 +31,7 @@ $fechaFin = $_POST['fechaFin'];
 
 //$file = HOME . "/STISCR/vROps/salidas/hostsystemResourceListArray.json";
 $file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
-
+$mesConsulta = 5;
 
 //función para crear la tabla resourceList del mes si no existe
 
@@ -65,7 +65,7 @@ $file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
     }
 
     //pasa la información a la base de datos
-    $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+    $result = CargarResourceList::insertRegistrosResourceList($arrayProv, $mesConsulta);
 
     if ($result>0){ //evalúa si se insertaron los registros en la base de datos
       echo "<tr><td align='center' colspan='". $cols ."'><div><h3> Se incertaron " . $result  . " registros</h3></div></td></tr>";

@@ -57,7 +57,14 @@ class VropsToken{
         }
     }
 
-    static function getTokenFromVrops(array $param){
+    static function getTokenFromVrops(array $param=null, $tokenFresh=false){
+        include_once 'classCurl.php';
+
+        if (is_null($param)){
+            $objConf = new VropsConf("tipoVmwareToken"); 
+            $param = $objConf->getParam();
+        }
+
         $curl = curl_init();
 
         $curlParam = array(
@@ -80,9 +87,28 @@ class VropsToken{
 
         curl_setopt_array($curl, $curlParam);
         
-        $response = curl_exec($curl);        
+        $response = curl_exec($curl);
+        
+        /*
+        $textError = '{"message":"The provided token for auth scheme \"vRealizeOpsToken\" is either invalid or has expired.","httpStatusCode":401,"apiErrorCode":1512}';
+        $contador = 0;
+        while($response == $textError && $contador<20){           
+            
+            $response = curl_exec($curl);   
+            $contador++;         
+        }
+        */
+        
         curl_close($curl);        
         file_put_contents(VMWARETOKENFILE, $response);
+
+        if($tokenFresh){
+            $tokenInfo = json_decode($response, true);
+            $token = $tokenInfo['token'];
+            file_put_contents(VMWARETOKENFILE, $response);
+            return $token;
+        }
+
         return self::tokenOkfromVrops($response);
     }
 
@@ -231,7 +257,7 @@ class VropsToken{
      */
     static function getToken(){
         
-        $tokenInfo = self::getTokenFromFile(); //busca si ya exsite un token
+        $tokenInfo = self::getTokenFromFile(); //busca si ya existe un token
         
         if ($tokenInfo['error']){
 

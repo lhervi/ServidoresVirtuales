@@ -3,7 +3,7 @@
     "password":"Banesco2021..",
     "networkDrive":"\\\\smgm1034\\Linea_base_windows",
     "archivo":"LB_Marzo_2021.csv",
-    "DBServer":"10.150.11.158",    
+    "DBServer":"10.150.11.96",    
     "port":"4999",
     "userName":"lornis"    
 }

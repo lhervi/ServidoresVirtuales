@@ -35,7 +35,7 @@ $seguir=true;
             echo LookAndFeel::estatus($result['mensaje'], 2);
             echo "<script>" . PHP_EOL;
         
-            echo LookAndFeel::enlace("regresar", INICIO);        
+            echo LookAndFeel::enlace("regresar", MENUINICIO);        
             echo "</script>" . PHP_EOL;  
             
         }else{
@@ -56,7 +56,7 @@ $seguir=true;
 
     echo "<script>" . PHP_EOL;
         
-        echo LookAndFeel::enlace("regresar", INICIO);
+        echo LookAndFeel::enlace("regresar", MENUINICIO);
         
     echo "</script>" . PHP_EOL;        
 

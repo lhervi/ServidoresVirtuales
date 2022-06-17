@@ -17,7 +17,7 @@
  echo LookAndFeel::estatusX("mas resultados que mostrar");
  echo '<div id="regresar" class="estatus" style="cursor:pointer; width:200px"><h4>>>>Regresar</h4></div>';
  echo "<script>" . PHP_EOL;      
- echo (LookAndFeel::enlace('regresar', INICIO));
+ echo (LookAndFeel::enlace('regresar', MENUINICIO));
  echo "</script>";
  
 ?>

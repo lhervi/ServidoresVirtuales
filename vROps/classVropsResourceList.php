@@ -63,7 +63,10 @@ class VropsResourceList{
                 $a=5; //[ELIMINAR] ============ parar y revisar
             } 
 
-            $resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
+            $newToken = VropsToken::getTokenFromVrops(null, true);
+
+            //$resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
+            $resultCurl = Curl::execCurl($newToken, "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
             //execCurl(string $token, string $tipo, string $campo=null, array $camposArray=null, $resourceKinds=null)
 
             if ($resultCurl['error']===true){
@@ -74,7 +77,9 @@ class VropsResourceList{
 
             }else{            
 
-                $FileArr = DecodeJF::decodeJsonFile($resultCurl['arch']);  //$resultCurl['arch']
+                $arch  = $resultCurl['arch'];
+
+                $FileArr = DecodeJF::decodeJsonFile($arch);  //$resultCurl['arch']
 
                 if ($FileArr['error']){
 

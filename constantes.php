@@ -3,14 +3,14 @@
 define("FFECHA", "d-m-Y H:i:s");
 define("TOKENHEADER", "Authorization: vRealizeOpsToken ");
 
-define("HOSTVROPS", "vrops01.intra.banesco.com");
+define("HOSTVROPS", "vrops.intra.banesco.com");
 
 define("ALLRESOURCELIST", "allResourceList.json");
 
 define("REPORTERRORACTIVE", false);
 
 define("URLVROPSTAIL", "&page=0&pageSize=");
-define("PAGESIZE", "1800"); //Este es el número de recursos vrops que trae una página en una cosulta
+define("PAGESIZE", "4000"); //Este es el número de recursos vrops que trae una página en una cosulta
 define("URLTAIL", URLVROPSTAIL . PAGESIZE); //Concatena el string en el que termina la cola de la consulta con el núm max de recursos
 
 // ------------------ R U T A S -------------------------------------

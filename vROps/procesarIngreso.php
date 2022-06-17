@@ -1,6 +1,10 @@
 <?php
 
-if(session_status() !== PHP_SESSION_ACTIVE) session_start();
+if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+$_SESSION['prueba'] = 4; //[ELIMINAR]
 
 
 ini_set('memory_limit', '-1');
@@ -61,9 +65,12 @@ if ($confArray['error']){
         $_SESSION['loging']=false;        
 
         header("Location:../view/index.php", true);
+        exit();
     }else{
         $_SESSION['login']=true;
+        $a;
         header("Location: /STISCR/vROps/view/Vrops.php", true);
+        exit();
     }    
     
 }       

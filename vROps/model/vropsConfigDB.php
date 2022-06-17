@@ -1,6 +1,6 @@
 <?php
 
-    define('HOSTBDVROPS', '10.150.11.158');    
+    define('HOSTBDVROPS', '10.150.11.96');    
     define('USUARIO', 'lornis');
     define('PASSWORD', 'Caracas.2024');
     define('BASEDEDATOS', 'STISCR');

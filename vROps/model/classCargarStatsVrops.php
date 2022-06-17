@@ -314,7 +314,7 @@ class CargarStatsVrops {
 
         echo "<script>" . PHP_EOL;
         
-            echo LookAndFeel::enlace("regresar", INICIO);
+            echo LookAndFeel::enlace("regresar", MENUINICIO);
         
         echo "<script>" . PHP_EOL;
 

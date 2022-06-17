@@ -36,7 +36,7 @@
             function regresar(){
                 echo LookAndFeel::estatus('<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>', 2);
                 echo "<script> " . PHP_EOL;
-                echo LookAndFeel::enlace('regresar', INICIO);
+                echo LookAndFeel::enlace('regresar', MENUINICIO);
                 echo "</script> " . PHP_EOL;
             }
 
@@ -56,9 +56,11 @@
             
             if(isset($_POST["mesConsulta"])){
                 
-                $begin = $_POST["mesConsulta"] . "-01";
-                $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);    
-                $_SESSION['numMesTabla'] = substr($_POST["mesConsulta"], 5);
+                $mesConsulta = $_POST["mesConsulta"];
+
+                $begin = $mesConsulta . "-01";
+                $end = $mesConsulta . "-" . Fechas::lastDay($mesConsulta);    
+                $_SESSION['numMesTabla'] = substr($mesConsulta, 5);
 
             }
             
@@ -93,7 +95,7 @@
                 
                 echo "<script>" . PHP_EOL;
         
-                echo LookAndFeel::enlace("regresar", INICIO);
+                echo LookAndFeel::enlace("regresar", MENUINICIO);
         
                 echo "</script>" . PHP_EOL;     
 
@@ -128,7 +130,7 @@
             //============ Fin de obtención de token de acceso ================//
             //-------------------------------------------------------------------                   
 
-            file_put_contents(HOME.SALIDAS.'indiceDeConsultas.json', '{"indiceDeConsultas":0}');
+            //file_put_contents(HOME.SALIDAS.'indiceDeConsultas.json', '{"indiceDeConsultas":0}');
 
             echo LookAndFeel::estatus("Estatus del procesamiento de los ResourceKinds", 1);
 
@@ -137,6 +139,10 @@
             //======================== CREACIÓN DE LA LISTA DE RECURSOS ========================
             
             //El proceso obtiene toda la lista de recursos, dado que toma los recursos definidos en el arreglo de vROpsConf.json
+
+            // ============================== P R O V I S I O N A L ==============================
+            
+            
             
             foreach($resourceKindsArray as $resourceKinds){ //[REVISAR][ELIMINAE] Eliminar esta linea----------
                 
@@ -152,6 +158,10 @@
                 }
             }  // [REVISAR][ELIMINAR] Eliminar esta llave que cierra el bucle, no es necesaria.
 
+            
+
+            // ============================== P R O V I S I O N A L ==============================
+
             //===== Crear la lista de recursos "resourceList" ---
             $file = HOME . SALIDAS . ALLRESOURCELIST;
             
@@ -164,9 +174,10 @@
             //================ [PENDIENTE] ==============================================
             //1 Preguntar acá si se desea pasar la información a la BD
             //2 Comprobar que la información no haya sido cargada previamente
-            //3 Advertir si los registros ya existen en la BD o la conclusión de la carga                                    
+            //3 Advertir si los registros ya existen en la BD o la conclusión de la carga   
+
             
-            $result = CargarResourceList::insertRegistrosResourceList($arrayProv);
+            $result = CargarResourceList::insertRegistrosResourceList($arrayProv, $mesConsulta);
 
             
             //Si ya los registros se encuentran en la BD se detiene la ejecución
@@ -178,7 +189,7 @@
                 die();               
                 echo LookAndFeel::estatus('<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>', 2);
                 echo "<script> . " . PHP_EOL;
-                echo LookAndFeel::enlace('->regresar', INICIO);
+                echo LookAndFeel::enlace('->regresar', MENUINICIO);
                 echo "</script> . " . PHP_EOL;
                 
             }

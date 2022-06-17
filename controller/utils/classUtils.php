@@ -99,12 +99,14 @@ class Utils{
         unset($listado[array_search('.', $listado, true)]);    
         
         foreach($listado as $file){
-            
-            $noExcluido = array_search($file, $exceptions) === false ? true : false;
+            $fileComp = $dir . $file;
+            $noExcluido = array_search($fileComp, $exceptions) === false ? true : false;
             
             if($noExcluido){           
-                $f = $dir . "/" . $file;
-                if (is_dir($f)){
+                $f = $fileComp;
+                //$f = $file;
+                //if (is_dir($f)){
+                if (is_dir($fileComp)){
                     continue;
                 }else{
                     unlink($f);
