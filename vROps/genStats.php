@@ -56,11 +56,11 @@
             
             if(isset($_POST["mesConsulta"])){
                 
-                $mesConsulta = $_POST["mesConsulta"];
+                $mesConsulta = substr($_POST["mesConsulta"], 5);
 
-                $begin = $mesConsulta . "-01";
-                $end = $mesConsulta . "-" . Fechas::lastDay($mesConsulta);    
-                $_SESSION['numMesTabla'] = substr($mesConsulta, 5);
+                $begin = $_POST["mesConsulta"] . "-01";
+                $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);    
+                $_SESSION['numMesTabla'] = substr($_POST["mesConsulta"], 5);
 
             }
             
@@ -206,7 +206,7 @@
             echo LookAndFeel::estatusX("Se ha completado el procesamiento de la lista de recursos", 2);
 
 
-            foreach($resourceKindsArray as $resourceKinds){            
+            foreach($resourceKindsArray as $resourceKinds){
                     
             $camposForStats = VropsResourceList::getCamposForStats($begin, $end, $intervalType, $intervalQuantifier, $rollUpType, $resourceKinds);  //además crea el archivo campos.json
 

@@ -1,6 +1,6 @@
 <?php
 
-<?php
+
 
 //$servidor="sapl8442";
 $usuario="hecnaranjo";
@@ -55,7 +55,7 @@ curl_setopt($curl, CURLOPT_URL, $url);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_POST, 1);
 curl_setopt($curl, CURLOPT_BINARYTRANSFER, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, $userpassword);
+//curl_setopt($curl, CURLOPT_POSTFIELDS, $userpassword); //deprecated
 //curl_setopt($curl, CURLOPT_HTTPGET, 1);
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 curl_setopt($curl, CURLOPT_CAINFO, $certfirefox);
@@ -114,7 +114,7 @@ curl_setopt($curl2, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
 curl_setopt($curl2, CURLOPT_URL, $url2);
 curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
 //curl_setopt($curl2, CURLOPT_POST, 1);
-curl_setopt($curl2, CURLOPT_BINARYTRANSFER, true);
+//curl_setopt($curl2, CURLOPT_BINARYTRANSFER, true); DEPRECATED
 curl_setopt($curl2, CURLOPT_POSTFIELDS, $userpassword);
 //curl_setopt($curl2, CURLOPT_POSTFIELDS, $datos);
 curl_setopt($curl2, CURLOPT_HTTPGET, 1);
@@ -497,12 +497,5 @@ $i++;
 } /*Cerrar llave, fin de foreach*/ 
 echo "</table>";
 }
-
-
-
-
-
-
-?>
 
 ?>

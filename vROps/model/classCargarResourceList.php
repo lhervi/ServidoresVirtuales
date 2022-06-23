@@ -19,7 +19,7 @@ class CargarResourceList{
         
       include_once 'classVropsConnection.php';
 
-      $consultaEliminaTabla = "DROP TABLE IF EXISTS vmware_recursos_". $mesConsulta;
+      $consultaEliminaTabla = 'DROP TABLE IF EXISTS "vmware_recursos_'. $mesConsulta . '"';
 
       $result = VropsConexion::insertar($consultaEliminaTabla);
 
@@ -47,9 +47,7 @@ class CargarResourceList{
         $consultaCreaTabla .= "latestStatsOfResource VARCHAR NOT NULL, latestPropertiesOfResource VARCHAR NOT NULL, credentialsOfResource VARCHAR NOT NULL)"; 
 
         $result = VropsConexion::insertar($consultaCreaTabla);  
-        
-        //file_put_contents("consulta.txt","");[ELIMINAR]
-
+                
         return $result;
         
     }
@@ -91,10 +89,10 @@ class CargarResourceList{
     //======================== FIN TEST ========================
 
     //static function insertar($consultaInsert, $strInsert){
-    static function insertar($strInsert){
+    static function insertar($strInsert, $mesConsulta){
       include_once 'classVropsConnection.php';
       $valoresConsulta = implode(", ", $strInsert);
-      $consultaInsert = self::iniConsulta() . $valoresConsulta;     
+      $consultaInsert = self::iniConsulta($mesConsulta) . $valoresConsulta;     
 
       $result = VropsConexion::insertar($consultaInsert);
       //file_put_contents("consulta.txt", $strInsert, FILE_APPEND);[ELIMINAR]
@@ -106,8 +104,8 @@ class CargarResourceList{
     // INICIALIZAR LA CONSULTA
     //=========================================================
 
-    static function iniConsulta(){
-      $consultaInsert = "INSERT INTO vmware_recursos (servidor, nombre, recursos_id, adapterKindKey, tipo, ";
+    static function iniConsulta($mesConsulta){
+      $consultaInsert = "INSERT INTO vmware_recursos_" . $mesConsulta . " (servidor, nombre, recursos_id, adapterKindKey, tipo, ";
       $consultaInsert .= "linkToSelf, relationsOfResource, propertiesOfResource, "; 
       $consultaInsert .= "alertsOfResource, symptomsOfResource, statKeysOfResource, "; 
       $consultaInsert .= "latestStatsOfResource, latestPropertiesOfResource, credentialsOfResource) "; 
@@ -149,7 +147,7 @@ class CargarResourceList{
             self::$contadorDeRegistros+=NUMREGINSERT;
             
             //=====================================================
-            $result = self::insertar($strInsert);
+            $result = self::insertar($strInsert, $mesConsulta);
             //=====================================================
 
             if (!$result){
@@ -162,7 +160,7 @@ class CargarResourceList{
 
           if ($tope>0){  //inserta los últimos registros que hayan quedado fuera de los lotes 
             //======================================================
-            $result = self::insertar($strInsert);
+            $result = self::insertar($strInsert, $mesConsulta);
             //===================================================
             
             self::$contadorDeRegistros+=$tope;

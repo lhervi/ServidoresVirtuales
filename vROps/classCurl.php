@@ -62,14 +62,14 @@ class Curl {
         $textError = '{"message":"The provided token for auth scheme \"vRealizeOpsToken\" is either invalid or has expired.","httpStatusCode":401,"apiErrorCode":1512}';
         $contador = 0;
         
-        while($res == $textError && $contador<20){            
+        while($res == $textError && $contador<20){           //[Eliminar] //[Eliminar] 
             curl_close($curl);
             $param['token'] = VropsToken::getTokenFromVrops(null,true);
             $curl = curl_init();
             self::curlSetOpt($curl, $param);         
             $res = curl_exec($curl);   
             $contador++;         
-        }
+        } //[Eliminar] //[Eliminar] //[Eliminar] //[Eliminar] 
 
         $arch = $param['arch'];
         file_put_contents($arch, $res);
