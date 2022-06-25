@@ -19,10 +19,7 @@ class CargarStatsVrops {
     function dropTable(string $tableName){
        
         include_once 'classVropsConnection.php';
-
-        //'DROP TABLE IF EXISTS "vmware_recursos_'. $mesConsulta . '"';        
-        //'DROP TABLE IF EXISTS
-        
+                
         $dropQuery = 'DROP TABLE IF EXISTS "' . $tableName . '"';
         $result = VropsConexion::insertar($dropQuery);
 

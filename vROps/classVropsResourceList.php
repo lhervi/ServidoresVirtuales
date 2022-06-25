@@ -23,6 +23,20 @@ include_once '../vROps/classVropsConf.php';
  * 
  */
 class VropsResourceList{
+
+        
+    /**
+     * creatVirtualmachineIdentifierFile
+     *
+     * @param  array $virtualmachineIdentifierList
+     * @return void
+     */
+    static function createVirtualmachineIdentifierFile(array $virtualmachineIdentifierList){
+        
+        $fileName=HOME . SALIDAS . "virtualmachineOnlyIdentifiersList.json";;
+        $virtulaMachiIdlist = '{"' . implode('", "', $virtualmachineIdentifierList) . '"}';
+        file_put_contents($fileName, $virtulaMachiIdlist);
+    }
     
     /**
      * getResourceList
@@ -57,11 +71,7 @@ class VropsResourceList{
             $error['error'] = true;  
             return $error;
 
-        }else{   
-            
-            if($resourceKinds=='hostsystem'){
-                $a=5; //[ELIMINAR] ============ parar y revisar
-            } 
+        }else{            
 
             $newToken = VropsToken::getTokenFromVrops(null, true);
 
@@ -90,6 +100,7 @@ class VropsResourceList{
                 }elseif(array_key_exists('resourceList', $FileArr)){
     
                     $resourceListInfo['error']=false;
+                    $listaVirtualMachineIdentifiers = "";
                    
                     foreach ($FileArr['resourceList'] as $ind=>$resource){		
                         
@@ -100,6 +111,12 @@ class VropsResourceList{
                             $rlArray['identifier'] = $resource['identifier'];
                             $rlArray['adapterKindKey'] = $resource['resourceKey']['adapterKindKey'];
                             $rlArray['resourceKindKey'] = $resource['resourceKey']['resourceKindKey'];
+
+                            //============ Crear listado de ids de virtualmachine ==================
+                            if ($resourceKinds=='virtualMachine'){                                
+                                $arrayVirtualmachineIdentifier[] = $virtualmachineIdentifier;
+                            }
+                            //============ Fin de crear listado de ids de virtualmachine ============
                             
                             foreach($resource['links'] as $link){
                                 $linksArray[$link['name']] = $link['href'];
@@ -109,7 +126,9 @@ class VropsResourceList{
                             
                             $resourceListArray[$ind]=$rlArray;
                         }
-                    }                        
+                    }                     
+                    
+                    
                     
                     $resourceListInfo['resourceList'] = $resourceListArray;
                     $resourceListInfo['error'] = false;
@@ -152,10 +171,6 @@ class VropsResourceList{
     static function getIds(string $resourceKinds){ //Recibe los Ids y ahora sabe cuáles regresar
         
         $resourceList = self::getResourceList($resourceKinds);   //Pasa $resourceKinds para que sepa cuáles buscar
-
-        if ($resourceKinds=='hostsystem'){
-            $a=5;
-        }
 
         if ($resourceList['error']){
 
