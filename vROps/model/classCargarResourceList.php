@@ -19,7 +19,14 @@ class CargarResourceList{
         
       include_once 'classVropsConnection.php';
 
-      $consultaEliminaTabla = 'DROP TABLE IF EXISTS "vmware_recursos_'. $mesConsulta . '"';
+      include_once (__DIR__ . "/../model/classVropsServerName.php");
+      include_once (__DIR__ . "/../classVropsConf.php");
+      
+      $shortServerName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);
+
+      //$consultaEliminaTabla = 'DROP TABLE IF EXISTS "vmware_recursos_'. $mesConsulta . '"';
+
+      $consultaEliminaTabla = 'DROP TABLE IF EXISTS ' . $shortServerName;
 
       $result = VropsConexion::insertar($consultaEliminaTabla);
 
@@ -40,7 +47,12 @@ class CargarResourceList{
         
         include_once 'classVropsConnection.php';
 
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS vmware_recursos_" . $mesConsulta . " (servidor VARCHAR NOT NULL, nombre VARCHAR NOT NULL, ";
+        include_once (__DIR__ . "/../model/classVropsServerName.php");
+        include_once (__DIR__ . "/../classVropsConf.php");
+      
+        $shortServerName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);
+
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $shortServerName . " (servidor VARCHAR NOT NULL, nombre VARCHAR NOT NULL, ";
         $consultaCreaTabla .= "recursos_id VARCHAR NOT NULL, adapterKindKey VARCHAR NOT NULL, tipo VARCHAR NOT NULL, ";        
         $consultaCreaTabla .= "linkToSelf VARCHAR NOT NULL, relationsOfResource VARCHAR NOT NULL, propertiesOfResource VARCHAR NOT NULL, "; 
         $consultaCreaTabla .= "alertsOfResource VARCHAR NOT NULL, symptomsOfResource VARCHAR NOT NULL, statKeysOfResource VARCHAR NOT NULL, "; 
@@ -105,7 +117,16 @@ class CargarResourceList{
     //=========================================================
 
     static function iniConsulta($mesConsulta){
-      $consultaInsert = "INSERT INTO vmware_recursos_" . $mesConsulta . " (servidor, nombre, recursos_id, adapterKindKey, tipo, ";
+
+      //$server = VropsConf::getCampo("vropsServer")["vropsServer"];
+
+      include_once (__DIR__ . "/../model/classVropsServerName.php");
+      include_once (__DIR__ . "/../classVropsConf.php");
+      
+      $shortServerName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);
+
+      //$consultaInsert = "INSERT INTO vmware_recursos_" . $shortServerName . "_" . $mesConsulta . " (servidor, nombre, recursos_id, adapterKindKey, tipo, ";
+      $consultaInsert = "INSERT INTO " . $shortServerName . " (servidor, nombre, recursos_id, adapterKindKey, tipo, ";
       $consultaInsert .= "linkToSelf, relationsOfResource, propertiesOfResource, "; 
       $consultaInsert .= "alertsOfResource, symptomsOfResource, statKeysOfResource, "; 
       $consultaInsert .= "latestStatsOfResource, latestPropertiesOfResource, credentialsOfResource) "; 

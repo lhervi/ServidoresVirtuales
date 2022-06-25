@@ -17,14 +17,13 @@ class CargarStatsVrops {
     //El número de registros a insertar se lee desde vropsConfigDB.php
 
     function dropTable(string $tableName){
+       
         include_once 'classVropsConnection.php';
 
         //'DROP TABLE IF EXISTS "vmware_recursos_'. $mesConsulta . '"';        
         //'DROP TABLE IF EXISTS
         
         $dropQuery = 'DROP TABLE IF EXISTS "' . $tableName . '"';
-
-        
         $result = VropsConexion::insertar($dropQuery);
 
         return $result;
@@ -274,15 +273,20 @@ class CargarStatsVrops {
         include_once 'vropsConfigDB.php';
         include_once 'classVropsConnection.php';
 
+        include_once (__DIR__ . "/../model/classVropsServerName.php");
+        include_once (__DIR__ . "/../classVropsConf.php");
+        
+        $nombreTabla = VropsServerName::getServerName("vmware_metricas", $numMesTabla);
+
         $objcon = new VropsConexion();        
 
         //-------- Crear la tabla dependiendo del mes [PENDIENTE] ------------
         
-        $nombreTabla= "vmware_metricas_" . $numMesTabla; //$numMesTabla = '01' | '02' | ... '12'
+        //$nombreTabla= "vmware_metricas_" . $numMesTabla; //$numMesTabla = '01' | '02' | ... '12'
 
-        self::dropTable($nombreTabla);
+        self::dropTable($nombreTabla); //Elimina la tabla si existe
         
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $nombreTabla ." (id serial, recursos_id VARCHAR NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL,  resourcekinds VARCHAR NOT NULL, servidor VARCHAR NOT NULL, PRIMARY KEY(recursos_id, fecha, metrica))"; 
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $nombreTabla . " (id serial, recursos_id VARCHAR NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL,  resourcekinds VARCHAR NOT NULL, servidor VARCHAR NOT NULL, PRIMARY KEY(recursos_id, fecha, metrica))"; 
         
         $registros = $objcon->insertar($consultaCreaTabla);  //Crea la tabla si no existe
                 

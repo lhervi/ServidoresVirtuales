@@ -1,5 +1,8 @@
 <?php
 
+define("PREFIJO", "https://");
+define("SUFIJO", ".intra");
+
 define("FFECHA", "d-m-Y H:i:s");
 define("TOKENHEADER", "Authorization: vRealizeOpsToken ");
 
