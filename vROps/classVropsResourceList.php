@@ -25,6 +25,13 @@ include_once '../vROps/classVropsConf.php';
 class VropsResourceList{
 
         
+    static function getVirtualMachineGuest(){
+        // Se obtiene el contenido del archivo, y si no hay error, 
+            // Se hace la consulta usando la clase classCurl        
+            // El resultado se deja en un archivo json para ser procesado porterior mente y convertirlo en una tabla
+    }
+    
+    
     /**
      * creatVirtualmachineIdentifierFile
      *
@@ -112,11 +119,16 @@ class VropsResourceList{
                             $rlArray['adapterKindKey'] = $resource['resourceKey']['adapterKindKey'];
                             $rlArray['resourceKindKey'] = $resource['resourceKey']['resourceKindKey'];
 
+
                             //============ Crear listado de ids de virtualmachine ==================
+
                             if ($resourceKinds=='virtualMachine'){                                
-                                $arrayVirtualmachineIdentifier[] = $virtualmachineIdentifier;
+                                $arrayVirtualmachineIdentifier[] = $resource['identifier'];
                             }
+
                             //============ Fin de crear listado de ids de virtualmachine ============
+
+
                             
                             foreach($resource['links'] as $link){
                                 $linksArray[$link['name']] = $link['href'];
@@ -128,7 +140,22 @@ class VropsResourceList{
                         }
                     }                     
                     
-                    
+                    //Al finalizar el bucle anterior, en caso de que resourceKinds=="virtualmachine" entonces se crea el archivo con la lista de resourId de virtualmachine
+                    if ($resourceKinds=='virtualMachine'){
+                        //Se crea el archivo que contiene la lista de identifiers de virtualmachine
+                        self::createVirtualmachineIdentifierFile($arrayVirtualmachineIdentifier);
+
+                        //Se obtiene la información de los huéspedes
+                        //$guest =;
+
+                        //========================[ OJO  OJO  OJO]==================================
+                        // Aquí va el código para crear la lista de virtualmachine
+                        // y con ella, contruir la de los huéspedes, 
+                        // para convertirla en tabla después
+                        //============================================================================
+
+
+                    }
                     
                     $resourceListInfo['resourceList'] = $resourceListArray;
                     $resourceListInfo['error'] = false;

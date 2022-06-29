@@ -18,9 +18,9 @@ class CargarResourceList{
     static function eliminarResourceListTable($mesConsulta){    
         
       include_once 'classVropsConnection.php';
-
-      include_once (__DIR__ . "/../model/classVropsServerName.php");
+      
       include_once (__DIR__ . "/../classVropsConf.php");
+      include_once (__DIR__ . "/../model/classVropsServerName.php");
       
       $shortServerName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);
 
@@ -50,9 +50,9 @@ class CargarResourceList{
         include_once (__DIR__ . "/../model/classVropsServerName.php");
         include_once (__DIR__ . "/../classVropsConf.php");
       
-        $shortServerName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);
+        $tableName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);
 
-        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $shortServerName . " (servidor VARCHAR NOT NULL, nombre VARCHAR NOT NULL, ";
+        $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $tableName . " (servidor VARCHAR NOT NULL, nombre VARCHAR NOT NULL, ";
         $consultaCreaTabla .= "recursos_id VARCHAR NOT NULL, adapterKindKey VARCHAR NOT NULL, tipo VARCHAR NOT NULL, ";        
         $consultaCreaTabla .= "linkToSelf VARCHAR NOT NULL, relationsOfResource VARCHAR NOT NULL, propertiesOfResource VARCHAR NOT NULL, "; 
         $consultaCreaTabla .= "alertsOfResource VARCHAR NOT NULL, symptomsOfResource VARCHAR NOT NULL, statKeysOfResource VARCHAR NOT NULL, "; 
