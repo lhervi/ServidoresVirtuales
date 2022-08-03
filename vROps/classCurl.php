@@ -156,7 +156,8 @@ class Curl {
                 $result=Utils::chequearConexion($ServidorActual); //Esto verifica la conexión con el servidor de turno
                 
                 if($result['result']==false){
-                    die("se perdió la conexión con el servidor vmware");                                        
+                    
+                    die("se perdió la conexión con el servidor vmware");                                     
                 }
                 return $error;
                 

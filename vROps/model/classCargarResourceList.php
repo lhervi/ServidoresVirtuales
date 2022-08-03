@@ -22,9 +22,7 @@ class CargarResourceList{
       include_once (__DIR__ . "/../classVropsConf.php");
       include_once (__DIR__ . "/../model/classVropsServerName.php");
       
-      $shortServerName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);
-
-      //$consultaEliminaTabla = 'DROP TABLE IF EXISTS "vmware_recursos_'. $mesConsulta . '"';
+      $shortServerName = VropsServerName::getServerName("vmware_recursos", $mesConsulta);      
 
       $consultaEliminaTabla = 'DROP TABLE IF EXISTS ' . $shortServerName;
 

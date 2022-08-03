@@ -221,7 +221,7 @@ class Fechas{
      * @param  string $fec ej: 2021-07
      * @return string ejemplo '30' que representa el último día de un mes dado
      */
-    static function lastDay (string $fec){
+    static function lastDay (string $fec, bool $hour=null){
         
         $lastDay = "28";
         $continuar=true;
@@ -230,7 +230,7 @@ class Fechas{
         $monthProv = $month;
         
         $fecProv = new DateTime($fec . "-" .$lastDay);      
-
+       
         while($continuar){
             $fecProv->add(new DateInterval('P1D'));
             $monthProv = $fecProv->format('m');
@@ -238,7 +238,7 @@ class Fechas{
                 $lastDay++;
             }else{
                 $continuar=false;
-                return strval($lastDay);
+                return strval($lastDay . ' 23:59');
             }            
         }
     }

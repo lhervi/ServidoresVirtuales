@@ -59,7 +59,7 @@
                 $mesConsulta = substr($_POST["mesConsulta"], 5);
 
                 $begin = $_POST["mesConsulta"] . "-01";
-                $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"]);    
+                $end = $_POST["mesConsulta"] . "-" . Fechas::lastDay($_POST["mesConsulta"], true);    
                 $_SESSION['numMesTabla'] = substr($_POST["mesConsulta"], 5);
 
             }

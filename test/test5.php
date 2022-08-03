@@ -1,5 +1,7 @@
 <?php
 
+/*
+
 include_once "./controller/utils/classDecodeJsonFile.php";                   
 include "./constantes.php";
 include_once HOME . '/vROps/classVropsConf.php';
@@ -24,6 +26,9 @@ y error=true si hubo problemas
 Retorna como salida,el nuevo archivo json con el elemento modificado y un error = false o null 
 y error=true si hubo problemas
 */
+
+/*
+
 class gestionJsonFiles{    
 
     private $jsonArray;
@@ -80,7 +85,6 @@ class gestionJsonFiles{
     
 }
 
-
 if ($confArray['error']){   
     die("<h3>" . $confArray['mensaje'] . "</h3>");
 }else{
@@ -94,14 +98,13 @@ if ($confArray['error']){
 
 
 
-/*
+
 $a=5;
 $conf = DecodeJF::decodeJsonFile(ARCHIVODECONFIGURACION);
 var_dump($conf);
-*/
-/*
 
-========= Convertir fecha de milisegundos a cadena de texto en formato año-mes-dia hora:min ===========
+
+//========= Convertir fecha de milisegundos a cadena de texto en formato año-mes-dia hora:min ===========
 
 echo "1604395966369";
 echo "<br><br>";
@@ -109,9 +112,8 @@ echo Fechas::getDatefromMiliSeconds(1604395966369);
 echo "<br><br>";
 $vropsServer = VropsConf::getCampo('vropsServer')['vropsServer']; //vropsServer
 echo $vropsServer;
-//echo $vropsServer['vropsServer'];
-//
+echo $vropsServer['vropsServer'];
 
-//echo "<pre><h2> " . URLTAIL . " </h2></pre>";
+*/
 
 ?>
