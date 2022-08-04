@@ -40,7 +40,9 @@ $seguir=true;
             
         }else{
             echo LookAndFeel::estatus("Culminó con éxito la carga de los registros", 2);
-        }                      
+        }                 
+        
+        
         
         //echo '<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>';  
         echo LookAndFeel::estatus('<div id="regresar" style="cursor:pointer"><h3> -> Regresar </h3></div>', 2);

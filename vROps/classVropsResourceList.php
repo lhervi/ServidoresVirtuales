@@ -188,6 +188,32 @@ class VropsResourceList{
             } 
         } 
     }
+
+    //---------------------------------------------------------------------------
+    //Método estático que crea la tabla de padres e hijos
+    //---------------------------------------------------------------------------
+
+    static function padresEhijos(array $listaDeHijos){
+
+        //URL = https://{{vrops}}/suite-api/api/resources/properties/latest/query
+        //Obtener el URL con la función que toma el servidor activo
+        //Obtener el resto del URL desde el archivo de configuración
+        //Pasarle a la clase curl los datos que se requieren para la consulta
+        //Construir $param
+        //$param['url'] = $URL;
+        //$param['proxy'] = $proxy (leerlo desde el arch de conf)
+        //$param['userproxy']
+        //$param['certfirefox']
+        //$$param['GET']='false' (obtenido del arch de conf)
+        //$param['campos'] = (la lista de recursos y )
+        //Culr::execParamCurl($param, $ind=0){
+
+        
+        return $error;
+    }
+
+
+    //===========================================================================
           
     /**
      * getIds
@@ -212,6 +238,15 @@ class VropsResourceList{
                 $resp[] = $rlist['identifier']; //arreglo de identifiers
     
             }
+
+            //============= Nuevo código para extraer los padres de los virtuales =============
+
+            //General: Crear una clase a la que se le pase la lista de identificadores y cree la tabla
+            
+
+            //=========== Fin del nuevo código para extraer los padres de los virtuales =======
+
+
 
             file_put_contents(HOME . SALIDAS . $resourceKinds . "ResourceList_Solo_Ids.json", json_encode($resp)); //Eliminar esta instrucción, solo por debugging
 
