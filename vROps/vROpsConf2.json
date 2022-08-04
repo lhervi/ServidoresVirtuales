@@ -1,10 +1,10 @@
 {
     "userBA":"INTRA\\ljhervilla",
-    "passwordBA":"Banesco2021..",
+    "passwordBA":"B4n3sc0Pro2022",
     "userVrops":"capacidad",
     "passwordVrops":"Pa$$w0rd",
-    "authSource" : "local",
-    "vropsServers":["https:\/\/vrops.intra.banesco.com","https:\/\/sapl8442.intra.banesco.com","https:\/\/vrops02.intra.banesco.com", "https:\/\/vrops01.intra.banesco.com"],
+    "authSource":"local",
+    "vropsServers":["https:\/\/vrops.intra.banesco.com","https:\/\/sapl8442.intra.banesco.com","https:\/\/vrops02.intra.banesco.com","https:\/\/vrops01.intra.banesco.com"],
     "vropsServer":"https:\/\/vrops.intra.banesco.com",
     "proxy":"prxsrv.intra.banesco.com:9090",
     "segmentos":100,
@@ -17,5 +17,6 @@
     "tipoVmwareToken":{"url":"\/suite-api\/api\/auth\/token\/acquire","arch":"VmwareToken.json","GET":false},
     "tipoMediciones":{"url":"\/suite-api\/api\/resources\/stats\/query","arch":"VmwareStats.json","GET":false},
     "tipoResourceKinds":{"url":"\/suite-api\/api\/resources?resourceKind=","arch":"VmwareResourceKinds.json","GET":true},
+    "tipoParentHost":{"url":"\/suite-api\/api\/resources\/properties\/latest\/query","arch":"VmwareParentHost.json","GET":false},
     "end":true
     }

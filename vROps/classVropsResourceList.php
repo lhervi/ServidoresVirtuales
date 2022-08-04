@@ -206,9 +206,9 @@ class VropsResourceList{
         //$param['certfirefox']
         //$$param['GET']='false' (obtenido del arch de conf)
         //$param['campos'] = (la lista de recursos y )
-        //Culr::execParamCurl($param, $ind=0){
-
-        
+        //$param['header'] = 
+        //$param['arch'] = es el archivo que va a contener la salida de la corrida
+        //Culr::execParamCurl($param, $ind=0){        
         return $error;
     }
 
