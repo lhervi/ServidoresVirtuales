@@ -192,20 +192,14 @@ class VropsResourceList{
 //=======================================================================================
 //********************************  Parent Host   ***************************************
 //=======================================================================================
-
-    static function createTableParentHosts(array $listaParentHost){
-        
-        include_once (__DIR__ . "/");
-        include_once (__DIR__ . "/model/classVropsConnection.php");
-        
+/*
+    static function createTableParentHosts(){
         //leer el json y pasarlo a un arreglo
-
-        $consulta = "";
 
         //Eliminar la tabla existente
         //Crear una nueva tabla 
         //Insertar los resgistros
-    } 
+    }
 
     static function parentHostArray(string $contenido){
 
@@ -227,12 +221,12 @@ class VropsResourceList{
     /**
      * padresEhijos
      * Esta clase recibe como parámetro la lista de Id's virtuales, y crea un archivo json con los 
-     * nombres de los padres en una ruta establecida. 
+     * nombres de los padres en una ruta establecida. El nom
      *
      * @param  array $listaDeHijos lista de ids virtuales 
      * @return void 
      */
-    
+    /*
     static function padresEhijos(array $listaDeHijos){
 
         include_once (__DIR__ ."/../constantes.php");
@@ -247,7 +241,7 @@ class VropsResourceList{
         return $result;
     }
 
-   
+    */
 
     //===========================================================================
           
@@ -258,8 +252,6 @@ class VropsResourceList{
      * @return array    Si tode está bien, regresa  $porcion['error']   $porcion[$fileName]   $porcion['arrayIds']
      */
     static function getIds(string $resourceKinds){ //Recibe los Ids y ahora sabe cuáles regresar
-
-        include_once (__DIR__ ."/../constantes.php");
         
         $resourceList = self::getResourceList($resourceKinds);   //Pasa $resourceKinds para que sepa cuáles buscar
 
@@ -284,18 +276,6 @@ class VropsResourceList{
             // Objetivo: Crear una clase a la que se le pase la lista de identificadores y obtenga la lista 
             // Recorrer la lista y convertirla en un arreglo
             // Pasar el arreglo a la BD
-
-            if ($resourceList['resourceList'] =  VIRTUALMACHINE){
-
-                $result = self::padresEhijos($resp);
-                if($result){
-                    return $result;
-                }else{
-                    $arrayParentHost = self::parentHostArray($result['file']);
-
-                }
-
-            }
 
             //$result = self::padresEhijos($resp);
             //self::parentHostArray(json_decode($result['file']));

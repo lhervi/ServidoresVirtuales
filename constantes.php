@@ -2,6 +2,7 @@
 
 define("PREFIJO", "https://");
 define("SUFIJO", ".intra");
+define("VIRTUALMACHINE", "virtualmachine");
 
 define("FFECHA", "d-m-Y H:i:s");
 define("TOKENHEADER", "Authorization: vRealizeOpsToken ");
@@ -30,17 +31,20 @@ define ("VROPS", "/vROps/");
 define ("VROPSVIEW", "/vROps/view/");
 define ("CONTROLLER", "/controller/");
 define ("ERRORES", "Errores.json");
-define("ERRORLOGJSONFILE", HOME.VROPS."/errors/vROpsErrors.json");
-define("CSS", "/view/css/");
 
-define("VMWARETOKENFILE", HOME . SALIDAS . "VmwareToken.json");
+define("CSS", "/view/css/");
 
 //define("VROPSVIEW", HOME . VROPS . "/view/");
 
 define("VROPSERROREMAILFROM","From: vROps programm");
 define("VROPSERROREMAILTO","lhervi@gmail.com");
 
-// ------------------ R U T A S -------------------------------------
+// ------------------------------------------------------------------
+
+//------------------------- A R C H I V O S -------------------------
+define("VMWARETOKENFILE", HOME . SALIDAS . "VmwareToken.json");
+define("ERRORLOGJSONFILE", HOME.VROPS."/errors/vROpsErrors.json");
+//-------------------------------------------------------------------
 
 // ------------------ M E N U -------------------------------------
 

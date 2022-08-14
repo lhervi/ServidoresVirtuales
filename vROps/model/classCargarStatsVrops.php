@@ -20,8 +20,11 @@ class CargarStatsVrops {
        
         include_once 'classVropsConnection.php';
                 
-        $dropQuery = 'DROP TABLE IF EXISTS "' . $tableName . '"';
-        $result = VropsConexion::insertar($dropQuery);
+        
+        $dropQuery = 'DROP TABLE IF EXISTS "' . $tableName . '"'; 
+       
+       $result = VropsConexion::insertar($dropQuery); //[COMENTADO PROVISIONAL]
+       
 
         return $result;
 
@@ -50,7 +53,11 @@ class CargarStatsVrops {
      * un mensaje 'mensaje' con la descripción del error
      */
     static function insertStats(array $arrayStats, string $nombreTabla){
+        
+        include_once HOME . '/constantes.php';
         include_once 'classVropsConnection.php';
+
+
         
         //Añadir el nombre de la tabla 
         $insertStr = "INSERT INTO " . $nombreTabla ." (recursos_id, fecha, metrica, valor, resourcekinds, servidor)";
@@ -58,7 +65,12 @@ class CargarStatsVrops {
 
         $insertStr .= implode(", ", $arrayStats);
 
+        //*************************************************************************
         $result = VropsConexion::insertar($insertStr);
+        // file_put_contents(HOME.SALIDAS . "insert.txt", $insertStr, FILE_APPEND);
+        //*************************************************************************
+
+        
         
         if($result){
             $error['error'] = false;

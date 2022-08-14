@@ -17,7 +17,6 @@
 "tipoVmwareToken":{"url":"\/suite-api\/api\/auth\/token\/acquire","arch":"VmwareToken.json","GET":false},
 "tipoMediciones":{"url":"\/suite-api\/api\/resources\/stats\/query","arch":"VmwareStats.json","GET":false},
 "tipoResourceKinds":{"url":"\/suite-api\/api\/resources?resourceKind=","arch":"VmwareResourceKinds.json","GET":true},
-"tipoParentHost":{"url":"\/suite-api\/api\/resources\/properties\/latest\/query","arch":"VmwareParentHost.json","GET":false},
+"tipoParentHost":{"url":"\/suite-api\/api\/resources\/properties\/latest\/query","arch":"VmwareParentHostFile.json","GET":false},
 "end":true
 }
-

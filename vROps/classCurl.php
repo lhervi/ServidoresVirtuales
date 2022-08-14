@@ -63,20 +63,19 @@ class Curl {
         $contador = 0;
 
         $arch = $param['arch'];
-        file_put_contents($arch, $res);
-       
-        //================================================
-        //$resultCurl['error'] = $res === true ? false : true;      
-        $resultCurl['error'] = $res === false ? true : false;
-        //=================================================
+        
+        file_put_contents($arch, $res);       
+               
+        $resultCurl['error'] = $res === false ? true : false;       
 
         curl_close($curl);
+
         if($resultCurl['error']){            
             $mensaje = "hubo un problema al ejecutar el cur, la consulta " . $ind . "al servidor no fue exitosa ";
             $resultCurl['mensaje'] = $mensaje;            
             RegistError::logError($mensaje, __FILE__, __LINE__, 2);            
             return $resultCurl;
-        }else{
+        }else{            
             $resultCurl['mensaje'] = "todo bien";
         }
         
