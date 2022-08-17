@@ -3,6 +3,7 @@
 define("PREFIJO", "https://");
 define("SUFIJO", ".intra");
 define("VIRTUALMACHINE", "virtualmachine");
+define("PARENTHOSTTABLENAME", "parenthost");
 
 define("FFECHA", "d-m-Y H:i:s");
 define("TOKENHEADER", "Authorization: vRealizeOpsToken ");

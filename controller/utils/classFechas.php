@@ -173,6 +173,16 @@ class Fechas{
             return $error;
         }
     }
+
+    static function getMes($mesAño){
+        $resp = self::splitMesAño($mesAño);
+        if($resp['error']){
+            return $resp;
+        }else{
+            $mes = $resp['mes'];
+            return $mes;
+        }
+    }
     
     /**
      * getDatefromMiliSeconds Método estático que regresa una fecha válida en formato string

@@ -193,18 +193,21 @@ class VropsResourceList{
 //********************************  Parent Host   ***************************************
 //=======================================================================================
 
-    static function createTableParentHosts(array $listaParentHost){
+    static function createTableParentHosts(array $listaParentHost, $mes){
         
-        include_once (__DIR__ . "/");
+        include_once (__DIR__ . "/../constantes.php");
         include_once (__DIR__ . "/model/classVropsConnection.php");
         
         //leer el json y pasarlo a un arreglo
 
-        $consulta = "";
+        $tableName = PARENTHOSTTABLENAME . "_" . $mes;
 
-        //Eliminar la tabla existente
-        //Crear una nueva tabla 
-        //Insertar los resgistros
+        $dropQuery = 'DROP TABLE IF EXISTS "' . $tableName . '"'; 
+       
+        $result ['tableName'] = $tableName;
+        $result = VropsConexion::insertar($dropQuery);        
+ 
+        return $result;
     } 
 
     static function parentHostArray(string $contenido){
@@ -235,18 +238,14 @@ class VropsResourceList{
     
     static function padresEhijos(array $listaDeHijos){
 
-        include_once (__DIR__ ."/../constantes.php");
-        include_once ("./classVropsConf.php");
-        include_once ("classCurl.php");
+        //include_once (__DIR__ ."/../constantes.php");
+        //include_once ("./classVropsConf.php");
+        include_once ("classCurl.php");        
         
-        $obj = new VropsConf('tipoParentHost');        
-        $param = $obj->getParam();
-        $file = HOME . SALIDAS . $param['file'];        
-        $result = Curl::execParamCurl($param);
+        $result = Curl::execParentHost($listaDeHijos);
         $result['file'] = $file;
         return $result;
     }
-
    
 
     //===========================================================================
@@ -257,9 +256,10 @@ class VropsResourceList{
      * @param  string   $resourceKinds  
      * @return array    Si tode está bien, regresa  $porcion['error']   $porcion[$fileName]   $porcion['arrayIds']
      */
-    static function getIds(string $resourceKinds){ //Recibe los Ids y ahora sabe cuáles regresar
+    static function getIds(string $resourceKinds, $ini=null){ //Recibe los Ids y ahora sabe cuáles regresar
 
-        include_once (__DIR__ ."/../constantes.php");
+        include_once (__DIR__ ."/../constantes.php");        
+        include_once(__DIR__ . "/../controller/utils/classFechas.php");
         
         $resourceList = self::getResourceList($resourceKinds);   //Pasa $resourceKinds para que sepa cuáles buscar
 
@@ -288,12 +288,16 @@ class VropsResourceList{
             if ($resourceList['resourceList'] =  VIRTUALMACHINE){
 
                 $result = self::padresEhijos($resp);
-                if($result){
+                if($result['error']){                    
                     return $result;
                 }else{
-                    $arrayParentHost = self::parentHostArray($result['file']);
+                    //Insertar los registros del json
+                        //Leer el json y convertirlo en arreglo: createTableParentHosts(array $listaParentHost, $mes)
+                        //Borrar la tabla si existe y cargar los datos: createTableParentHosts(array $listaParentHost, $mes)
+                createTableParentHosts($listaParentHost, $mes);
 
                 }
+
 
             }
 
@@ -383,10 +387,10 @@ class VropsResourceList{
 
         $begin = is_null($ini) ? Fechas::fechaQuery("ini") : strtotime($ini) * 1000;   // ----- begin  OK
 
-        $end = is_null($fin) ? Fechas::fechaQuery() : strtotime($fin) * 1000;          // ----- end  OK
+        $end = is_null($fin) ? Fechas::fechaQuery() : strtotime($fin) * 1000;          // ----- end  OK         
        
         //-----------------------------------------------------------------------------------------------
-        $porciones = self::getIds($resourceKinds);  //Ahora getIds sabe que Ids va a regresar        
+        $porciones = self::getIds($resourceKinds, $ini);  //Ahora getIds sabe que Ids va a regresar        
         //-----------------------------------------------------------------------------------------------
 
         if ($porciones['error']){

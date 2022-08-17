@@ -38,6 +38,16 @@ class Curl {
         curl_setopt($curl, CURLOPT_HTTPHEADER, $param['header']);
         //curl_setopt($curl, CURLOPT_FILE, $arch);
     }      
+
+    static function execParentHost(array $arrayCampos){
+        include_once '../vROps/classVropsConf.php';
+
+        $obj = new VropsConf('tipoParentHost');        
+        $param = $obj->getParam();
+        $param['campos'] = self::getCamposParentHosts($arrayCampos);
+        $result = Curl::execParamCurl($param);
+        return $result;
+    }
         
     /**
      * execCurl
@@ -75,10 +85,20 @@ class Curl {
             $resultCurl['mensaje'] = $mensaje;            
             RegistError::logError($mensaje, __FILE__, __LINE__, 2);            
             return $resultCurl;
-        }else{            
+        }else{        
+            $resultCurl['arch'] = $arch; // retorna el nombre completo del archivo de salida
             $resultCurl['mensaje'] = "todo bien";
         }
         
+    }
+
+    static function getCamposParentHosts(array $resourceIds){     
+              
+        $campos = '{"resourceIds" : ["';
+        $campos .= implode('", ', $resourceIds);
+        $campos .= '"], "propertyKeys" : [ "summary|ParentHost"]}';
+        
+        return $campos;
     }
 
     static function getCamposJson(array $arrayCampos){

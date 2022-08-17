@@ -193,7 +193,7 @@ class CargarResourceList{
     // OBTENER LA LISTA DE LOS RECURSOS DE UN ARCHIVO
     //=========================================================
 
-    static function readResourceListArray(string $file,   bool $linkActive=false, $vaciar=true){
+    static function readResourceListArray(string $file, bool $linkActive=false, $vaciar=true){
        
         include_once __DIR__ . '/../../constantes.php';        
         include_once HOME . '/controller/utils/classDecodeJsonFile.php';        
