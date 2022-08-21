@@ -40,12 +40,35 @@ class Curl {
     }      
 
     static function execParentHost(array $arrayCampos){
-        include_once '../vROps/classVropsConf.php';
+        include_once '../vROps/classVropsConf.php';        
+        include_once './classVropsToken.php';
 
-        $obj = new VropsConf('tipoParentHost');        
+        $tokenInfo = VropsToken::getToken();   
+        $obj = new VropsConf('tipoParentHost');     
+
+        $campos = self::getCamposParentHosts($arrayCampos);
+        $camposOk = is_string($campos) && strlen($campos)>0;
+        
+        if($tokenInfo['error']){
+            return $tokenInfo;
+        }else{
+            $token = $tokenInfo['token'];
+            $obj->setToken($token);
+        }
+
+        if ($camposOk){
+            $obj->setCampos($campos);
+        }else{
+            $resp['error']=true;
+        }
+        
         $param = $obj->getParam();
-        $param['campos'] = self::getCamposParentHosts($arrayCampos);
-        $result = Curl::execParamCurl($param);
+        //$param['token'] = $token;        
+        //$param['campos'] = self::getCamposParentHosts($arrayCampos);
+
+        //$result = Curl::execParamCurl($param);
+        $result = self::execParamCurl($param);
+        
         return $result;
     }
         
@@ -76,7 +99,7 @@ class Curl {
         
         file_put_contents($arch, $res);       
                
-        $resultCurl['error'] = $res === false ? true : false;       
+        $resultCurl['error'] = ($res === false) ? true : false;       
 
         curl_close($curl);
 
@@ -88,6 +111,7 @@ class Curl {
         }else{        
             $resultCurl['arch'] = $arch; // retorna el nombre completo del archivo de salida
             $resultCurl['mensaje'] = "todo bien";
+            return $resultCurl;
         }
         
     }
@@ -95,7 +119,7 @@ class Curl {
     static function getCamposParentHosts(array $resourceIds){     
               
         $campos = '{"resourceIds" : ["';
-        $campos .= implode('", ', $resourceIds);
+        $campos .= implode('", "', $resourceIds);
         $campos .= '"], "propertyKeys" : [ "summary|ParentHost"]}';
         
         return $campos;
@@ -335,7 +359,8 @@ class Curl {
         
             }elseif(!is_null($campo) && $tipo=="tipoVmwareToken"){    // --- Caso cuando no es tipo tipoVmwareToken
                     $param['campos'] = $campo;
-                    $resultCurl['error']=self::execParamCurl($param);
+                    //$resultCurl['error']=self::execParamCurl($param);
+                    $resultCurl=self::execParamCurl($param);
                     if($resultCurl['error']){
                         $error['error'] = true;
                         $error['mensaje'] .= "no hubo contacto con Vrops para obtener el Token ";
@@ -345,7 +370,7 @@ class Curl {
                         return $resultCurl;
                     }                
             }else{ //tipoResourceKinds
-                    $resultCurl['error']=self::execParamCurl($param);
+                    $resultCurl=self::execParamCurl($param);
                     if($resultCurl['error']){
                         $error['error'] = true;
                         $error['mensaje'] = "hubo problemas para conectar con la API de Vrops";

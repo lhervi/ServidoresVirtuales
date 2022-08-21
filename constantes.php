@@ -3,7 +3,7 @@
 define("PREFIJO", "https://");
 define("SUFIJO", ".intra");
 define("VIRTUALMACHINE", "virtualmachine");
-define("PARENTHOSTTABLENAME", "parenthost");
+define("PARENTHOSTTABLENAME", "vmware_parenthost");
 
 define("FFECHA", "d-m-Y H:i:s");
 define("TOKENHEADER", "Authorization: vRealizeOpsToken ");
@@ -65,6 +65,7 @@ define ("TOPEMESES", 5); //El número de meses a acumular como histórico de est
 define("TAMAÑOLISTACONSULTA", 12);
 define("LISTADECONSULTAS", HOME . VROPS . "listaDeConsultas.json");
 define('SEGMENTOS', 2000);
+define("TOPENUMEROREGISTROS", 1000);
 define("NUMREGPARACOMPROBAR", 10);
 define("ARCHIVOSDEIDS", "IdsFilesNames.json");
 

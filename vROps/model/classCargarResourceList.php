@@ -62,6 +62,81 @@ class CargarResourceList{
         
     }
 
+    //========================= ParentHost ====================================
+
+    
+    function valuesParentHost(array $parentHotsArray){
+
+      $valores = "";
+      $arrayProv = array(); 
+      $empaquetar = function($resourceId, $parenHost){
+        return "('" . $resourceId . "', '" . $parenHost . "')";
+      };
+
+      foreach($parentHotsArray as $reg){
+          $arrayProv[] = $empaquetar($reg['resourceId'], $reg['parentHost']);
+      }
+       $values = implode (", ", $arrayProv);
+       return $values;
+    }
+    
+    
+    static function insertParentHost(array $listaParentHost, $tableName){
+      include_once (__DIR__ . "/../../constantes.php");
+      include_once 'classVropsConnection.php';
+      include_once (__DIR__ . "/../../controller/utils/classUtils.php");
+
+      $insertQuery = "INSERT INTO " . $tableName . " (recursos_id, parentHostname) VALUES ";
+
+      $arregloDePorciones = Utils::splitArray($listaParentHost, TOPENUMEROREGISTROS);
+
+      $numDeRegistros = count($listaParentHost);
+
+      foreach($arregloDePorciones as $arregloPorcion){
+
+          //pasar los pares de valores de la porción a una cadena de etexto a insertar
+          $valores = self::valuesParentHost($arregloPorcion);
+
+          $insertQueryConValores = $insertQuery . $valores;
+
+          $insertQueryConValores = $insertQuery . $valores;
+          
+          $result = VropsConexion::insertar($insertQueryConValores);
+          
+      }
+      
+      $result['mensaje']="se agregaron " . $numDeRegistros . " registros";
+      $result['numeroDeRegistros'] = $numDeRegistros;
+      $result['error'] = false;
+      
+      return  $result;
+
+    }
+    
+    static function createTableParentHosts(string $mes){
+        
+      include_once (__DIR__ . "/../../constantes.php");
+      include_once 'classVropsConnection.php';
+
+      $tableName = PARENTHOSTTABLENAME . "_" . $mes;          
+
+      //Borrar la tabla si existe
+      $dropQuery = 'DROP TABLE IF EXISTS "' . $tableName . '"'; 
+      
+      $result = VropsConexion::insertar($dropQuery);        
+
+      //Crear la tabla
+      $createTableQuery = 'CREATE TABLE IF NOT EXISTS '. $tableName;
+      //DROP TABLE IF EXISTS
+      $createTableQuery .= ' (recursos_id VARCHAR NOT NULL, parentHostname VARCHAR NOT NULL, PRIMARY KEY(recursos_id, parentHostname))';
+      $result = array();
+      $result['tableName'] = $tableName; 
+      $result['result'] = VropsConexion::insertar($createTableQuery);   
+
+      return $result;
+  } 
+    //=============================================================================
+
     //======================== TEST ========================
     static function yaEstanLosDatos(array $registros){
 

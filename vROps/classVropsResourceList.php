@@ -193,34 +193,19 @@ class VropsResourceList{
 //********************************  Parent Host   ***************************************
 //=======================================================================================
 
-    static function createTableParentHosts(array $listaParentHost, $mes){
-        
-        include_once (__DIR__ . "/../constantes.php");
-        include_once (__DIR__ . "/model/classVropsConnection.php");
-        
-        //leer el json y pasarlo a un arreglo
-
-        $tableName = PARENTHOSTTABLENAME . "_" . $mes;
-
-        $dropQuery = 'DROP TABLE IF EXISTS "' . $tableName . '"'; 
-       
-        $result ['tableName'] = $tableName;
-        $result = VropsConexion::insertar($dropQuery);        
- 
-        return $result;
-    } 
-
-    static function parentHostArray(string $contenido){
-
-        $contenidoArray= json_decode($contenido, true)['values'];
     
-        $valoresArray=array();    
-    
-        foreach($contenidoArray as $ind=>$registro){
-            $valoresArray[$ind]["resourceId"]=$registro["resourceId"];
-            $valoresArray[$ind]["parentHost"]=$registro["property-contents"]["property-content"][0]["values"][0];
+
+    static function parentHostArray(string $filepath){
+
+        $contenido = file_get_contents($filepath);
+        $contenidoArray= json_decode($contenido, true);
+        $valoresArray = $contenidoArray["values"];
+
+        foreach($valoresArray as $ind=>$registro){
+            $parentHost[$ind]["resourceId"]=$registro["resourceId"];
+            $parentHost[$ind]["parentHost"]=$registro["property-contents"]["property-content"][0]["values"][0];
         }
-        return $valoresArray;
+        return $parentHost; 
     }
 
     //---------------------------------------------------------------------------
@@ -236,14 +221,34 @@ class VropsResourceList{
      * @return void 
      */
     
-    static function padresEhijos(array $listaDeHijos){
-
-        //include_once (__DIR__ ."/../constantes.php");
-        //include_once ("./classVropsConf.php");
-        include_once ("classCurl.php");        
+    static function padresEhijos(array $listaDeHijos, $ini){        
         
-        $result = Curl::execParentHost($listaDeHijos);
-        $result['file'] = $file;
+        include_once ("classCurl.php"); 
+        include_once (__DIR__ . "/model/classCargarResourceList.php");
+
+        $mes = Fechas::getMes($ini);
+
+        $result = Curl::execParentHost($listaDeHijos); //***********************************/
+       
+        if($result['error']){                    
+            return $result;
+        }else{
+            
+            $file= $result['arch']; //Aquí explota [OJO OJO OJO]
+            //Insertar los registros del json
+            //Leer el json y convertirlo en arreglo: createTableParentHosts(array $listaParentHost, $mes)
+            $listaParentHost = self::parentHostArray($file);
+            
+            //Borrar la tabla si existe y cargar los datos: createTableParentHosts(array $listaParentHost, $mes)
+            //createTableParentHosts($listaParentHost, $mes);
+            $result = CargarResourceList::createTableParentHosts($mes);
+            $nombreTabla = $result['tableName'];
+            $result = CargarResourceList::insertParentHost($listaParentHost, $nombreTabla);
+        }    
+
+        $result['error'] = false;
+        $result['mensaje'] = "se cró la tabla parentHost y se insertaron los registros";
+            
         return $result;
     }
    
@@ -253,10 +258,11 @@ class VropsResourceList{
     /**
      * getIds
      * 
-     * @param  string   $resourceKinds  
+     * @param  string   $resourceKinds  El tipo de resourceKind
+     * @param string    $ini fecha de inicio de la consulta
      * @return array    Si tode está bien, regresa  $porcion['error']   $porcion[$fileName]   $porcion['arrayIds']
      */
-    static function getIds(string $resourceKinds, $ini=null){ //Recibe los Ids y ahora sabe cuáles regresar
+    static function getIds(string $resourceKinds, $ini=null){   //Recibe los Ids y ahora sabe cuáles regresar
 
         include_once (__DIR__ ."/../constantes.php");        
         include_once(__DIR__ . "/../controller/utils/classFechas.php");
@@ -285,19 +291,10 @@ class VropsResourceList{
             // Recorrer la lista y convertirla en un arreglo
             // Pasar el arreglo a la BD
 
-            if ($resourceList['resourceList'] =  VIRTUALMACHINE){
+            
+            if ($resourceKinds ==  VIRTUALMACHINE){
 
-                $result = self::padresEhijos($resp);
-                if($result['error']){                    
-                    return $result;
-                }else{
-                    //Insertar los registros del json
-                        //Leer el json y convertirlo en arreglo: createTableParentHosts(array $listaParentHost, $mes)
-                        //Borrar la tabla si existe y cargar los datos: createTableParentHosts(array $listaParentHost, $mes)
-                createTableParentHosts($listaParentHost, $mes);
-
-                }
-
+                $result = self::padresEhijos($resp, $ini);
 
             }
 

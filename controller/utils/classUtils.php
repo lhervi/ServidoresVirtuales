@@ -124,6 +124,44 @@ class Utils{
         unset($listado[array_search("..", $listado)]);
         return $listado;
     }  
+    
+    /**
+     * splitArray regresa un arreglo de arreglos cuyos tamaños son iguales a step, salvo el último que puede
+     * ser igual o menor por ser el remanente
+     *
+     * @param  array $arreglo el arreglo que será dividido
+     * @param  int $step los tamaños de las porciones
+     * @return array arregloDeArreglos retorna un arreglo de arreglos
+     */
+    static function splitArray(array $arreglo, int $step){
+
+        ///opt/lornis/STISCR/controller/utils/classUtils.php
+
+        $tam = count($arreglo);
+        $start = 0;        
+        
+        while($tam>0){            
+            $arregloDeArreglos[] = array_slice($arreglo, $start, $step);
+            $tam -= $step;
+            $start +=$step;
+        }        
+        return $arregloDeArreglos;
+
+    }
+
+    static function splitArrayJson(array $arreglo, int $step){
+        $arregloDeArreglos=self::splitArray($arreglo, $step);
+        foreach($arregloDeArreglos as $ind=>$arreglo){            
+            foreach($arreglo as $reg){
+                $jsonArray[]=json_decode($reg, true);
+            }
+            $arregloDeArreglosProv[]= $jsonArray;                   
+        }
+        return $arregloDeArreglosProv;
+    }
+
+
+    
 }
 
 ?>
