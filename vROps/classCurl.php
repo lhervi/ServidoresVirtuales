@@ -120,7 +120,7 @@ class Curl {
               
         $campos = '{"resourceIds" : ["';
         $campos .= implode('", "', $resourceIds);
-        $campos .= '"], "propertyKeys" : [ "summary|ParentHost"]}';
+        $campos .= '"], "propertyKeys" : [ "summary|ParentHost"], "summary|guest|fullName"}';
         
         return $campos;
     }

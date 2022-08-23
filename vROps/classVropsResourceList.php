@@ -203,7 +203,8 @@ class VropsResourceList{
 
         foreach($valoresArray as $ind=>$registro){
             $parentHost[$ind]["resourceId"]=$registro["resourceId"];
-            $parentHost[$ind]["parentHost"]=$registro["property-contents"]["property-content"][0]["values"][0];
+            $parentHost[$ind]["parentHost"]=$registro["property-contents"]["property-content"][1]["values"][0];
+            $parentHost[$ind]["operativeSystem"]=$registro["property-contents"]["property-content"][0]["values"][0];
         }
         return $parentHost; 
     }

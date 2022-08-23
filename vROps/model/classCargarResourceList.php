@@ -69,12 +69,12 @@ class CargarResourceList{
 
       $valores = "";
       $arrayProv = array(); 
-      $empaquetar = function($resourceId, $parenHost){
-        return "('" . $resourceId . "', '" . $parenHost . "')";
+      $empaquetar = function($resourceId, $parenHost, $operativeSystem){
+        return "('" . $resourceId . "', '" . $parenHost . "', '" . $operativeSystem . "')";
       };
 
       foreach($parentHotsArray as $reg){
-          $arrayProv[] = $empaquetar($reg['resourceId'], $reg['parentHost']);
+          $arrayProv[] = $empaquetar($reg['resourceId'], $reg['parentHost'], $reg['operativeSystem']);
       }
        $values = implode (", ", $arrayProv);
        return $values;
@@ -86,7 +86,7 @@ class CargarResourceList{
       include_once 'classVropsConnection.php';
       include_once (__DIR__ . "/../../controller/utils/classUtils.php");
 
-      $insertQuery = "INSERT INTO " . $tableName . " (recursos_id, parentHostname) VALUES ";
+      $insertQuery = "INSERT INTO " . $tableName . " (recursos_id, parentHostname, operativeSystem) VALUES ";
 
       $arregloDePorciones = Utils::splitArray($listaParentHost, TOPENUMEROREGISTROS);
 
@@ -128,7 +128,7 @@ class CargarResourceList{
       //Crear la tabla
       $createTableQuery = 'CREATE TABLE IF NOT EXISTS '. $tableName;
       //DROP TABLE IF EXISTS
-      $createTableQuery .= ' (recursos_id VARCHAR NOT NULL, parentHostname VARCHAR NOT NULL, PRIMARY KEY(recursos_id, parentHostname))';
+      $createTableQuery .= ' (recursos_id VARCHAR NOT NULL, parentHostname VARCHAR NOT NULL, operativeSystem VARCHAR, PRIMARY KEY(recursos_id, parentHostname))';
       $result = array();
       $result['tableName'] = $tableName; 
       $result['result'] = VropsConexion::insertar($createTableQuery);   
