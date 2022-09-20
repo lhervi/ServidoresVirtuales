@@ -70,6 +70,8 @@ class VropsResourceList{
         
         $tokenInfo=VropsToken::getToken();
 
+        $token = $tokenInfo['token'];
+
         $server = VropsConf::getCampo('vropsServer')['vropsServer'];
 
         if ($tokenInfo['error']){     
@@ -80,10 +82,10 @@ class VropsResourceList{
 
         }else{            
 
-            $newToken = VropsToken::getTokenFromVrops(null, true);
+            //$newToken = VropsToken::getTokenFromVrops(null, true); //* * * * *  [OJO]  * * * * * *
 
             //$resultCurl = Curl::execCurl($tokenInfo['token'], "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
-            $resultCurl = Curl::execCurl($newToken, "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
+            $resultCurl = Curl::execCurl($token, "tipoResourceKinds", null, null, $resourceKinds);   //Para obtener la lista de recursos                                         
             //execCurl(string $token, string $tipo, string $campo=null, array $camposArray=null, $resourceKinds=null)
 
             if ($resultCurl['error']===true){
@@ -199,12 +201,36 @@ class VropsResourceList{
 
         $contenido = file_get_contents($filepath);
         $contenidoArray= json_decode($contenido, true);
-        $valoresArray = $contenidoArray["values"];
+        
+        if (array_key_exists("values", $contenidoArray)){
+            $valoresArray = $contenidoArray["values"];
+        }else{
+            $error['error'] = true;
+            $error['message']= "no se pudo recuperar la lista parentHost";
+            return $error;
+        }
+        
+
+        $parenthost = function ($registro){
+            if (isset($registro["property-contents"]["property-content"][1]["values"][0])){
+                return $registro["property-contents"]["property-content"][1]["values"][0];
+            }else{
+                return null;
+            } 
+        };
+
+        $operativeSystem = function ($registro){
+            if (isset($registro["property-contents"]["property-content"][0]["values"][0])){
+                return $registro["property-contents"]["property-content"][0]["values"][0];
+            }else{
+                return null;
+            } 
+        };
 
         foreach($valoresArray as $ind=>$registro){
             $parentHost[$ind]["resourceId"]=$registro["resourceId"];
-            $parentHost[$ind]["parentHost"]=$registro["property-contents"]["property-content"][1]["values"][0];
-            $parentHost[$ind]["operativeSystem"]=$registro["property-contents"]["property-content"][0]["values"][0];
+            $parentHost[$ind]["parentHost"]=$parenthost($registro);
+            $parentHost[$ind]["operativeSystem"]=$operativeSystem($registro);
         }
         return $parentHost; 
     }
@@ -228,9 +254,11 @@ class VropsResourceList{
         include_once (__DIR__ . "/model/classCargarResourceList.php");
 
         $mes = Fechas::getMes($ini);
+        $result = array();
 
         $result = Curl::execParentHost($listaDeHijos); //***********************************/
        
+        //*********** OJO OJO OJO REVISAR */
         if($result['error']){                    
             return $result;
         }else{
@@ -238,7 +266,13 @@ class VropsResourceList{
             $file= $result['arch']; //Aquí explota [OJO OJO OJO]
             //Insertar los registros del json
             //Leer el json y convertirlo en arreglo: createTableParentHosts(array $listaParentHost, $mes)
-            $listaParentHost = self::parentHostArray($file);
+            if (strlen($file)>0){
+                $listaParentHost = self::parentHostArray($file);
+            }else{
+                $result['error'] = true;
+                $result['mensaje'] = "no se encontró la dirección del archivo parentHost";
+            }
+
             
             //Borrar la tabla si existe y cargar los datos: createTableParentHosts(array $listaParentHost, $mes)
             //createTableParentHosts($listaParentHost, $mes);
@@ -248,7 +282,7 @@ class VropsResourceList{
         }    
 
         $result['error'] = false;
-        $result['mensaje'] = "se cró la tabla parentHost y se insertaron los registros";
+        $result['mensaje'] = "se creó la tabla parentHost y se insertaron los registros";
             
         return $result;
     }

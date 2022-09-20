@@ -67,6 +67,7 @@ class Curl {
         //$param['campos'] = self::getCamposParentHosts($arrayCampos);
 
         //$result = Curl::execParamCurl($param);
+        //*********** OJO OJO OJO REVISAR VALOR  */
         $result = self::execParamCurl($param);
         
         return $result;
@@ -92,7 +93,7 @@ class Curl {
         self::curlSetOpt($curl, $param);   //configura el Curl
         //Curl::curlSetOpt($curl, $param); //configura el Curl 
         $res = curl_exec($curl);
-        $textError = '{"message":"The provided token for auth scheme \"vRealizeOpsToken\" is either invalid or has expired.","httpStatusCode":401,"apiErrorCode":1512}';
+        //$textError = '{"message":"The provided token for auth scheme \"vRealizeOpsToken\" is either invalid or has expired.","httpStatusCode":401,"apiErrorCode":1512}';
         $contador = 0;
 
         $arch = $param['arch'];
@@ -120,7 +121,10 @@ class Curl {
               
         $campos = '{"resourceIds" : ["';
         $campos .= implode('", "', $resourceIds);
-        $campos .= '"], "propertyKeys" : [ "summary|ParentHost"], "summary|guest|fullName"}';
+        $campos .= '"], "propertyKeys" : [ "summary|ParentHost", "summary|guest|fullName"]}';
+
+        file_put_contents(HOME . SALIDAS . "camposParentHost.json", $campos);
+        //***************** OJO OJO OJO REVISAR SALIDA */
         
         return $campos;
     }
@@ -188,20 +192,30 @@ class Curl {
             if($ind==14){
                 $a=5;
             }
-            $resultCurl['error']=self::execParamCurl($param, $ind);
+            $resultCurl['error']=self::execParamCurl($param, $ind)['error'];
             if($resultCurl['error']){
                 //echo "Error en la linea " . __LINE__ . " en: " . __FILE__ . "<br/><br/>";
                 $error['error'] = true;
                 $error['mensaje'] .= "hubo un error al procesar " . $param['arch'] . PHP_EOL;
                 $bitacora['IndiceDelerror']=$ind;
                 $ServidorActual = VropsConf::getCampo('vropsServer')['vropsServer'];
-                //$result=Utils::chequearConexion(HOSTVROPS);
-                $result=Utils::chequearConexion($ServidorActual); //Esto verifica la conexión con el servidor de turno
+                $pos = strripos($ServidorActual, "/");
+                $ServidorActual = substr($ServidorActual, $pos);
+                //$result=Utils::chequearConexion(HOSTVROPS); //"vrops.intra.banesco.com"
+
+                
+
+                //OJO OJO OJO entrar **********************
+                
+                $result = Utils::chequearConexion($ServidorActual); //Esto verifica la conexión con el servidor de turno
+                
+                //Revisar OJO OJO OJO
                 
                 if($result['result']==false){
                     
                     die("se perdió la conexión con el servidor vmware");                                     
                 }
+                
                 return $error;
                 
             }else{                                                       

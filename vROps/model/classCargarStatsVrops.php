@@ -295,7 +295,15 @@ class CargarStatsVrops {
 
         self::dropTable($nombreTabla); //Elimina la tabla si existe
         
+        // Linea original con restricción
         $consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $nombreTabla . " (id serial, recursos_id VARCHAR NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL,  resourcekinds VARCHAR NOT NULL, servidor VARCHAR NOT NULL, PRIMARY KEY(recursos_id, fecha, metrica))"; 
+        
+        //[PROVISIONAL] OJO OJO OJO **************************
+
+        //$consultaCreaTabla = "CREATE TABLE IF NOT EXISTS " . $nombreTabla . " (id serial, recursos_id VARCHAR NOT NULL, fecha TIMESTAMP NOT NULL, metrica VARCHAR NOT NULL, valor VARCHAR NOT NULL,  resourcekinds VARCHAR NOT NULL, servidor VARCHAR NOT NULL)"; 
+
+        //[PROVISIONAL] OJO OJO OJO **************************
+
         
         $registros = $objcon->insertar($consultaCreaTabla);  //Crea la tabla si no existe
                 

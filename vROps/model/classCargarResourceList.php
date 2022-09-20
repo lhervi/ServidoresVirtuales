@@ -90,8 +90,14 @@ class CargarResourceList{
 
       $arregloDePorciones = Utils::splitArray($listaParentHost, TOPENUMEROREGISTROS);
 
-      $numDeRegistros = count($listaParentHost);
+      $result = array();
 
+      if(count($listaParentHost)>0){
+        $numDeRegistros = count($listaParentHost);
+      }else{
+        $numDeRegistros=0;
+      }
+             
       foreach($arregloDePorciones as $arregloPorcion){
 
           //pasar los pares de valores de la porción a una cadena de etexto a insertar
@@ -101,7 +107,7 @@ class CargarResourceList{
 
           $insertQueryConValores = $insertQuery . $valores;
           
-          $result = VropsConexion::insertar($insertQueryConValores);
+          $result['resultInsert'] = VropsConexion::insertar($insertQueryConValores);
           
       }
       
