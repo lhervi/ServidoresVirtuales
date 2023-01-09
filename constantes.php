@@ -21,6 +21,7 @@ define("URLTAIL", URLVROPSTAIL . PAGESIZE); //Concatena el string en el que term
 // ------------------ R U T A S -------------------------------------
 
 define("HOME", __DIR__);
+const URLHOME = "http://10.150.11.96:81/STISCR";
 
 define("ARCHIVODECONFIGURACION", HOME."/vROps/vROpsConf.json");
 
@@ -79,5 +80,15 @@ define ("TABLEHOVERDARK", "table table-hover table-dark");
 define ("TABLESMALLDARK", "table table-sm table-dark");
 define ("TABLESMALL", "table table-sm");
 // ------------------ E S T I L O S -------------------------------------
+
+const BITACORATEMPORALFILEPATH = "/vROps/salidas/bitacora/bitacoraTemporal.json";
+const BITACORAHISTORICAFILEPATH = "/vROps/salidas/bitacora/bitacoraHistorica.json";
+
+const NOMBREBITACORA = "Bitacora Temporal";
+
+const CLASEEVENTO = 'claseEvento';
+const BITACORADIV = 'bitacoradiv';
+
+const REFRESHTIMESECONDS = 300;
 
 ?>

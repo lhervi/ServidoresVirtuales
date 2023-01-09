@@ -20,7 +20,10 @@ include "menu.php";
     <body class="m-0 vh-100 col justify-content-left align-items-top">       
 
         <div class="container justify-content-left style="background-color: #eee; height: 150px;">
-            <h1><br><br><br>Salud, Capacidad y Redimiento</h1>
+            <br><br><br>
+            <h4>Aplicación para obtener los datos de vROPs y enviarlos al DataStage</h4>
+            <br><br>
+            <h1>vROPs -> DataStage</h1>
         <div/>
         
     <?php include "bodyScripts.php" ?>

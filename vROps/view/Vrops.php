@@ -56,7 +56,7 @@ Utils::limpiarDirectorio($directorio);
                                     
                                     include_once './../classVropsConf.php';
                                     $server = VropsConf::getCampo('vropsServer')['vropsServer'];
-                                    echo '<div id="server" class="form-group form-check-inline"><h5>Servidor: ' . $server . '<br/></h5>'; 
+                                    echo '<div id="server" class="form-group form-check-inline"><h4>Servidor: ' . $server . '<br/></h4>'; 
                                     echo '<label for="server" id="labelServer" style="cursor:pointer">Cambiar servidor-></label>';
                                 
                                 ?>
