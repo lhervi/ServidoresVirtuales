@@ -12,6 +12,7 @@
     include_once '../view/encabezado.php';
     include_once 'model/classCargarStatsVrops.php';   
     include HOME . '/controller/utils/classLookAndFeel.php';
+    include_once '/controller/classBitacora.php';
     
 ?>
     <body class="m-0 vh-100 row justify-content-start align-items-center">
