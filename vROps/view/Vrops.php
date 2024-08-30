@@ -9,15 +9,15 @@ include_once HOME . '/controller/utils/classUtils.php';
 include "../view/../../view/encabezado.php";
 include "../view/../../view/menu.php";
 
-//ini_set('session.save_path', '/opt/lornis/STISCR/sessionData');
+//ini_set('session.save_path', '/opt/lornis/CTISCR/sessionData');
 
 if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 if (!isset($_SESSION['login']) || $_SESSION['login']===false){
     //header("Location: ingreso.php", true);
     header("Location: ./ingreso.php", true);  //provisional >ELIMINAR
-    //D:\xampp\htdocs\STISCR\view\index.php
-    //D:\xampp\htdocs\STISCR\vROps\view\ingreso.php
+    //D:\xampp\htdocs\CTISCR\view\index.php
+    //D:\xampp\htdocs\CTISCR\vROps\view\ingreso.php
     //http://localhost/vROps/view/ingreso.php
 }
 
@@ -181,7 +181,7 @@ Utils::limpiarDirectorio($directorio);
 
         document.getElementById("server").addEventListener("click", function(){
            
-            location.href = "/STISCR/vROps/view/ingreso.php";            
+            location.href = "/CTISCR/vROps/view/ingreso.php";            
             
         })
         

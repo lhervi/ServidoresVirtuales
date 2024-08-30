@@ -7,7 +7,7 @@ class Conexion {
     public static function abrirConexion(){
 	
 		include_once "configdb.php";
-		// D:\xampp\htdocs\STISCR\model\dbConexion.php
+		// D:\xampp\htdocs\CTISCR\model\dbConexion.php
 
         if (!isset(self::$conexion)){
 

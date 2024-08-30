@@ -1,14 +1,14 @@
 <?php
 
 define("PREFIJO", "https://");
-define("SUFIJO", ".intra");
+define("SUFIJO", ".INX");
 define("VIRTUALMACHINE", "virtualmachine");
 define("PARENTHOSTTABLENAME", "vmware_parenthost");
 
 define("FFECHA", "d-m-Y H:i:s");
 define("TOKENHEADER", "Authorization: vRealizeOpsToken ");
 
-define("HOSTVROPS", "vrops.intra.banesco.com");
+define("HOSTVROPS", "vrops.INX.sec.com");
 
 define("ALLRESOURCELIST", "allResourceList.json");
 
@@ -21,7 +21,7 @@ define("URLTAIL", URLVROPSTAIL . PAGESIZE); //Concatena el string en el que term
 // ------------------ R U T A S -------------------------------------
 
 define("HOME", __DIR__);
-const URLHOME = "http://10.150.11.96:81/STISCR";
+const URLHOME = "http://[direccion_IP]/CTISCR";
 
 define("ARCHIVODECONFIGURACION", HOME."/vROps/vROpsConf.json");
 
@@ -50,11 +50,11 @@ define("ERRORLOGJSONFILE", HOME.VROPS."/errors/vROpsErrors.json");
 
 // ------------------ M E N U -------------------------------------
 
-define("MENUINICIO", "/STISCR/vROps/view/ingreso.php");
-define("MENUINDEX", "/STISCR/view/index.php");
-define("MENULINEABASE", "/STISCR/view/lineabase.php");
-define("MENUDASHBOARD", "/STISCR/view/Dashboard.php");
-define("MENUVROPS", "/STISCR/vROps/view/Vrops.php");
+define("MENUINICIO", "/CTISCR/vROps/view/ingreso.php");
+define("MENUINDEX", "/CTISCR/view/index.php");
+define("MENULINEABASE", "/CTISCR/view/lineabase.php");
+define("MENUDASHBOARD", "/CTISCR/view/Dashboard.php");
+define("MENUVROPS", "/CTISCR/vROps/view/Vrops.php");
 
 //MENUINICIO, MENUINDEX, MENULINEABASE, MENUDASHBOARD, MENUVROPS
 

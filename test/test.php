@@ -29,14 +29,14 @@ $fechaInicio = $_POST['fechaInicio'];
 $fechaFin = $_POST['fechaFin'];
 
 
-//$file = HOME . "/STISCR/vROps/salidas/hostsystemResourceListArray.json";
-$file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
+//$file = HOME . "/CTISCR/vROps/salidas/hostsystemResourceListArray.json";
+$file = "/var/www/html/CTISCR/vROps/salidas/hostsystemResourceListArray.json";
 $mesConsulta = 5;
 
 //función para crear la tabla resourceList del mes si no existe
 
 
-//Esta función estará en STISCR/vROps/model/classCargarResourList.php
+//Esta función estará en CTISCR/vROps/model/classCargarResourList.php
 
 
 //función para insertar los registros en la tabla
@@ -111,7 +111,7 @@ echo date("d/m/Y H:i:s", $seconds);
 
 /*
 $ruta = HOME . "/ejemplo/*";
-$lista = ["/var/www/html/STISCR/ejemplo/archivo_a_saltar", "/var/www/html/STISCR/ejemplo/otro_archivo_a_excluir"];
+$lista = ["/var/www/html/CTISCR/ejemplo/archivo_a_saltar", "/var/www/html/CTISCR/ejemplo/otro_archivo_a_excluir"];
 $result = Utils::eraseFiles($ruta, $lista);
 echo "Archivos excluidos: " . $result['excluidos'] . "<br>";
 echo "Archivos eliminados: " . $result['eliminados'] . "<br>";
@@ -120,7 +120,7 @@ echo "Archivos raros: " . $result['rarezas'] . "<br>";
 /*
 function eliminar(array $files, array $lista=null){
   foreach($files as $file){ // iterate files
-    //if(is_file($file) && ($file!="/var/www/html/STISCR/vROps/salidas/VmwareToken.json"))
+    //if(is_file($file) && ($file!="/var/www/html/CTISCR/vROps/salidas/VmwareToken.json"))
     if(is_file($file)) {
 
       if (in_array($file, $lista)){

@@ -25,7 +25,7 @@ include_once '../model/classCargarResourceList.php';
 $fechaInicio = $_POST['fechaInicio'];
 $fechaFin = $_POST['fechaFin'];
 
-$file = "/var/www/html/STISCR/vROps/salidas/hostsystemResourceListArray.json";
+$file = "/var/www/html/CTISCR/vROps/salidas/hostsystemResourceListArray.json";
 $file = HOME . SALIDAS . ALLRESOURCELIST;
 
 ?>

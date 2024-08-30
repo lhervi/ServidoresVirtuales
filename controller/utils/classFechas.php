@@ -194,7 +194,7 @@ class Fechas{
     static function getDatefromMiliSeconds(int $fecMiliSeconds, $tipo="Y/m/d H:i:s"){ 
         /*
             $tipo("F j, Y, g:i a");                 // March 10, 2001, 5:16 pm
-            $tipo("m.d.y");                         // 03.10.01
+            $tipo("m.d.y");                         // 03.192.01
             $tipo("j, n, Y");                       // 10, 3, 2001
             $tipo("Ymd");                           // 20010310
             $tipo('h-i-s, j-m-y, it is w Day');     // 05-16-18, 10-03-01, 1631 1618 6 Satpm01

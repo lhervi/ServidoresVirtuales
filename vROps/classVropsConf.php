@@ -157,7 +157,7 @@ class VropsConf{
     }
 
     function getNomArch(){
-        //include_once  '/var/www/html/STISCR/constantes.php'; ///var/www/html/STISCR/vROps/classVropsConf.php      
+        //include_once  '/var/www/html/CTISCR/constantes.php'; ///var/www/html/CTISCR/vROps/classVropsConf.php      
         if(($this->conf['tipo']=="tipoMediciones") || ($this->conf['tipo']=="tipoResourceKinds")){
             $arch = HOME . SALIDAS . $this->getResourceKinds() . $this->conf[$this->conf['tipo']]['arch'];
         }else{

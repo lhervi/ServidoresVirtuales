@@ -17,7 +17,7 @@ if($añoMesArr['error']){
 	$año=$añoMesArr['año'];
 }
 
-$DSNyBD = ["INTRA"=>"odbc:\\\\10.132.71.50\SIS_INTRA", "BOL"=>"odbc:\\10.132.71.50\SIS_BOL", "AGENCIA"=>"odbc:\\10.132.71.50\SIS_AGENCIAS"];
+$DSNyBD = ["INX"=>"odbc:\\\\192.132.71.50\SIS_INX", "BOL"=>"odbc:\\192.132.71.50\SIS_BOL", "AGENCIA"=>"odbc:\\192.132.71.50\SIS_AGENCIAS"];
 
 foreach ($DSNyBD as $bd=>$dsn){
 	$sql = consulta(1, $bd, $año, $mes);

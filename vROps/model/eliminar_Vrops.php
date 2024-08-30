@@ -8,8 +8,8 @@ if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 if (!isset($_SESSION['login']) || $_SESSION['login']===false){
     //header("Location: ingreso.php", true);
     header("Location: ./ingreso.php", true);  //provisional >ELIMINAR
-    //D:/xampp/htdocs/STISCR/view/index.php
-    //D:/xampp/htdocs/STISCR/vROps/view/ingreso.php
+    //D:/xampp/htdocs/CTISCR/view/index.php
+    //D:/xampp/htdocs/CTISCR/vROps/view/ingreso.php
     //http://localhost/vROps/view/ingreso.php
 }
 

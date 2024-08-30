@@ -4,7 +4,7 @@ include_once './constantes.php';
 include_once './controller/utils/classDecodeJsonFile.php';
 include_once './vROps/classVropsConf.php';
 include_once './vROps/classCurl.php';
-  //$file = "/var/www/html/STISCR/vROps/vROpsConf.json";
+  //$file = "/var/www/html/CTISCR/vROps/vROpsConf.json";
 
 function echoArray($ind, $valor){
     if(is_array($valor)){

@@ -1,21 +1,21 @@
 <?php
 
 /*
-"user":"INTRA\\ljhervilla",
-    "password":"Banesco2021..",
+"user":"INX\\hervilla",
+    "password":"sec2021..",
     "networkDrive":"\\\\smgm1034\\Linea_base_windows",
 */
 
-$user="INTRA\\ljhervilla";
-$password = "Banesco2021..";
+$user="INX\\hervilla";
+$password = "sec2021..";
 //$netRoute = "\\\\smgm1034\\Linea_base_windows";
-$netRoute = "\\\\10.132.71.50\\Linea_base_windows";
+$netRoute = "\\\\192.132.71.50\\Linea_base_windows";
 $archivo = "LB_Marzo_2021.csv";
 
 
 
 $strConn = 'net use "'. $netRoute .'" /user:"' . $user . '" "' . $password .'" /persistent:no';
-//"net use \\smgm1034\Linea_base_windows /user:"INTRA\ljhervilla" "Banesco2021.." /persistent:no"
+//"net use \\smgm1034\Linea_base_windows /user:"INX\hervilla" "sec2021.." /persistent:no"
 //exec('net use "\\\INVEST-OP-001\test\music" /user:"'.$user.'" "'.$password.'" /persistent:no');
 
 $res = exec($strConn);

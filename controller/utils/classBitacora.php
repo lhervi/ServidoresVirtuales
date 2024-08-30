@@ -2,7 +2,7 @@
 
 class Bitacora {    
     
-    static function log(int $linea, string $tipo, string $error, string $file="../STISCRlogs.json"){
+    static function log(int $linea, string $tipo, string $error, string $file="../CTISCRlogs.json"){
         include_once 'classLog.php';
         $obj = Log::getLog($linea, $tipo, $error);       
         $evento = json_encode($obj) . PHP_EOL;

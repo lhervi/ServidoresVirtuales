@@ -28,7 +28,7 @@ $resourceKindsArray = DecodeJF::decodeJsonFile(HOME.VROPS."vROpsConf.json");
                             
                         </div><br>
                         <div class="form-group form-check-block">
-                        <input type="text" Id="prefix" name="prefix" placeholder="\\Intra">
+                        <input type="text" Id="prefix" name="prefix" placeholder="\\INX">
                             <lable for="prefix">Prefijo de Usuario</lable>
                             
                         </div><br>

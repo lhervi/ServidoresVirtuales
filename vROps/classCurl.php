@@ -201,7 +201,7 @@ class Curl {
                 $ServidorActual = VropsConf::getCampo('vropsServer')['vropsServer'];
                 $pos = strripos($ServidorActual, "/");
                 $ServidorActual = substr($ServidorActual, $pos);
-                //$result=Utils::chequearConexion(HOSTVROPS); //"vrops.intra.banesco.com"
+                //$result=Utils::chequearConexion(HOSTVROPS); //"vrops.INX.sec.com"
 
                 
 

@@ -1,6 +1,6 @@
 <?php
 
-//ini_set('session.save_path', '/opt/lornis/STISCR/sessionData');
+//ini_set('session.save_path', '/opt/lornis/CTISCR/sessionData');
 
 if(session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -16,8 +16,8 @@ $existeLogin = array_key_exists("login", $_SESSION);
 if($existeLogin) $loginOk = $_SESSION['login']===true;
 
 if($loginOk && $existeLogin){
-    header("Location: /STISCR/vROps/view/Vrops.php", true);
-    ///var/www/html/STISCR/vROps/view/Vrops.php
+    header("Location: /CTISCR/vROps/view/Vrops.php", true);
+    ///var/www/html/CTISCR/vROps/view/Vrops.php
 }
 */
 

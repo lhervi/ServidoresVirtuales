@@ -13,7 +13,7 @@ include_once(__DIR__ . "./encabezado.php");
     <div><h3>Navegación y uso de la aplicación</h3></div>
     <div>
         <p>Esta aplicación está diseñada para trasladar las estadísticas de servidores que recopila vROPs al DataStage.
-            El enlace de inicio es http://10.150.11.96:81/ (para acceder a la aplicación, hay que estar loggeado en la red).
+            El enlace de inicio es http://192.101.192.35:81/ (para acceder a la aplicación, hay que estar loggeado en la red).
             Si no se ha autenticado en la aplicación, será remitido a la ventana de acceso:
         </p>
         <img src="">

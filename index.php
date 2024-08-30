@@ -12,7 +12,7 @@ include_once "./view/encabezado.php";
 </div>
 
 <?php
-header("Location: /STISCR/view/index.php", true);
+header("Location: /CTISCR/view/index.php", true);
 ?>
 
 </body>

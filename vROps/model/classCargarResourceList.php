@@ -280,7 +280,7 @@ class CargarResourceList{
         include_once HOME . '/controller/utils/classDecodeJsonFile.php';        
       
         $array = DecodeJF::decodeJsonFile($file);
-        //$file = "/var/www/html/STISCR/vROps/salidas/allResourceList.json"
+        //$file = "/var/www/html/CTISCR/vROps/salidas/allResourceList.json"
         
         $prov = array();
         $arrayProv = array();

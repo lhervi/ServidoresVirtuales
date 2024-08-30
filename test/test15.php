@@ -17,7 +17,7 @@ $provMd5=array();
 $provSha256=array();
 
 function agregarConsulta(array $listaDeConsultas, string $consulta){
-    include_once '/var/www/html/STISCR/constantes.php';
+    include_once '/var/www/html/CTISCR/constantes.php';
     include_once HOME . '/controller/utils/classFechas.php';
     include_once HOME . './vROps/classVropsConf.php';
     //Crear un arreglo con 12 posiciones, en la que en cada una se almacena las últimas 12

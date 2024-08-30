@@ -2,7 +2,7 @@
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', '-1');
 ini_set('display_errors', 1);
-$url = "https://vrops01.intra.banesco.com/suite-api/api/auth/token/acquire";
+$url = "https://vrops01.INX.sec.com/suite-api/api/auth/token/acquire";
 $nom_arch = "vmware_host.xml";
 $xmlUrl = "vmware_host.xml";
 $tipo = 1;
@@ -12,12 +12,12 @@ $hola = capturadatadesdeurl($url, $xmlUrl, $nom_arch);
 
 $arch = fopen($nom_arch , "w") or exit ("No se pudo abrir el archivo");
 $curl = curl_init();
-$proxy = "prxsrv.intra.banesco.com:9090";
-$userproxy = "INTRA\\hecnaranjo:Caracas2020";
-$uservrops = "capacidad:Pa$\$w0rd";
+$proxy = "prxsrv.INX.sec.com:9090";
+$userproxy = "INX\\usuario:mbo";
+$uservrops = "need:clave";
 $certfirefox = "C:\\xampp\\htdocs\\vmware_parse\\vrops.pem";
-//D:\xampp\htdocs\STISCR\vROps\vrops.pem
-$up = array("username" => "capacidad", "password" => "Pa$\$w0rd");
+
+$up = array("username" => "need", "password" => "clave");
 $userpassword = json_encode($up);
 
 echo $hola;
@@ -27,9 +27,9 @@ echo $hola;
 function capturadatadesdeurl($url, $xmlUrl, $nom_arch){
     $arch = fopen($nom_arch , "w") or exit ("No se pudo abrir el archivo");
     $curl = curl_init();
-    $proxy = "prxsrv.intra.banesco.com:9090";
-    $userproxy = "INTRA\\hecnaranjo:Caracas2020";
-    $uservrops = "capacidad:Pa$\$w0rd";
+    $proxy = "prxsrv.INX.sec.com:9090";
+    $userproxy = "INX\\usuario:mbo";
+    $uservrops = "need:clave";
     $certfirefox = "C:\\xampp\\htdocs\\vmware_parse\\vrops.pem";
     
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/xml"));

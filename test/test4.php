@@ -5,7 +5,7 @@
 include_once "./controller/utils/classUtils.php";
 
 for ($i=1; $i<8; $i++){
-    file_put_contents("/var/www/html/STISCR/carpetaPrueba/ej" . $i . ".json", "nada");
+    file_put_contents("/var/www/html/CTISCR/carpetaPrueba/ej" . $i . ".json", "nada");
 }
 
 function imprimirListado($listado){
@@ -17,7 +17,7 @@ function imprimirListado($listado){
 }
 
 
-$dir = "/var/www/html/STISCR/carpetaPrueba";
+$dir = "/var/www/html/CTISCR/carpetaPrueba";
 
 $exc = ["ej3.json", "ej4.json"];
 

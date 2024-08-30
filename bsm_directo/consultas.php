@@ -2,7 +2,7 @@
 
 function consulta($tipo, $bd, $anio, $mes){
 if($tipo == 1){
-	$sql = "select replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INTRA',''),'.BANESCO.COM',''),'.DMZ.COM','') as srv, 
+	$sql = "select replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INX',''),'.sec.COM',''),'.DMZ.COM','') as srv, 
 MONITOR_LOGICAL_NAME,MSNAME,DAT.TIME_STAMP, 
 iif(DAT.RMH_MEAS_VALUE_SUM is NULL,NULL,iif(DAT.RMH_THRESH_QUALITY_GOOD_SUM is NULL,NULL,
 iif(DAT.RMH_THRESH_QUALITY_GOOD_SUM=0,0,DAT.RMH_MEAS_VALUE_SUM/DAT.RMH_THRESH_QUALITY_GOOD_SUM/100))) valor
@@ -22,14 +22,14 @@ and TAR.TARGET_ID=DAT.RMH_TARGET_ID
 and MEA.MEASUREMENT_ID=DAT.MEASUREMENT_ID
 and MONITOR_LOGICAL_NAME in ('CPU','Memory') 
 and MSNAME in ('utilization','percent used')
---and replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INTRA',''),'.BANESCO.COM',''),'.DMZ.COM','')
+--and replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INX',''),'.sec.COM',''),'.DMZ.COM','')
 and year(DAT.TIME_STAMP)= ".$anio." 
 and month(DAT.TIME_STAMP) in ( ".$mes." )
-order by replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INTRA',''),'.BANESCO.COM',''),'.DMZ.COM',''),MONITOR_LOGICAL_NAME,MSNAME,DAT.TIME_STAMP";
+order by replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INX',''),'.sec.COM',''),'.DMZ.COM',''),MONITOR_LOGICAL_NAME,MSNAME,DAT.TIME_STAMP";
 } elseif($tipo == 2)
 {
 
-$sql="select distinct replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INTRA',''),'.BANESCO.COM',''),'.DMZ.COM','') as srv,
+$sql="select distinct replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INX',''),'.sec.COM',''),'.DMZ.COM','') as srv,
 DAT.TIME_STAMP,MON.MONITOR_LOGICAL_NAME + ' - ' + MEA.MSNAME as met,
 iif(DAT.RMH_MEAS_VALUE_SUM is NULL,NULL,iif(DAT.RMH_THRESH_QUALITY_GOOD_SUM is NULL,NULL,
 iif(DAT.RMH_THRESH_QUALITY_GOOD_SUM=0,0,DAT.RMH_MEAS_VALUE_SUM/DAT.RMH_THRESH_QUALITY_GOOD_SUM/100))) valor
@@ -53,7 +53,7 @@ and MEA.MEASUREMENT_ID=DAT.MEASUREMENT_ID
 /*and MONITOR_LOGICAL_NAME in ('Ping','URL Monitor') and MSNAME in ('% packets good','roundtrip time (milliseconds)','round trip time')*/
 and year(DAT.TIME_STAMP)=".$anio."
 and month(DAT.TIME_STAMP) in (".$mes.")
-order by replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INTRA',''),'.BANESCO.COM',''),'.DMZ.COM',''),
+order by replace(replace(replace(upper(TAR.TARGET_HOST_NAME),'.INX',''),'.sec.COM',''),'.DMZ.COM',''),
 DAT.TIME_STAMP";
 
 }

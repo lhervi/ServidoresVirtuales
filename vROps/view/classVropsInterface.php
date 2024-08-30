@@ -4,7 +4,7 @@ class VropsInterface{
 
     static function getHTMLResourceKinds(){
         include_once __DIR__ . './../../constantes.php';        
-        ///var/www/html/STISCR/vROps/classVropsConf.php
+        ///var/www/html/CTISCR/vROps/classVropsConf.php
         include_once HOME . '/vROps/classVropsConf.php';
 
         

@@ -135,7 +135,7 @@ class Utils{
      */
     static function splitArray(array $arreglo, int $step){
 
-        ///opt/lornis/STISCR/controller/utils/classUtils.php
+        ///opt/lornis/CTISCR/controller/utils/classUtils.php
 
         $tam = count($arreglo);
         $start = 0;        

@@ -89,7 +89,7 @@ if ($confArray['error']){
     die("<h3>" . $confArray['mensaje'] . "</h3>");
 }else{
     unset($confArray['error']);
-    $confArray['userBA'] = "INTRA\\" . $_POST['userBA'];
+    $confArray['userBA'] = "INX\\" . $_POST['userBA'];
     $confArray['passwordBA'] = $_POST['passwordBA'];
     $servers = VropsConf::getCampo('vropsServers');
     $server = $servers['vropsServers'][intval($_POST['vropsServer'])];

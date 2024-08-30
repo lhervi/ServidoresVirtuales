@@ -11,7 +11,7 @@ if (!$ExisteLogin || $loginFalso){
 
 include_once "./../constantes.php";
 include_once "./../vROps/model/vropsConfigDB.php";
-//D:\xampp\htdocs\STISCR\vROps\model\vropsConfigDB.php
+//D:\xampp\htdocs\CTISCR\vROps\model\vropsConfigDB.php
 include "encabezado.php";
 include "menu.php";
 

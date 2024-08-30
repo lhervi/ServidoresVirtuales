@@ -9,8 +9,8 @@ if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 /*
 if (!isset($_SESSION['login']) || $_SESSION['login']===false){
     header("Location:" . "./../vROps/view/ingreso.php", true);
-    //D:\xampp\htdocs\STISCR\view\index.php
-    //D:\xampp\htdocs\STISCR\vROps\view\ingreso.php
+    //D:\xampp\htdocs\CTISCR\view\index.php
+    //D:\xampp\htdocs\CTISCR\vROps\view\ingreso.php
     //http://localhost/vROps/view/ingreso.php
 }
 */
@@ -28,7 +28,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']===false){
                         <div class="border border-secondary p-3 mb-2 bg-light text-dark rounded">
                         <div id="loader" class="loader" style="display:none;"></div>
             
-                            <form id="enviarForma" action="/STISCR/bsm_directo/consultaBSM.php" method="post" class="form-group">                                 
+                            <form id="enviarForma" action="/CTISCR/bsm_directo/consultaBSM.php" method="post" class="form-group">                                 
 
                                 <div class="form-group form-check-inline"><h5>Mes y Año<br/></h5>               
                                     <!--label for="mes"></label-->    

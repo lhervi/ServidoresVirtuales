@@ -3,7 +3,7 @@
 
 
 //$servidor="sapl8442";
-$usuario="hecnaranjo";
+$usuario="usuario";
 $password="Caracas2021..";
 
 
@@ -29,21 +29,21 @@ if($_GET["tipo"] == 1){
 
 
 function tokens($servidor,$usuario,$password){ 
-$url = "https://".$servidor.".intra.banesco.com/suite-api/api/auth/token/acquire";
-//vrops.intra.banesco.com
+$url = "https://".$servidor.".INX.sec.com/suite-api/api/auth/token/acquire";
+//vrops.INX.sec.com
 $nom_arch = "vmware_host.xml";
 $xmlUrl = "vmware_host.xml";
 $tipo = 1;
 
 $arch = fopen($nom_arch , "w") or exit ("No se pudo abrir el archivo");
 $curl = curl_init();
-$proxy = "prxsrv.intra.banesco.com:9090";
-$userproxy = "INTRA\\".$usuario.":".$password;
+$proxy = "prxsrv.INX.sec.com:9090";
+$userproxy = "INX\\".$usuario.":".$password;
 //echo $userproxy;
-$uservrops = "capacidad:Pa$\$w0rd";
+$uservrops = "need:clave";
 $certfirefox = "C:\\xampp\\htdocs\\vrops_licencia\\multi_part_sapl8442.pem";
 //$certfirefox = "C:\\xampp\\htdocs\\vrops_licencia\\vrops.pem";
-$up = array("username" => "capacidad", "password" => "Pa$\$w0rd");
+$up = array("username" => "need", "password" => "clave");
 $userpassword = json_encode($up);
 curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
 curl_setopt($curl, CURLOPT_PROXY, $proxy);
@@ -83,12 +83,12 @@ $lala = json_decode($b,true);
 }
 
 function consultar_swagger($page, $token, $servidor){
-$proxy = "prxsrv.intra.banesco.com:9090";
-$userproxy = "INTRA\\hecnaranjo:Caracas2021..";
-$uservrops = "capacidad:Pa$\$w0rd";
+$proxy = "prxsrv.INX.sec.com:9090";
+$userproxy = "INX\\usuario:Caracas2021..";
+$uservrops = "need:clave";
 //$certfirefox = "C:\\xampp\\htdocs\\vrops\\vrops.pem";
 $certfirefox = "C:\\xampp\\htdocs\\vrops_licencia\\multi_part_sapl8442.pem";
-$up = array("username" => "capacidad", "password" => "Pa$\$w0rd");
+$up = array("username" => "need", "password" => "clave");
 $userpassword = json_encode($up);
 $curl2 = curl_init();
 $xmlUrl2 = "hola.txt";
@@ -96,7 +96,7 @@ $xmlUrl2 = "hola.txt";
 $arch2 =  fopen("hola.txt" , "w") or exit ("No se pudo abrir el archivo");
 
 
-$url2 = "https://".$servidor.".intra.banesco.com/suite-api/api/resources?page=".$page."&pageSize=-1";
+$url2 = "https://".$servidor.".INX.sec.com/suite-api/api/resources?page=".$page."&pageSize=-1";
 
 $header[] = "Content-Type: application/json";
 $header[] = "Accept: application/json";
@@ -163,7 +163,7 @@ foreach($lala as $valor1 => $valor2){
 									}
 									else
 									{
-										//echo "valor 1:".$valor1." valor 3:".$valor3." valor 5".$valor5." valor 7:".$valor7." valor 9".$valor9." valor 10".$valor10."</br>";
+										//echo "valor 1:".$valor1." valor 3:".$valor3." valor 5".$valor5." valor 7:".$valor7." valor 9".$valor9." valor 10".$valor192."</br>";
 										$info[$valor3][$valor9][] = $valor10;
 									}
 								}
@@ -191,12 +191,12 @@ return $info;
 }	
 
 function consultar_swagger_vm_vs_host($info, $token){
-$proxy = "prxsrv.intra.banesco.com:9090";
-$userproxy = "INTRA\\hecnaranjo:Caracas2020";
-$uservrops = "capacidad:Pa$\$w0rd";
+$proxy = "prxsrv.INX.sec.com:9090";
+$userproxy = "INX\\usuario:mbo";
+$uservrops = "need:clave";
 //$certfirefox = "C:\\xampp\\htdocs\\vrops\\vrops.pem";
 $certfirefox = "C:\\xampp\\htdocs\\vrops_licencia\\multi_part_sapl8442.pem";
-$up = array("username" => "capacidad", "password" => "Pa$\$w0rd");
+$up = array("username" => "need", "password" => "clave");
 $userpassword = json_encode($up);
 $curl2 = curl_init();
 $xmlUrl2 = "hola.txt";
@@ -207,10 +207,10 @@ $arch2 =  fopen("hola.txt" , "w") or exit ("No se pudo abrir el archivo");
 for($i=0;$i<=count($info);$i++)
 {
 	//echo "Servidor: ".$info[$i]["name"][0]."</br>";
-	$url2 = "https://vrops01.intra.banesco.com".$info[$i]["href"][1];
+	$url2 = "https://vrops01.INX.sec.com".$info[$i]["href"][1];
 	//echo $url2."</br>";
 
-//$url2 = "https://vrops01.intra.banesco.com/suite-api/api/resources?page=".$page;
+//$url2 = "https://vrops01.INX.sec.com/suite-api/api/resources?page=".$page;
 
 $header[] = "Content-Type: application/json";
 $header[] = "Accept: application/json";
@@ -279,7 +279,7 @@ foreach($lala as $valor1 => $valor2){
 									}
 									else
 									{
-										//echo "valor 1:".$valor1." valor 3:".$valor3." valor 5".$valor5." valor 7:".$valor7." valor 9".$valor9." valor 10".$valor10."</br>";
+										//echo "valor 1:".$valor1." valor 3:".$valor3." valor 5".$valor5." valor 7:".$valor7." valor 9".$valor9." valor 10".$valor192."</br>";
 										//$info[$valor3][$valor9][] = $valor10;
 									}
 								}
@@ -374,7 +374,7 @@ echo "</table>";
 function llenardb_posgres($info, $server){
 
 try{
-       $con = pg_connect("host=10.135.197.120 port=8499 dbname=VROPS user=postgres password=Mercantil2021");
+       $con = pg_connect("host=192.135.197.120 port=8499 dbname=VROPS user=postgres password=Mercantil2021");
 }
 catch (Exception $e)
 {
